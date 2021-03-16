@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:xml/xml.dart';
 part 'basic.dart';
 part 'text.dart';
+part 'group.dart';
 
 abstract class XmlWidgetBuilder {
   String get name;
@@ -44,6 +45,8 @@ class WidgetAssembler {
   static const _noChild = const <Widget>[];
   static const _builtinBuilders = <XmlWidgetBuilder>[
     const _XmlTextBuilder(),
+    const _XmlColumnBuilder(),
+    const _XmlRowBuilder(),
   ];
 
   static final _defaultBuilders = {

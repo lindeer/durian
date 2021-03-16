@@ -32,4 +32,18 @@ void main() {
     expect(w.textDirection, TextDirection.rtl);
     expect(w.textAlign, null);
   });
+
+  test('test text style', () {
+    const xml = """
+<Text
+  flutter:data="widget from xml"
+  flutter:style.color="#777"
+  flutter:style.fontSize="14sp"/>
+""";
+    final widget = assembler.fromSource(xml);
+    expect(widget is Text, true);
+    final w = widget as Text;
+    final style = w.style;
+    expect(style?.fontSize, 14);
+  });
 }
