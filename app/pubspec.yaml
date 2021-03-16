@@ -23,6 +23,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  xml_widget:
+    path: ../xml_widget
 
 
   # The following adds the Cupertino Icons font to your application.
