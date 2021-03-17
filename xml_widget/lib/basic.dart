@@ -70,6 +70,27 @@ extension _StringExt on String {
   }
 }
 
+extension _TextThemeExt on TextTheme {
+  Map<String, TextStyle?> tighten() {
+    final theme = this;
+    return <String, TextStyle?>{
+      "headline1": theme.headline1,
+      "headline2": theme.headline2,
+      "headline3": theme.headline3,
+      "headline4": theme.headline4,
+      "headline5": theme.headline5,
+      "headline6": theme.headline6,
+      "subtitle1": theme.subtitle1,
+      "subtitle2": theme.subtitle2,
+      "bodyText1": theme.bodyText1,
+      "bodyText2": theme.bodyText2,
+      "caption": theme.caption,
+      "button": theme.button,
+      "overline": theme.overline,
+    };
+  }
+}
+
 class _PropertyStruct {
   static TextStyle? toTextStyle(Map<String, String> attr) {
     const prefix = 'style.';
@@ -84,5 +105,19 @@ class _PropertyStruct {
       backgroundColor: style['backgroundColor']?.toColor(),
       fontSize: style['fontSize']?.toSize(),
     );
+  }
+
+  static TextTheme? _textTheme(ThemeData theme, String name) {
+    switch (name) {
+      case 'textTheme': return theme.textTheme;
+      case 'primaryTextTheme': return theme.primaryTextTheme;
+      case 'accentTextTheme': return theme.accentTextTheme;
+      default: return null;
+    }
+  }
+
+  static TextStyle? themeTextStyle(ThemeData theme, String text) {
+    final secondary = text.split('.');
+    return _textTheme(theme, secondary[0])?.tighten()[secondary[1]];
   }
 }

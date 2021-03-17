@@ -10,9 +10,18 @@ class _XmlTextBuilder extends CommonWidgetBuilder {
   @override
   Widget build(AssembleElement element, List<Widget> children) {
     final attrs = element.attrs;
+    final styleAttr = attrs['style'];
+    TextStyle? textStyle;
+    if (styleAttr?.startsWith('@theme/') ?? false) {
+      final theme = Theme.of(element.buildContext);
+      final path = styleAttr!.substring(7);
+      textStyle = _PropertyStruct.themeTextStyle(theme, path);
+    }
+    final overrideStyle = _PropertyStruct.toTextStyle(attrs);
+    textStyle = textStyle != null ? textStyle.merge(overrideStyle) : overrideStyle;
     return Text(
       attrs['data'] ?? '',
-      style: _PropertyStruct.toTextStyle(attrs),
+      style: textStyle,
       maxLines: attrs['maxLines']?.let((it) => int.parse(it)),
       softWrap: attrs['softWrap']?.let((it) => it.toLowerCase() == 'true'),
       textDirection: attrs['textDirection']?.toTextDirection(),
