@@ -2,5 +2,6 @@
   flutter:mainAxisAlignment="center">
   <Text flutter:data="You have pushed the button this many times:"/>
   <Text flutter:data="@{data.data}"
+    flutter:style.color="@color/lightGreen"
     flutter:style="@theme/textTheme.headline4"/>
 </Column>

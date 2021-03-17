@@ -9,11 +9,69 @@ bool _notDigit(int n) {
   return pos < 0 || pos > 9;
 }
 
+const _builtinColors = <String, Color>{
+  "transparent": Colors.transparent,
+  "black": Colors.black,
+  "black87": Colors.black87,
+  "black54": Colors.black54,
+  "black45": Colors.black45,
+  "black38": Colors.black38,
+  "black26": Colors.black26,
+  "black12": Colors.black12,
+  "white": Colors.white,
+  "white70": Colors.white70,
+  "white60": Colors.white60,
+  "white54": Colors.white54,
+  "white38": Colors.white38,
+  "white30": Colors.white30,
+  "white24": Colors.white24,
+  "white12": Colors.white12,
+  "white10": Colors.white10,
+
+  "red": Colors.red,
+  "pink": Colors.pink,
+  "purple": Colors.purple,
+  "deepPurple": Colors.deepPurple,
+  "indigo": Colors.indigo,
+  "blue": Colors.blue,
+  "lightBlue": Colors.lightBlue,
+  "cyan": Colors.cyan,
+  "teal": Colors.teal,
+  "green": Colors.green,
+  "lightGreen": Colors.lightGreen,
+  "lime": Colors.lime,
+  "yellow": Colors.yellow,
+  "amber": Colors.amber,
+  "orange": Colors.orange,
+  "deepOrange": Colors.deepOrange,
+  "brown": Colors.brown,
+  "grey": Colors.grey,
+  "blueGrey": Colors.blueGrey,
+
+  "redAccent": Colors.redAccent,
+  "pinkAccent": Colors.pinkAccent,
+  "purpleAccent": Colors.purpleAccent,
+  "deepPurpleAccent": Colors.deepPurpleAccent,
+  "indigoAccent": Colors.indigoAccent,
+  "blueAccent": Colors.blueAccent,
+  "lightBlueAccent": Colors.lightBlueAccent,
+  "cyanAccent": Colors.cyanAccent,
+  "tealAccent": Colors.tealAccent,
+  "greenAccent": Colors.greenAccent,
+  "lightGreenAccent": Colors.lightGreenAccent,
+  "limeAccent": Colors.limeAccent,
+  "yellowAccent": Colors.yellowAccent,
+  "amberAccent": Colors.amberAccent,
+  "orangeAccent": Colors.orangeAccent,
+  "deepOrangeAccent": Colors.deepOrangeAccent,
+};
+
 extension _StringExt on String {
 
   Color? toColor() {
     if (this[0] != '#') {
-      return null;
+      final key = startsWith('@color/') ? substring(7) : null;
+      return _builtinColors[key];
     }
 
     final text = substring(1);
