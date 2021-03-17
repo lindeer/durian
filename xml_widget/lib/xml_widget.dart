@@ -53,6 +53,7 @@ class WidgetAssembler {
     const _XmlColumnBuilder(),
     const _XmlRowBuilder(),
     const _XmlContainerBuilder(),
+    const _XmlInkBuilder(),
   ];
 
   static final _defaultBuilders = {
