@@ -142,6 +142,46 @@ const _alignment = const {
   "bottomRight": Alignment.bottomRight,
 };
 
+const _borderStyle = const {
+  "none": BorderStyle.none,
+  "solid": BorderStyle.solid,
+};
+
+const _blendMode = const {
+  "clear": BlendMode.clear,
+  "src": BlendMode.src,
+  "dst": BlendMode.dst,
+  "srcOver": BlendMode.srcOver,
+  "dstOver": BlendMode.dstOver,
+  "srcIn": BlendMode.srcIn,
+  "dstIn": BlendMode.dstIn,
+  "srcOut": BlendMode.srcOut,
+  "dstOut": BlendMode.dstOut,
+  "srcATop": BlendMode.srcATop,
+  "dstATop": BlendMode.dstATop,
+  "xor": BlendMode.xor,
+  "plus": BlendMode.plus,
+  "modulate": BlendMode.modulate,
+  "overlay": BlendMode.overlay,
+  "darken": BlendMode.darken,
+  "lighten": BlendMode.lighten,
+  "colorDodge": BlendMode.colorDodge,
+  "colorBurn": BlendMode.colorBurn,
+  "hardLight": BlendMode.hardLight,
+  "softLight": BlendMode.softLight,
+  "difference": BlendMode.difference,
+  "exclusion": BlendMode.exclusion,
+  "hue": BlendMode.hue,
+  "saturation": BlendMode.saturation,
+  "color": BlendMode.color,
+  "luminosity": BlendMode.luminosity,
+};
+
+const _boxShape = const {
+  "rectangle": BoxShape.rectangle,
+  "circle": BoxShape.circle,
+};
+
 extension _StringExt on String {
 
   Color? toColor() {
@@ -256,5 +296,114 @@ class _PropertyStruct {
   static TextStyle? themeTextStyle(ThemeData theme, String text) {
     final secondary = text.split('.');
     return _textTheme(theme, secondary[0])?.tighten()[secondary[1]];
+  }
+
+  static EdgeInsetsGeometry? _edge(String property, Map<String, String> attr) {
+    final keys = attr.keys.where((k) => k.startsWith(property));
+    if (keys.isEmpty) {
+      return null;
+    }
+    final padding = attr[property];
+    final paddingLeft = attr['${property}Left'] ?? padding;
+    final paddingTop = attr['${property}Top'] ?? padding;
+    final paddingRight = attr['${property}Right'] ?? padding;
+    final paddingBottom = attr['${property}Bottom'] ?? padding;
+    return EdgeInsets.only(
+      left: paddingLeft?.toSize() ?? 0.0,
+      top: paddingTop?.toSize() ?? 0.0,
+      right: paddingRight?.toSize() ?? 0.0,
+      bottom: paddingBottom?.toSize() ?? 0.0,
+    );
+  }
+
+  static EdgeInsetsGeometry? padding(Map<String, String> map) => _edge('padding', map);
+
+  static EdgeInsetsGeometry? margin(Map<String, String> map) => _edge('margin', map);
+
+  static BorderSide _side(String key, Map<String, String> attr) {
+    final color = attr['$key.color'];
+    final width = attr['$key.width'];
+    final style = attr['$key.style'];
+
+    return BorderSide(
+      color: color?.toColor() ?? Colors.black,
+      width: width?.toDouble() ?? 1.0,
+      style: _borderStyle[style] ?? BorderStyle.solid,
+    );
+  }
+
+  static BoxBorder? _boxBorder(Map<String, String> attr) {
+    final keys = attr.keys.where((k) => k.startsWith('border'));
+    if (keys.isEmpty) {
+      return null;
+    }
+    final borderKeys = keys.where((k) => k.startsWith('border.'));
+    final side = borderKeys.isEmpty ? null : _side('border', attr);
+
+    const keyLeft = 'borderLeft';
+    const keyTop = 'borderTop';
+    const keyRight = 'borderRight';
+    const keyBottom = 'borderBottom';
+
+    final leftKeys = keys.where((k) => k.startsWith(keyLeft));
+    final left = leftKeys.isEmpty ? side : _side(keyLeft, attr);
+
+    final topKeys = keys.where((k) => k.startsWith(keyTop));
+    final top = topKeys.isEmpty ? side : _side(keyTop, attr);
+
+    final rightKeys = keys.where((k) => k.startsWith(keyRight));
+    final right = rightKeys.isEmpty ? side : _side(keyRight, attr);
+
+    final bottomKeys = keys.where((k) => k.startsWith(keyBottom));
+    final bottom = bottomKeys.isEmpty ? side : _side(keyBottom, attr);
+
+    return left == null && top == null && right == null && bottom == null ? null :
+    Border(
+      left: left ?? BorderSide.none,
+      top: top ?? BorderSide.none,
+      right: right ?? BorderSide.none,
+      bottom: bottom ?? BorderSide.none,
+    );
+  }
+
+  static BorderRadius? _borderRadius(Map<String, String> attr) {
+    final keys = attr.keys.where((k) => k.startsWith('radius'));
+    if (keys.isEmpty) {
+      return null;
+    }
+    final radius = attr['radius'];
+    final topLeft = attr['radiusTopLeft'] ?? radius;
+    final topRight = attr['radiusTopRight'] ?? radius;
+    final bottomLeft = attr['radiusBottomLeft'] ?? radius;
+    final bottomRight = attr['radiusBottomRight'] ?? radius;
+
+    Radius _radius(String? s) {
+      final r = s?.toSize();
+      return r == null ? Radius.zero : Radius.circular(r);
+    }
+    return BorderRadius.only(
+      topLeft: _radius(topLeft),
+      topRight: _radius(topRight),
+      bottomLeft: _radius(bottomLeft),
+      bottomRight: _radius(bottomRight),
+    );
+  }
+
+  static BoxDecoration? boxDecoration(Map<String, String> attr) {
+    const prefix = 'decoration.';
+    final keys = attr.keys.where((k) => k.startsWith(prefix));
+    if (keys.isEmpty) {
+      return null;
+    }
+    const start = prefix.length;
+    final style = {for (final k in keys) k.substring(start): attr[k]!};
+
+    return BoxDecoration(
+      color: style['color']?.toColor(),
+      border: _boxBorder(style),
+      borderRadius: _borderRadius(style),
+      backgroundBlendMode: _blendMode[style['backgroundBlendMode']],
+      shape: _boxShape[style['shape']] ?? BoxShape.rectangle,
+    );
   }
 }

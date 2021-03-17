@@ -4,4 +4,34 @@
   <Text flutter:data="@{data.data}"
     flutter:style.color="@color/lightGreen"
     flutter:style="@theme/textTheme.headline4"/>
+
+  <Container
+    flutter:width="80dp"
+    flutter:height="80dp"
+    flutter:padding="10dp"
+    flutter:paddingLeft="16dp"
+    flutter:paddingRight="16dp"
+    flutter:decoration.color="@color/orange"
+    flutter:decoration.border.color="@color/orangeAccent"
+    flutter:decoration.border.width="2dp"
+    flutter:decoration.borderTop.color="@color/lightBlue"
+    flutter:margin="16dp">
+
+    <Text flutter:data="Restarted application in 233ms."/>
+
+  </Container>
+
+  <Container
+    flutter:width="120dp"
+    flutter:height="120dp"
+    flutter:decoration.border.color="@color/deepPurpleAccent"
+    flutter:decoration.border.width="2dp"
+    flutter:decoration.radius="20dp"
+    flutter:decoration.radiusBottomRight="10dp"
+    flutter:clipBehavior="antiAlias">
+
+    <Text flutter:data="Restarted application in 233ms."/>
+
+  </Container>
+
 </Column>

@@ -8,6 +8,7 @@ import 'element.dart';
 part 'basic.dart';
 part 'text.dart';
 part 'group.dart';
+part 'container.dart';
 
 abstract class XmlWidgetBuilder {
   String get name;
@@ -51,6 +52,7 @@ class WidgetAssembler {
     const _XmlTextBuilder(),
     const _XmlColumnBuilder(),
     const _XmlRowBuilder(),
+    const _XmlContainerBuilder(),
   ];
 
   static final _defaultBuilders = {
