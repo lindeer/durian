@@ -70,11 +70,6 @@ extension _StringExt on String {
   }
 }
 
-extension _XmlElementExt on XmlElement {
-  Map<String, String> get attrs => Map.fromEntries(attributes.map(
-          (attr) => MapEntry(attr.name.local, attr.value)));
-}
-
 class _PropertyStruct {
   static TextStyle? toTextStyle(Map<String, String> attr) {
     const prefix = 'style.';

@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:xml/xml.dart';
+import 'element.dart';
 part 'basic.dart';
 part 'text.dart';
 part 'group.dart';
@@ -14,7 +15,7 @@ abstract class XmlWidgetBuilder {
   bool get childless;
 
   // children would be empty if childless is false
-  Widget build(XmlElement element, List<Widget> children);
+  Widget build(AssembleElement element, List<Widget> children);
 }
 
 abstract class CommonWidgetBuilder implements XmlWidgetBuilder {
@@ -29,9 +30,12 @@ abstract class CommonWidgetBuilder implements XmlWidgetBuilder {
 }
 
 class WidgetAssembler {
+
   final _builders = Map.of(_defaultBuilders);
+  final BuildContext buildContext;
 
   WidgetAssembler({
+    required this.buildContext,
     List<XmlWidgetBuilder>? builders,
   }) {
     if (builders != null && builders.isNotEmpty) {
@@ -53,14 +57,15 @@ class WidgetAssembler {
     for (final builder in _builtinBuilders) builder.name: builder
   };
 
-  Widget _assembleDefaultWidget(XmlElement element, List<Widget> children) {
+  Widget _assembleDefaultWidget(AssembleElement element, List<Widget> children) {
     return Row(
       children: children,
     );
   }
 
-  Widget _assembleByElement(XmlElement element) {
-    final name = element.name.qualified;
+  Widget _assembleByElement(AssembleElement element) {
+    final e = element.e;
+    final name = e.name.qualified;
     final builder = _builders[name];
 
     Widget w;
@@ -74,9 +79,9 @@ class WidgetAssembler {
     return w;
   }
 
-  List<Widget> _inflateChildren(XmlElement element) => element.children
+  List<Widget> _inflateChildren(AssembleElement element) => element.e.children
       .where((node) => node.nodeType == XmlNodeType.ELEMENT)
-      .map((e) => e as XmlElement)
+      .map((e) => AssembleElement(e as XmlElement, element.buildContext))
       .map((e) => _assembleByElement(e))
       .toList(growable: false);
 
@@ -88,7 +93,7 @@ class WidgetAssembler {
   Widget fromSource(String source) {
     final doc = XmlDocument.parse(source);
     final root = doc.rootElement;
-    final assembler = WidgetAssembler();
-    return assembler._assembleByElement(root);
+    final element = AssembleElement(root, buildContext);
+    return _assembleByElement(element);
   }
 }

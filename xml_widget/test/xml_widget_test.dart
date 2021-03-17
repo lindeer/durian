@@ -1,9 +1,12 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:xml_widget/xml_widget.dart';
+import 'package:mockito/mockito.dart';
+
+class _MockBuildContext extends Mock implements BuildContext {}
 
 void main() {
-  final assembler = WidgetAssembler();
+  final assembler = WidgetAssembler(buildContext: _MockBuildContext());
 
   test('test text widget - plain text', () {
     const xml = """

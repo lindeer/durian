@@ -62,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final assembler = WidgetAssembler();
+    final assembler = WidgetAssembler(buildContext: context);
     final w = assembler.fromFile('app.xml');
     return Scaffold(
       appBar: AppBar(

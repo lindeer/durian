@@ -8,7 +8,7 @@ class _XmlTextBuilder extends CommonWidgetBuilder {
   bool get childless => true;
 
   @override
-  Widget build(XmlElement element, List<Widget> children) {
+  Widget build(AssembleElement element, List<Widget> children) {
     final attrs = element.attrs;
     return Text(
       attrs['data'] ?? '',
