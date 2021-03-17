@@ -66,6 +66,82 @@ const _builtinColors = <String, Color>{
   "deepOrangeAccent": Colors.deepOrangeAccent,
 };
 
+const _textDirection = const {
+  "ltr": TextDirection.ltr,
+  "rtl": TextDirection.rtl,
+};
+
+const _verticalDirection = const {
+  "up": VerticalDirection.up,
+  "down": VerticalDirection.down,
+};
+
+const _textBaseline = const {
+  "alphabetic": TextBaseline.alphabetic,
+  "ideographic": TextBaseline.ideographic,
+};
+
+const _axis = const {
+  "horizontal": Axis.horizontal,
+  "vertical": Axis.vertical,
+};
+
+const _mainAxisAlignment = const {
+  "start": MainAxisAlignment.start,
+  "end": MainAxisAlignment.end,
+  "center": MainAxisAlignment.center,
+  "spaceBetween": MainAxisAlignment.spaceBetween,
+  "spaceAround": MainAxisAlignment.spaceAround,
+  "spaceEvenly": MainAxisAlignment.spaceEvenly,
+};
+
+const _mainAxisSize = const {
+  "min": MainAxisSize.min,
+  "max": MainAxisSize.max,
+};
+
+const _crossAxisAlignment = const {
+  "start": CrossAxisAlignment.start,
+  "end": CrossAxisAlignment.end,
+  "center": CrossAxisAlignment.center,
+  "stretch": CrossAxisAlignment.stretch,
+  "baseline": CrossAxisAlignment.baseline,
+};
+
+const _wrapAlignment = const {
+  "start": WrapAlignment.start,
+  "end": WrapAlignment.end,
+  "center": WrapAlignment.center,
+  "spaceBetween": WrapAlignment.spaceBetween,
+  "spaceAround": WrapAlignment.spaceAround,
+  "spaceEvenly": WrapAlignment.spaceEvenly,
+};
+
+const _wrapCrossAlignment = const {
+  "start": WrapCrossAlignment.start,
+  "end": WrapCrossAlignment.end,
+  "center": WrapCrossAlignment.center,
+};
+
+const _clip = const {
+  "none": Clip.none,
+  "hardEdge": Clip.hardEdge,
+  "antiAlias": Clip.antiAlias,
+  "antiAliasWithSaveLayer": Clip.antiAliasWithSaveLayer,
+};
+
+const _alignment = const {
+  "topLeft": Alignment.topLeft,
+  "topCenter": Alignment.topCenter,
+  "topRight": Alignment.topRight,
+  "centerLeft": Alignment.centerLeft,
+  "center": Alignment.center,
+  "centerRight": Alignment.centerRight,
+  "bottomLeft": Alignment.bottomLeft,
+  "bottomCenter": Alignment.bottomCenter,
+  "bottomRight": Alignment.bottomRight,
+};
+
 extension _StringExt on String {
 
   Color? toColor() {
@@ -81,6 +157,14 @@ extension _StringExt on String {
 
     return color;
   }
+
+  int? toInt() => int.tryParse(this);
+
+  int optInt({defVal = 0.0}) => int.tryParse(this) ?? defVal;
+
+  double? toDouble() => double.tryParse(this);
+
+  double optDouble({defVal = 0.0}) => double.tryParse(this) ?? defVal;
 
   double? toSize() {
     int n = this.length;
@@ -108,24 +192,19 @@ extension _StringExt on String {
     });
   }
 
-  TextDirection? toTextDirection() {
-    final s = this.toLowerCase();
-    if (s == 'rtl') return TextDirection.rtl;
-    else if (s == 'ltr') return TextDirection.ltr;
-    else return null;
-  }
+  TextDirection? toTextDirection() => _textDirection[this];
 
-  MainAxisAlignment? toMainAxisAlignment() {
-    switch (this) {
-      case 'start': return MainAxisAlignment.start;
-      case 'end': return MainAxisAlignment.end;
-      case 'center': return MainAxisAlignment.center;
-      case 'spaceBetween': return MainAxisAlignment.spaceBetween;
-      case 'spaceAround': return MainAxisAlignment.spaceAround;
-      case 'spaceEvenly': return MainAxisAlignment.spaceEvenly;
-      default: return null;
-    }
-  }
+  VerticalDirection? toVerticalDirection() => _verticalDirection[this];
+
+  Axis? toAxis() => _axis[this];
+
+  MainAxisAlignment? toMainAxisAlignment() => _mainAxisAlignment[this];
+
+  WrapAlignment? toWrapAlignment() => _wrapAlignment[this];
+
+  WrapCrossAlignment? toWrapCrossAlignment() => _wrapCrossAlignment[this];
+
+  Clip? toClip() => _clip[this];
 }
 
 extension _TextThemeExt on TextTheme {
