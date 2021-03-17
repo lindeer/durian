@@ -14,6 +14,7 @@ class _XmlContainerBuilder extends CommonWidgetBuilder {
       color: attrs['color']?.toColor(),
       width: attrs['width']?.toSize(),
       height: attrs['height']?.toSize(),
+      constraints: _PropertyStruct.constraints(attrs),
       margin: _PropertyStruct.margin(attrs),
       transformAlignment: _alignment[attrs['transformAlignment']],
       clipBehavior: _clip[attrs['clipBehavior']] ?? Clip.none,

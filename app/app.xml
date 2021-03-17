@@ -22,8 +22,9 @@
   </Container>
 
   <Container
-    flutter:width="120dp"
-    flutter:height="120dp"
+    flutter:constraints.width="120dp"
+    flutter:constraints.minHeight="50dp"
+    flutter:constraints.maxHeight="150dp"
     flutter:decoration.border.color="@color/deepPurpleAccent"
     flutter:decoration.border.width="2dp"
     flutter:decoration.radius="20dp"

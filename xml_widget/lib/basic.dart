@@ -406,4 +406,26 @@ class _PropertyStruct {
       shape: _boxShape[style['shape']] ?? BoxShape.rectangle,
     );
   }
+
+  static BoxConstraints? constraints(Map<String, String> attr) {
+    const prefix = 'constraints.';
+    final keys = attr.keys.where((k) => k.startsWith(prefix));
+    if (keys.isEmpty) {
+      return null;
+    }
+    const start = prefix.length;
+    final style = {for (final k in keys) k.substring(start): attr[k]!};
+    final width = style['width'];
+    final height = style['height'];
+    final minWidth = style['minWidth'] ?? width;
+    final maxWidth = style['maxWidth'] ?? width;
+    final minHeight = style['minHeight'] ?? height;
+    final maxHeight = style['maxHeight'] ?? height;
+    return BoxConstraints(
+      minWidth: minWidth?.toSize() ?? 0.0,
+      maxWidth: maxWidth?.toSize() ?? double.infinity,
+      minHeight: minHeight?.toSize() ?? 0.0,
+      maxHeight: maxHeight?.toSize() ?? double.infinity,
+    );
+  }
 }
