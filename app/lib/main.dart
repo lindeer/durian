@@ -46,7 +46,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> implements OnPressHandler {
   int _counter = 0;
 
   void _incrementCounter() {
@@ -61,8 +61,20 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
+  void onLongPressed(String uri) {
+  }
+
+  @override
+  void onPressed(String uri) {
+    print("onPressed: $uri");
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final assembler = WidgetAssembler(buildContext: context);
+    final assembler = WidgetAssembler(
+      buildContext: context,
+      onPressHandler: this,
+    );
     final w = assembler.fromFile('app.xml');
     return Scaffold(
       appBar: AppBar(

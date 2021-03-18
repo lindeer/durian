@@ -5,6 +5,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:xml/xml.dart';
 import 'element.dart';
+export 'element.dart';
+
 part 'basic.dart';
 part 'text.dart';
 part 'group.dart';
@@ -33,12 +35,13 @@ abstract class CommonWidgetBuilder implements XmlWidgetBuilder {
 class WidgetAssembler {
 
   final _builders = Map.of(_defaultBuilders);
-  final BuildContext buildContext;
+  final AssembleContext context;
 
   WidgetAssembler({
-    required this.buildContext,
+    required BuildContext buildContext,
+    OnPressHandler? onPressHandler,
     List<XmlWidgetBuilder>? builders,
-  }) {
+  }) : context = AssembleContext(buildContext, onPressHandler) {
     if (builders != null && builders.isNotEmpty) {
       final map = {
         for (final b in builders) b.name: b
@@ -52,8 +55,14 @@ class WidgetAssembler {
     const _XmlTextBuilder(),
     const _XmlColumnBuilder(),
     const _XmlRowBuilder(),
+    const _XmlWrapBuilder(),
     const _XmlContainerBuilder(),
     const _XmlInkBuilder(),
+    const _XmlRaisedButtonBuilder(),
+    const _XmlFlatButtonBuilder(),
+    const _XmlMaterialButtonBuilder(),
+    const _XmlElevatedButtonBuilder(),
+    const _XmlTextButtonBuilder(),
   ];
 
   static final _defaultBuilders = {
@@ -84,7 +93,7 @@ class WidgetAssembler {
 
   List<Widget> _inflateChildren(AssembleElement element) => element.e.children
       .where((node) => node.nodeType == XmlNodeType.ELEMENT)
-      .map((e) => AssembleElement(e as XmlElement, element.buildContext))
+      .map((e) => AssembleElement(e as XmlElement, element.context))
       .map((e) => _assembleByElement(e))
       .toList(growable: false);
 
@@ -96,7 +105,7 @@ class WidgetAssembler {
   Widget fromSource(String source) {
     final doc = XmlDocument.parse(source);
     final root = doc.rootElement;
-    final element = AssembleElement(root, buildContext);
+    final element = AssembleElement(root, context);
     return _assembleByElement(element);
   }
 }

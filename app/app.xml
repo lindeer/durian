@@ -1,5 +1,5 @@
-<Column
-  flutter:mainAxisAlignment="center">
+<Column xmlns:flutter="http://flutter.dev/xml/flutter"
+  flutter:mainAxisAlignment="center" >
   <Text flutter:data="You have pushed the button this many times:"/>
   <Text flutter:data="@{data.data}"
     flutter:style.color="@color/lightGreen"
@@ -35,4 +35,25 @@
 
   </Container>
 
+  <MaterialButton
+    flutter:textTheme="primary"
+    flutter:textColor="@color/white"
+    flutter:color="@color/blue"
+    flutter:hoverColor="@color/lightGreen"
+    flutter:highlightColor="@color/green"
+    flutter:splashColor="#33691E"
+    flutter:padding="8dp"
+    flutter:onPressed="http://flutter.dev"
+    flutter:onLongPressed="http://flutter.dev"
+    flutter:elevation="5dp">
+
+    <Text flutter:data="MaterialButton" />
+
+  </MaterialButton>
+
+  <ElevatedButton/>
+
+  <TextButton>
+    <Text flutter:data="this is TextButton"/>
+  </TextButton>
 </Column>

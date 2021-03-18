@@ -13,7 +13,7 @@ class _XmlTextBuilder extends CommonWidgetBuilder {
     final styleAttr = attrs['style'];
     TextStyle? textStyle;
     if (styleAttr?.startsWith('@theme/') ?? false) {
-      final theme = Theme.of(element.buildContext);
+      final theme = element.context.theme;
       final path = styleAttr!.substring(7);
       textStyle = _PropertyStruct.themeTextStyle(theme, path);
     }

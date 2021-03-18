@@ -182,6 +182,28 @@ const _boxShape = const {
   "circle": BoxShape.circle,
 };
 
+const _buttonTextTheme = const {
+  "normal": ButtonTextTheme.normal,
+  "primary": ButtonTextTheme.primary,
+  "accent": ButtonTextTheme.accent,
+};
+
+const _brightness = const {
+  "dark": Brightness.dark,
+  "light": Brightness.light,
+};
+
+const _visualDensity = const {
+  "standard": VisualDensity.standard,
+  "comfortable": VisualDensity.comfortable,
+  "compact": VisualDensity.compact,
+};
+
+const _materialTapTargetSize = const {
+  "padded": MaterialTapTargetSize.padded,
+  "shrinkWrap": MaterialTapTargetSize.shrinkWrap,
+};
+
 extension _StringExt on String {
 
   Color? toColor() {
@@ -210,12 +232,12 @@ extension _StringExt on String {
     int n = this.length;
 
     while (n-- > 0 && _notDigit(this.codeUnits[n])){}
-    if (n > 0) {
+    if (n < 0) {
+      return null;
+    } else {
       final num = n < length ? substring(0, n + 1) : this;
       final unit = n < length ? substring(n + 1) : '';
       return _unitSize(num, unit);
-    } else {
-      return null;
     }
   }
 
@@ -230,6 +252,11 @@ extension _StringExt on String {
       }
       return v;
     });
+  }
+
+  Duration? toDuration() {
+    final n = int.tryParse(this);
+    return n == null ? null : Duration(milliseconds: n);
   }
 
   TextDirection? toTextDirection() => _textDirection[this];
