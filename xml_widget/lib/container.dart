@@ -151,3 +151,50 @@ class _XmlTextButtonBuilder extends CommonWidgetBuilder {
     );
   }
 }
+
+class _XmlPaddingBuilder extends CommonWidgetBuilder {
+  const _XmlPaddingBuilder() : super('Padding');
+
+  @override
+  Widget build(AssembleElement element, List<Widget> children) {
+    final attrs = element.attrs;
+    final padding = _PropertyStruct.padding(attrs);
+    if (padding == null) {
+      return ErrorWidget.withDetails(message: 'Padding must have valid value!');
+    }
+    return Padding(
+      padding: padding,
+      child: children.first,
+    );
+  }
+}
+
+class _XmlInkWellBuilder extends CommonWidgetBuilder {
+  const _XmlInkWellBuilder() : super('InkWell');
+
+  @override
+  Widget build(AssembleElement element, List<Widget> children) {
+    final attrs = element.attrs;
+    final handler = element.context.onPressHandler;
+    final pressUri = attrs["onTap"];
+    final onPressed = handler != null && pressUri != null ? () => handler.onPressed(pressUri) : null;
+    final longPressUri = attrs["onLongPressed"];
+    final onLongPressed = handler != null && longPressUri != null ? () => handler.onLongPressed(longPressUri) : null;
+
+    return InkWell(
+      child: children.first,
+      onTap: onPressed,
+      onLongPress: onLongPressed,
+      focusColor: attrs['focusColor']?.toColor(),
+      hoverColor: attrs['hoverColor']?.toColor(),
+      highlightColor: attrs['highlightColor']?.toColor(),
+      splashColor: attrs['splashColor']?.toColor(),
+      radius: attrs['radius']?.toSize(),
+      borderRadius: _PropertyStruct._borderRadius(attrs),
+      enableFeedback: attrs['enableFeedback'] == "false",
+      excludeFromSemantics: attrs['excludeFromSemantics'] == "true",
+      canRequestFocus: attrs['canRequestFocus'] == "false",
+      autofocus: attrs['autofocus'] == "true",
+    );
+  }
+}
