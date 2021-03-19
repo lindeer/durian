@@ -66,12 +66,23 @@ _ColorItem? _colorItem(XmlElement e) {
   return _ColorItem(name, color);
 }
 
-class XmlResColor {
+abstract class ResColor extends ColorProvider {
+  MaterialStateProperty<Color?>? state(String key);
+}
+
+@visibleForTesting
+class XmlResColor implements ResColor {
   final _stateColors = <String, MaterialStateProperty<Color?>>{};
   final _colors = <String, Color>{};
 
+  XmlResColor() {
+    _resourceColors = this;
+  }
+
+  @override
   Color? operator [](String key) => _colors[key];
 
+  @override
   MaterialStateProperty<Color?>? state(String key) => _stateColors[key];
 
   void loadResource(String source) {

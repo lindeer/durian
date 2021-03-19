@@ -36,13 +36,15 @@ abstract class CommonWidgetBuilder implements XmlWidgetBuilder {
 class WidgetAssembler {
 
   final _builders = Map.of(_defaultBuilders);
-  final AssembleContext context;
+  final _colors = XmlResColor();
+  late final AssembleContext context;
 
   WidgetAssembler({
     required BuildContext buildContext,
     OnPressHandler? onPressHandler,
     List<XmlWidgetBuilder>? builders,
-  }) : context = AssembleContext(buildContext, onPressHandler) {
+  }) {
+    context = AssembleContext(buildContext, _colors, onPressHandler);
     if (builders != null && builders.isNotEmpty) {
       final map = {
         for (final b in builders) b.name: b
@@ -103,6 +105,10 @@ class WidgetAssembler {
       .toList(growable: false);
 
   Widget fromFile(String path) {
+    final file = File('colors.xml');
+    if (file.existsSync()) {
+      _colors.loadResource(file.readAsStringSync());
+    }
     final f = File(path);
     return fromSource(f.readAsStringSync());
   }

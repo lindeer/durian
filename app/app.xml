@@ -2,7 +2,7 @@
   flutter:mainAxisAlignment="center" >
   <Text flutter:data="You have pushed the button this many times:"/>
   <Text flutter:data="@{data.data}"
-    flutter:style.color="@color/lightGreen"
+    flutter:style.color="@flutter:color/lightGreen"
     flutter:style="@theme/textTheme.headline4"/>
 
   <Container
@@ -11,10 +11,10 @@
     flutter:padding="10dp"
     flutter:paddingLeft="16dp"
     flutter:paddingRight="16dp"
-    flutter:decoration.color="@color/orange"
-    flutter:decoration.border.color="@color/orangeAccent"
+    flutter:decoration.color="@flutter:color/orange"
+    flutter:decoration.border.color="@flutter:color/orangeAccent"
     flutter:decoration.border.width="2dp"
-    flutter:decoration.borderTop.color="@color/lightBlue"
+    flutter:decoration.borderTop.color="@flutter:color/lightBlue"
     flutter:margin="16dp">
 
     <Text flutter:data="Restarted application in 233ms."/>
@@ -25,7 +25,7 @@
     flutter:constraints.width="120dp"
     flutter:constraints.minHeight="50dp"
     flutter:constraints.maxHeight="150dp"
-    flutter:decoration.border.color="@color/deepPurpleAccent"
+    flutter:decoration.border.color="@flutter:color/deepPurpleAccent"
     flutter:decoration.border.width="2dp"
     flutter:decoration.radius="20dp"
     flutter:decoration.radiusBottomRight="10dp"
@@ -37,10 +37,10 @@
 
   <MaterialButton
     flutter:textTheme="primary"
-    flutter:textColor="@color/white"
-    flutter:color="@color/blue"
-    flutter:hoverColor="@color/lightGreen"
-    flutter:highlightColor="@color/green"
+    flutter:textColor="@flutter:color/white"
+    flutter:color="@flutter:color/blue"
+    flutter:hoverColor="@flutter:color/lightGreen"
+    flutter:highlightColor="@flutter:color/green"
     flutter:splashColor="#33691E"
     flutter:padding="8dp"
     flutter:onPressed="http://flutter.dev"
@@ -54,6 +54,6 @@
   <ElevatedButton/>
 
   <TextButton>
-    <Text flutter:data="this is TextButton"/>
+    <Text flutter:data="this is TextButton" flutter:style.color="@color/darkGreen"/>
   </TextButton>
 </Column>

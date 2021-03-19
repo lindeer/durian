@@ -1,0 +1,12 @@
+<resources>
+  <color name="orange">@flutter:color/orange</color>
+  <color name="darkGreen">#1b8523</color>
+  <color name="darkBlue">#1b5485</color>
+
+  <state name="color_state_text">
+    <item flutter:color="@color/orange" flutter:state="hovered|focused"/>
+    <item flutter:color="@color/darkGreen" flutter:state="dragged"/>
+    <item flutter:color="@color/darkBlue"/>
+  </state>
+
+</resources>

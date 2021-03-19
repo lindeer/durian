@@ -4,6 +4,9 @@ extension _TExt<T> on T {
   R let<R>(R Function(T it) op) => op(this);
 }
 
+const _poundSign = 0x23; // '#'
+const _atSign = 0x40; // '@'
+
 bool _notDigit(int n) {
   final pos = n ^ 0x30;
   return pos < 0 || pos > 9;
@@ -217,20 +220,41 @@ const _materialState = const {
   "error": MaterialState.error,
 };
 
+const _flutterColorPrefix = '@flutter:color/';
+const _flutterColorPrefixLength = _flutterColorPrefix.length;
+const _resColorPrefix = '@color/';
+const _resColorPrefixLength = _resColorPrefix.length;
+
+abstract class ColorProvider {
+  Color? operator[](String key);
+}
+
+late ColorProvider _resourceColors;
+
+@visibleForTesting
+final testResColors = _resourceColors;
+
 extension _StringExt on String {
 
   Color? toColor() {
-    if (this[0] != '#') {
-      final key = startsWith('@color/') ? substring(7) : null;
+    final first = codeUnitAt(0);
+    if (first == _poundSign) {
+      final text = substring(1);
+      final value = text.length == 3 ? text.split('').map((e) => '$e$e').join('') : text;
+      final color = int.tryParse(value, radix: 16)?.let((color) =>
+      color <= 0xffffff ? Color(color).withAlpha(255) : Color(color));
+      return color;
+    }
+    if (startsWith(_flutterColorPrefix)) {
+      final key = substring(_flutterColorPrefixLength);
       return _builtinColors[key];
     }
+    if (startsWith(_resColorPrefix)) {
+      final key = substring(_resColorPrefixLength);
+      return _resourceColors[key];
+    }
 
-    final text = substring(1);
-    final value = text.length == 3 ? text.split('').map((e) => '$e$e').join('') : text;
-    final color = int.tryParse(value, radix: 16)?.let((color) =>
-    color <= 0xffffff ? Color(color).withAlpha(255) : Color(color));
-
-    return color;
+    return null;
   }
 
   int? toInt() => int.tryParse(this);

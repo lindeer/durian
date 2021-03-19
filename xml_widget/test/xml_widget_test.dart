@@ -56,11 +56,11 @@ void main() {
 <resources>
   <color name="colorPrimary">#ffffff</color>
   <color name="colorAccent">#ff7d41</color>
-  <color name="orange">@color/orange</color>
+  <color name="orange">@flutter:color/orange</color>
 
   <state name="color_state_text">
-    <item flutter:color="@color/green" flutter:state="hovered|focused"/>
-    <item flutter:color="@color/red" flutter:state="dragged"/>
+    <item flutter:color="@flutter:color/green" flutter:state="hovered|focused"/>
+    <item flutter:color="@flutter:color/red" flutter:state="dragged"/>
     <item flutter:color="#f0f"/>
   </state>
 
@@ -79,5 +79,33 @@ void main() {
 
     final c3 = state?.resolve({MaterialState.dragged});
     expect(c3?.value, testColors['red']?.value);
+  });
+
+  test('test color resource2', () {
+    const xml = """
+<resources>
+  <color name="colorPrimary">#ffffff</color>
+  <color name="colorAccent">#ff7d41</color>
+  <color name="orange">@flutter:color/orange</color>
+
+  <state name="color_state_text">
+    <item flutter:color="@color/orange" flutter:state="hovered|focused"/>
+    <item flutter:color="@color/colorAccent" flutter:state="dragged"/>
+    <item flutter:color="@color/colorPrimary"/>
+  </state>
+
+</resources>
+""";
+    final res = XmlResColor();
+    res.loadResource(xml);
+
+    final state = res.state('color_state_text');
+    final c1 = state?.resolve({MaterialState.hovered, MaterialState.disabled, MaterialState.focused});
+    expect(c1?.value, res['orange']?.value);
+
+    final c2 = state?.resolve({MaterialState.dragged});
+    expect(c2?.value, res['colorAccent']?.value);
+    expect(c2?.value, testResColors['colorAccent']?.value);
+
   });
 }

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:xml/xml.dart';
+import 'xml_widget.dart';
 
 abstract class OnPressHandler {
   void onPressed(String uri);
@@ -11,9 +12,10 @@ abstract class OnPressHandler {
 
 class AssembleContext {
   final ThemeData theme;
+  final ResColor color;
   final OnPressHandler? onPressHandler;
 
-  AssembleContext(BuildContext context, this.onPressHandler)
+  AssembleContext(BuildContext context, this.color, this.onPressHandler)
       : theme = Theme.of(context);
 }
 
