@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:xml_widget/xml_widget.dart';
@@ -48,5 +49,35 @@ void main() {
     final w = widget as Text;
     final style = w.style;
     expect(style?.fontSize, 14);
+  });
+
+  test('test color resource', () {
+    const xml = """
+<resources>
+  <color name="colorPrimary">#ffffff</color>
+  <color name="colorAccent">#ff7d41</color>
+  <color name="orange">@color/orange</color>
+
+  <state name="color_state_text">
+    <item flutter:color="@color/green" flutter:state="hovered|focused"/>
+    <item flutter:color="@color/red" flutter:state="dragged"/>
+    <item flutter:color="#f0f"/>
+  </state>
+
+</resources>
+""";
+    final res = XmlResColor();
+    res.loadResource(xml);
+    expect(res['colorPrimary'], Color(0xffffffff));
+    expect(res['orange']?.value, testColors['orange']?.value);
+    final state = res.state('color_state_text');
+    final c1 = state?.resolve({MaterialState.hovered, MaterialState.disabled, MaterialState.focused});
+    expect(c1?.value, testColors['green']?.value);
+
+    final c2 = state?.resolve({MaterialState.hovered, MaterialState.disabled, MaterialState.pressed});
+    expect(c2?.value, 0xffff00ff);
+
+    final c3 = state?.resolve({MaterialState.dragged});
+    expect(c3?.value, testColors['red']?.value);
   });
 }

@@ -11,6 +11,7 @@ part 'basic.dart';
 part 'text.dart';
 part 'group.dart';
 part 'container.dart';
+part 'xml_resource.dart';
 
 abstract class XmlWidgetBuilder {
   String get name;

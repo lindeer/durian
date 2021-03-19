@@ -66,6 +66,9 @@ const _builtinColors = <String, Color>{
   "deepOrangeAccent": Colors.deepOrangeAccent,
 };
 
+@visibleForTesting
+const testColors = _builtinColors;
+
 const _textDirection = const {
   "ltr": TextDirection.ltr,
   "rtl": TextDirection.rtl,
@@ -202,6 +205,16 @@ const _visualDensity = const {
 const _materialTapTargetSize = const {
   "padded": MaterialTapTargetSize.padded,
   "shrinkWrap": MaterialTapTargetSize.shrinkWrap,
+};
+
+const _materialState = const {
+  "hovered": MaterialState.hovered,
+  "focused": MaterialState.focused,
+  "pressed": MaterialState.pressed,
+  "dragged": MaterialState.dragged,
+  "selected": MaterialState.selected,
+  "disabled": MaterialState.disabled,
+  "error": MaterialState.error,
 };
 
 extension _StringExt on String {
