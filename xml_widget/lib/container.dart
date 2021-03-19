@@ -104,6 +104,10 @@ class _XmlFlatButtonBuilder extends _XmlDeprecatedWidgetBuilder {
   const _XmlFlatButtonBuilder() : super('FlatButton', 'TextButton');
 }
 
+class _XmlOutlineButtonBuilder extends _XmlDeprecatedWidgetBuilder {
+  const _XmlOutlineButtonBuilder() : super('OutlineButton', 'OutlinedButton');
+}
+
 class _XmlElevatedButtonBuilder extends CommonWidgetBuilder {
   const _XmlElevatedButtonBuilder() : super('ElevatedButton');
 
@@ -139,10 +143,36 @@ class _XmlTextButtonBuilder extends CommonWidgetBuilder {
     final onLongPressed = handler != null && longPressUri != null ? () => handler.onLongPressed(longPressUri) : null;
 
     if (children.isEmpty) {
-      return ErrorWidget.withDetails(message: 'TextButton must have one child!');
+      return ErrorWidget.withDetails(message: '$name must have one child!');
     }
 
     return TextButton(
+      child: children.first,
+      onPressed: onPressed,
+      onLongPress: onLongPressed,
+      autofocus: attrs['autofocus'] == "true",
+      clipBehavior: _clip[attrs['clipBehavior']] ?? Clip.none,
+    );
+  }
+}
+
+class _XmlOutlinedButtonBuilder extends CommonWidgetBuilder {
+  const _XmlOutlinedButtonBuilder() : super('OutlinedButton');
+
+  @override
+  Widget build(AssembleElement element, List<Widget> children) {
+    final attrs = element.attrs;
+    final handler = element.context.onPressHandler;
+    final pressUri = attrs["onPressed"];
+    final onPressed = handler != null && pressUri != null ? () => handler.onPressed(pressUri) : null;
+    final longPressUri = attrs["onLongPressed"];
+    final onLongPressed = handler != null && longPressUri != null ? () => handler.onLongPressed(longPressUri) : null;
+
+    if (children.isEmpty) {
+      return ErrorWidget.withDetails(message: '$name must have one child!');
+    }
+
+    return OutlinedButton(
       child: children.first,
       onPressed: onPressed,
       onLongPress: onLongPressed,

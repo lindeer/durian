@@ -61,9 +61,11 @@ class WidgetAssembler {
     const _XmlInkBuilder(),
     const _XmlRaisedButtonBuilder(),
     const _XmlFlatButtonBuilder(),
+    const _XmlOutlineButtonBuilder(),
     const _XmlMaterialButtonBuilder(),
     const _XmlElevatedButtonBuilder(),
     const _XmlTextButtonBuilder(),
+    const _XmlOutlinedButtonBuilder(),
     const _XmlPaddingBuilder(),
     const _XmlInkWellBuilder(),
   ];
