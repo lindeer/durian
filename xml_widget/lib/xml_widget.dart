@@ -70,6 +70,8 @@ class WidgetAssembler {
     const _XmlOutlinedButtonBuilder(),
     const _XmlPaddingBuilder(),
     const _XmlInkWellBuilder(),
+    const _XmlStackBuilder(),
+    const _XmlFlexBuilder(),
   ];
 
   static final _defaultBuilders = {

@@ -56,3 +56,44 @@ class _XmlWrapBuilder extends CommonWidgetBuilder {
     );
   }
 }
+
+class _XmlStackBuilder extends CommonWidgetBuilder {
+  const _XmlStackBuilder() : super('Stack');
+
+  @override
+  Widget build(AssembleElement element, List<Widget> children) {
+    final attrs = element.attrs;
+    return Stack(
+      children: children,
+      alignment: _alignmentDirectional[attrs['alignment']] ?? AlignmentDirectional.topStart,
+      textDirection: _textDirection[attrs['textDirection']],
+      fit: _stackFit[attrs['fit']] ?? StackFit.loose,
+      clipBehavior: _clip[attrs['clipBehavior']] ?? Clip.hardEdge,
+    );
+  }
+}
+
+
+class _XmlFlexBuilder extends CommonWidgetBuilder {
+  const _XmlFlexBuilder() : super('Flex');
+
+  @override
+  Widget build(AssembleElement element, List<Widget> children) {
+    final attrs = element.attrs;
+    final direction = _axis[attrs['direction']];
+    if (direction == null) {
+      return ErrorWidget.withDetails(message: "'direction' is required!",);
+    }
+    return Flex(
+      children: children,
+      direction: direction,
+      mainAxisAlignment: attrs['mainAxisAlignment']?.toMainAxisAlignment() ?? MainAxisAlignment.start,
+      mainAxisSize: _mainAxisSize[attrs['mainAxisSize']] ?? MainAxisSize.max,
+      crossAxisAlignment: _crossAxisAlignment[attrs['crossAxisAlignment']] ?? CrossAxisAlignment.center,
+      textDirection: _textDirection[attrs['textDirection']],
+      verticalDirection: _verticalDirection[attrs['textDirection']] ?? VerticalDirection.down,
+      textBaseline: _textBaseline[attrs['textBaseline']],
+      clipBehavior: _clip[attrs['clipBehavior']] ?? Clip.none,
+    );
+  }
+}

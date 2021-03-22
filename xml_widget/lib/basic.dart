@@ -220,6 +220,31 @@ const _materialState = const {
   "error": MaterialState.error,
 };
 
+const _alignmentDirectional = const {
+  "topStart": AlignmentDirectional.topStart,
+  "topCenter": AlignmentDirectional.topCenter,
+  "topEnd": AlignmentDirectional.topEnd,
+  "centerStart": AlignmentDirectional.centerStart,
+  "center": AlignmentDirectional.center,
+  "centerEnd": AlignmentDirectional.centerEnd,
+  "bottomStart": AlignmentDirectional.bottomStart,
+  "bottomCenter": AlignmentDirectional.bottomCenter,
+  "bottomEnd": AlignmentDirectional.bottomEnd,
+};
+
+const _stackFit = const {
+  "loose": StackFit.loose,
+  "expand": StackFit.expand,
+  "passthrough": StackFit.passthrough,
+};
+
+const _axisDirection = const {
+  "up": AxisDirection.up,
+  "right": AxisDirection.right,
+  "down": AxisDirection.down,
+  "left": AxisDirection.left,
+};
+
 const _flutterColorPrefix = '@flutter:color/';
 const _flutterColorPrefixLength = _flutterColorPrefix.length;
 const _resColorPrefix = '@color/';
