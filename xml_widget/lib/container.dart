@@ -4,10 +4,10 @@ class _XmlContainerBuilder extends CommonWidgetBuilder {
   const _XmlContainerBuilder() : super('Container');
 
   @override
-  Widget build(AssembleElement element, List<Widget> children) {
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     return Container(
-      child: children.isEmpty ? null : children.first,
+      child: descendant.isEmpty ? null : descendant.first.child,
       alignment: _alignment[attrs['alignment']],
       padding: _PropertyStruct.padding(attrs),
       decoration: _PropertyStruct.boxDecoration(attrs),
@@ -26,10 +26,10 @@ class _XmlInkBuilder extends CommonWidgetBuilder {
   const _XmlInkBuilder() : super('Ink');
 
   @override
-  Widget build(AssembleElement element, List<Widget> children) {
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     return Ink(
-      child: children.isEmpty ? null : children.first,
+      child: descendant.isEmpty ? null : descendant.first.child,
       padding: _PropertyStruct.padding(attrs),
       color: attrs['color']?.toColor(),
       decoration: _PropertyStruct.boxDecoration(attrs),
@@ -43,7 +43,7 @@ class _XmlMaterialButtonBuilder extends CommonWidgetBuilder {
   const _XmlMaterialButtonBuilder() : super('MaterialButton');
 
   @override
-  Widget build(AssembleElement element, List<Widget> children) {
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final handler = element.context.onPressHandler;
     final pressUri = attrs["onPressed"];
@@ -52,7 +52,7 @@ class _XmlMaterialButtonBuilder extends CommonWidgetBuilder {
     final onLongPressed = handler != null && longPressUri != null ? () => handler.onLongPressed(longPressUri) : null;
 
     return MaterialButton(
-      child: children.isEmpty ? null : children.first,
+      child: descendant.isEmpty ? null : descendant.first.child,
       onPressed: onPressed,
       onLongPress: onLongPressed,
       textTheme: _buttonTextTheme[attrs['textTheme']],
@@ -89,7 +89,7 @@ class _XmlDeprecatedWidgetBuilder extends CommonWidgetBuilder {
   const _XmlDeprecatedWidgetBuilder(String name, this.instead) : super(name);
 
   @override
-  Widget build(AssembleElement element, List<Widget> children) {
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
     return ErrorWidget.withDetails(
       message: '$name is deprecated, use $instead instead!',
     );
@@ -112,7 +112,7 @@ class _XmlElevatedButtonBuilder extends CommonWidgetBuilder {
   const _XmlElevatedButtonBuilder() : super('ElevatedButton');
 
   @override
-  Widget build(AssembleElement element, List<Widget> children) {
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final handler = element.context.onPressHandler;
     final pressUri = attrs["onPressed"];
@@ -121,7 +121,7 @@ class _XmlElevatedButtonBuilder extends CommonWidgetBuilder {
     final onLongPressed = handler != null && longPressUri != null ? () => handler.onLongPressed(longPressUri) : null;
 
     return ElevatedButton(
-      child: children.isEmpty ? null : children.first,
+      child: descendant.isEmpty ? null : descendant.first.child,
       onPressed: onPressed,
       onLongPress: onLongPressed,
       autofocus: attrs['autofocus'] == "true",
@@ -134,7 +134,7 @@ class _XmlTextButtonBuilder extends CommonWidgetBuilder {
   const _XmlTextButtonBuilder() : super('TextButton');
 
   @override
-  Widget build(AssembleElement element, List<Widget> children) {
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final handler = element.context.onPressHandler;
     final pressUri = attrs["onPressed"];
@@ -142,12 +142,12 @@ class _XmlTextButtonBuilder extends CommonWidgetBuilder {
     final longPressUri = attrs["onLongPressed"];
     final onLongPressed = handler != null && longPressUri != null ? () => handler.onLongPressed(longPressUri) : null;
 
-    if (children.isEmpty) {
+    if (descendant.isEmpty) {
       return ErrorWidget.withDetails(message: '$name must have one child!');
     }
 
     return TextButton(
-      child: children.first,
+      child: descendant.first.child,
       onPressed: onPressed,
       onLongPress: onLongPressed,
       autofocus: attrs['autofocus'] == "true",
@@ -160,7 +160,7 @@ class _XmlOutlinedButtonBuilder extends CommonWidgetBuilder {
   const _XmlOutlinedButtonBuilder() : super('OutlinedButton');
 
   @override
-  Widget build(AssembleElement element, List<Widget> children) {
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final handler = element.context.onPressHandler;
     final pressUri = attrs["onPressed"];
@@ -168,12 +168,12 @@ class _XmlOutlinedButtonBuilder extends CommonWidgetBuilder {
     final longPressUri = attrs["onLongPressed"];
     final onLongPressed = handler != null && longPressUri != null ? () => handler.onLongPressed(longPressUri) : null;
 
-    if (children.isEmpty) {
+    if (descendant.isEmpty) {
       return ErrorWidget.withDetails(message: '$name must have one child!');
     }
 
     return OutlinedButton(
-      child: children.first,
+      child: descendant.first.child,
       onPressed: onPressed,
       onLongPress: onLongPressed,
       autofocus: attrs['autofocus'] == "true",
@@ -186,7 +186,7 @@ class _XmlPaddingBuilder extends CommonWidgetBuilder {
   const _XmlPaddingBuilder() : super('Padding');
 
   @override
-  Widget build(AssembleElement element, List<Widget> children) {
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final padding = _PropertyStruct.padding(attrs);
     if (padding == null) {
@@ -194,7 +194,7 @@ class _XmlPaddingBuilder extends CommonWidgetBuilder {
     }
     return Padding(
       padding: padding,
-      child: children.first,
+      child: descendant.isEmpty ? null : descendant.first.child,
     );
   }
 }
@@ -203,7 +203,7 @@ class _XmlInkWellBuilder extends CommonWidgetBuilder {
   const _XmlInkWellBuilder() : super('InkWell');
 
   @override
-  Widget build(AssembleElement element, List<Widget> children) {
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final handler = element.context.onPressHandler;
     final pressUri = attrs["onTap"];
@@ -212,7 +212,7 @@ class _XmlInkWellBuilder extends CommonWidgetBuilder {
     final onLongPressed = handler != null && longPressUri != null ? () => handler.onLongPressed(longPressUri) : null;
 
     return InkWell(
-      child: children.first,
+      child: descendant.isEmpty ? null : descendant.first.child,
       onTap: onPressed,
       onLongPress: onLongPressed,
       focusColor: attrs['focusColor']?.toColor(),

@@ -4,7 +4,8 @@ class _XmlColumnBuilder extends CommonWidgetBuilder {
   const _XmlColumnBuilder() : super('Column');
 
   @override
-  Widget build(AssembleElement element, List<Widget> children) {
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+    final children = descendant.map((e) => e.child).toList(growable: false);
     final attrs = element.attrs;
     return Column(
       children: children,
@@ -22,7 +23,8 @@ class _XmlRowBuilder extends CommonWidgetBuilder {
   const _XmlRowBuilder() : super('Row');
 
   @override
-  Widget build(AssembleElement element, List<Widget> children) {
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+    final children = descendant.map((e) => e.child).toList(growable: false);
     final attrs = element.attrs;
     return Row(
       children: children,
@@ -40,7 +42,8 @@ class _XmlWrapBuilder extends CommonWidgetBuilder {
   const _XmlWrapBuilder() : super('Wrap');
 
   @override
-  Widget build(AssembleElement element, List<Widget> children) {
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+    final children = descendant.map((e) => e.child).toList(growable: false);
     final attrs = element.attrs;
     return Wrap(
       children: children,
@@ -61,7 +64,8 @@ class _XmlStackBuilder extends CommonWidgetBuilder {
   const _XmlStackBuilder() : super('Stack');
 
   @override
-  Widget build(AssembleElement element, List<Widget> children) {
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+    final children = descendant.map((e) => e.child).toList(growable: false);
     final attrs = element.attrs;
     return Stack(
       children: children,
@@ -78,7 +82,8 @@ class _XmlFlexBuilder extends CommonWidgetBuilder {
   const _XmlFlexBuilder() : super('Flex');
 
   @override
-  Widget build(AssembleElement element, List<Widget> children) {
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+    final children = descendant.map((e) => e.child).toList(growable: false);
     final attrs = element.attrs;
     final direction = _axis[attrs['direction']];
     if (direction == null) {

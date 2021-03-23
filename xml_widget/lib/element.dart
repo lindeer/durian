@@ -28,3 +28,10 @@ class AssembleElement {
   : attrs = Map.fromEntries(e.attributes.map(
           (attr) => MapEntry(attr.name.local, attr.value)));
 }
+
+class AssembleChildElement {
+  final Map<String, String> attrs;
+  final Widget child;
+
+  AssembleChildElement(this.attrs, this.child);
+}

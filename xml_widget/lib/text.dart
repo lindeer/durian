@@ -8,7 +8,7 @@ class _XmlTextBuilder extends CommonWidgetBuilder {
   bool get childless => true;
 
   @override
-  Widget build(AssembleElement element, List<Widget> children) {
+  Widget build(AssembleElement element, List<AssembleChildElement> children) {
     final attrs = element.attrs;
     final styleAttr = attrs['style'];
     TextStyle? textStyle;

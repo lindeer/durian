@@ -19,7 +19,7 @@ abstract class XmlWidgetBuilder {
   bool get childless;
 
   // children would be empty if childless is false
-  Widget build(AssembleElement element, List<Widget> children);
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant);
 }
 
 abstract class CommonWidgetBuilder implements XmlWidgetBuilder {
@@ -53,7 +53,7 @@ class WidgetAssembler {
     }
   }
 
-  static const _noChild = const <Widget>[];
+  static const _noChild = const <AssembleChildElement>[];
   static const _builtinBuilders = <XmlWidgetBuilder>[
     const _XmlTextBuilder(),
     const _XmlColumnBuilder(),
@@ -78,7 +78,8 @@ class WidgetAssembler {
     for (final builder in _builtinBuilders) builder.name: builder
   };
 
-  Widget _assembleDefaultWidget(AssembleElement element, List<Widget> children) {
+  Widget _assembleDefaultWidget(AssembleElement element, List<AssembleChildElement> descendant) {
+    final children = descendant.map((e) => e.child).toList(growable: false);
     return Row(
       children: children,
     );
@@ -100,10 +101,10 @@ class WidgetAssembler {
     return w;
   }
 
-  List<Widget> _inflateChildren(AssembleElement element) => element.e.children
+  List<AssembleChildElement> _inflateChildren(AssembleElement element) => element.e.children
       .where((node) => node.nodeType == XmlNodeType.ELEMENT)
       .map((e) => AssembleElement(e as XmlElement, element.context))
-      .map((e) => _assembleByElement(e))
+      .map((e) => AssembleChildElement(e.attrs, _assembleByElement(e)))
       .toList(growable: false);
 
   Widget fromFile(String path) {
