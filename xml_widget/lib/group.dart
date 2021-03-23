@@ -102,3 +102,81 @@ class _XmlFlexBuilder extends CommonWidgetBuilder {
     );
   }
 }
+
+class _XmlScaffoldBuilder extends CommonWidgetBuilder {
+  const _XmlScaffoldBuilder() : super('Scaffold');
+
+  @override
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+    final attrs = element.attrs;
+    final components = <String, AssembleChildElement>{};
+    descendant.where((e) => e.attrs.keys.contains('scaffold')).forEach((e) {
+      final key = e.attrs['scaffold'] ?? '';
+      components[key] = e;
+    });
+
+    final floatingButton = components['floatingActionButton'];
+    return Scaffold(
+      appBar: components['appBar']?.child as PreferredSizeWidget?,
+      body: components['body']?.child,
+      floatingActionButton: floatingButton?.child,
+      floatingActionButtonLocation: _floatingActionButtonLocation[floatingButton?.attrs['floatingActionButtonLocation']],
+      drawer: components['drawer']?.child,
+      endDrawer: components['endDrawer']?.child,
+      bottomNavigationBar: components['bottomNavigationBar']?.child,
+      bottomSheet: components['bottomSheet']?.child,
+      backgroundColor: attrs['backgroundColor']?.toColor(),
+      resizeToAvoidBottomInset: attrs['backgroundColor']?.let((it) => it == "true"),
+      primary: attrs['primary'] != "false",
+      drawerDragStartBehavior: _drawerDragStartBehavior[attrs['drawerDragStartBehavior']] ?? DragStartBehavior.start,
+      extendBody: attrs['extendBody'] == "true",
+      extendBodyBehindAppBar: attrs['extendBodyBehindAppBar'] == "true",
+      drawerScrimColor: attrs['drawerScrimColor']?.toColor(),
+      drawerEdgeDragWidth: attrs['drawerEdgeDragWidth']?.toDouble(),
+      drawerEnableOpenDragGesture: attrs['drawerEnableOpenDragGesture'] != "false",
+      endDrawerEnableOpenDragGesture: attrs['endDrawerEnableOpenDragGesture'] != "false",
+      restorationId: attrs['restorationId'],
+    );
+  }
+}
+
+class _XmlAppBarBuilder extends CommonWidgetBuilder {
+  const _XmlAppBarBuilder() : super('AppBar');
+
+  @override
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+    final attrs = element.attrs;
+    final components = <String, AssembleChildElement>{};
+    descendant.where((e) => e.attrs.keys.contains('appBar')).forEach((e) {
+      final key = e.attrs['appBar'] ?? '';
+      components[key] = e;
+    });
+    return AppBar(
+      leading: components['leading']?.child,
+      automaticallyImplyLeading: attrs['automaticallyImplyLeading'] != "false",
+      title: components['title']?.child,
+      flexibleSpace: components['flexibleSpace']?.child,
+      bottom: components['bottom']?.child as PreferredSizeWidget?,
+      elevation: attrs['elevation']?.toSize(),
+      shadowColor: attrs['shadowColor']?.toColor(),
+      foregroundColor: attrs["foregroundColor"]?.toColor(),
+      backgroundColor: attrs["backgroundColor"]?.toColor(),
+      brightness: _brightness[attrs["brightness"]],
+      // iconTheme: ,
+      // actionsIconTheme: ,
+      // textTheme: _buttonTextTheme[attrs['textTheme']],
+      primary: attrs['primary'] != "false",
+      centerTitle: attrs['centerTitle']?.let((it) => it == "true"),
+      excludeHeaderSemantics: attrs['excludeHeaderSemantics'] == "true",
+      titleSpacing: attrs['titleSpacing']?.toSize(),
+      toolbarOpacity: attrs['toolbarOpacity']?.toSize() ?? 1.0,
+      bottomOpacity: attrs['bottomOpacity']?.toSize() ?? 1.0,
+      toolbarHeight: attrs['toolbarHeight']?.toSize(),
+      leadingWidth: attrs['leadingWidth']?.toSize(),
+      backwardsCompatibility: attrs['backwardsCompatibility']?.let((it) => it == "true"),
+      // toolbarTextStyle: ,
+      // titleTextStyle: ,
+      // systemOverlayStyle: ,
+    );
+  }
+}

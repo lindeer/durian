@@ -245,6 +245,32 @@ const _axisDirection = const {
   "left": AxisDirection.left,
 };
 
+const _floatingActionButtonLocation = const {
+  "startTop": FloatingActionButtonLocation.startTop,
+  "miniStartTop": FloatingActionButtonLocation.miniStartTop,
+  "centerTop": FloatingActionButtonLocation.centerTop,
+  "miniCenterTop": FloatingActionButtonLocation.miniCenterTop,
+  "endTop": FloatingActionButtonLocation.endTop,
+  "miniEndTop": FloatingActionButtonLocation.miniEndTop,
+  "startFloat": FloatingActionButtonLocation.startFloat,
+  "miniStartFloat": FloatingActionButtonLocation.miniStartFloat,
+  "centerFloat": FloatingActionButtonLocation.centerFloat,
+  "miniCenterFloat": FloatingActionButtonLocation.miniCenterFloat,
+  "endFloat": FloatingActionButtonLocation.endFloat,
+  "miniEndFloat": FloatingActionButtonLocation.miniEndFloat,
+  "startDocked": FloatingActionButtonLocation.startDocked,
+  "miniStartDocked": FloatingActionButtonLocation.miniStartDocked,
+  "centerDocked": FloatingActionButtonLocation.centerDocked,
+  "miniCenterDocked": FloatingActionButtonLocation.miniCenterDocked,
+  "endDocked": FloatingActionButtonLocation.endDocked,
+  "miniEndDocked": FloatingActionButtonLocation.miniEndDocked,
+};
+
+const _drawerDragStartBehavior = const {
+  "start": DragStartBehavior.start,
+  "down": DragStartBehavior.down,
+};
+
 const _flutterColorPrefix = '@flutter:color/';
 const _flutterColorPrefixLength = _flutterColorPrefix.length;
 const _resColorPrefix = '@color/';

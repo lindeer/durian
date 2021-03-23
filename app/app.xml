@@ -1,59 +1,79 @@
-<Column xmlns:flutter="http://flutter.dev/xml/flutter"
-  flutter:mainAxisAlignment="center" >
-  <Text flutter:data="You have pushed the button this many times:"/>
-  <Text flutter:data="@{data.data}"
-    flutter:style.color="@flutter:color/lightGreen"
-    flutter:style="@theme/textTheme.headline4"/>
+<Scaffold xmlns:flutter="http://flutter.dev/xml/flutter">
 
-  <Container
-    flutter:width="80dp"
-    flutter:height="80dp"
-    flutter:padding="10dp"
-    flutter:paddingLeft="16dp"
-    flutter:paddingRight="16dp"
-    flutter:decoration.color="@flutter:color/orange"
-    flutter:decoration.border.color="@flutter:color/orangeAccent"
-    flutter:decoration.border.width="2dp"
-    flutter:decoration.borderTop.color="@flutter:color/lightBlue"
-    flutter:margin="16dp">
+  <AppBar flutter:scaffold="appBar">
+    <Text
+      flutter:appBar="title"
+      flutter:data="Flutter Xml Widget"/>
 
-    <Text flutter:data="Restarted application in 233ms."/>
+  </AppBar>
 
-  </Container>
+  <FloatingActionButton
+    flutter:scaffold="floatingActionButton"
+    flutter:tooltip="Increment"
+    flutter:onPressed="https://flutter.dev">
 
-  <Container
-    flutter:constraints.width="120dp"
-    flutter:constraints.minHeight="50dp"
-    flutter:constraints.maxHeight="150dp"
-    flutter:decoration.border.color="@flutter:color/deepPurpleAccent"
-    flutter:decoration.border.width="2dp"
-    flutter:decoration.radius="20dp"
-    flutter:decoration.radiusBottomRight="10dp"
-    flutter:clipBehavior="antiAlias">
+    <Icon flutter:icon="@flutter:icons/add"/>
+  </FloatingActionButton>
 
-    <Text flutter:data="Restarted application in 233ms."/>
+  <Center flutter:scaffold="body">
+    <Column
+      flutter:mainAxisAlignment="center">
+      <Text flutter:data="You have pushed the button this many times:"/>
+      <Text flutter:data="@{data.data}"
+        flutter:style.color="@flutter:color/lightGreen"
+        flutter:style="@theme/textTheme.headline4"/>
 
-  </Container>
+      <Container
+        flutter:width="80dp"
+        flutter:height="80dp"
+        flutter:padding="10dp"
+        flutter:paddingLeft="16dp"
+        flutter:paddingRight="16dp"
+        flutter:decoration.color="@flutter:color/orange"
+        flutter:decoration.border.color="@flutter:color/orangeAccent"
+        flutter:decoration.border.width="2dp"
+        flutter:decoration.borderTop.color="@flutter:color/lightBlue"
+        flutter:margin="16dp">
 
-  <MaterialButton
-    flutter:textTheme="primary"
-    flutter:textColor="@flutter:color/white"
-    flutter:color="@flutter:color/blue"
-    flutter:hoverColor="@flutter:color/lightGreen"
-    flutter:highlightColor="@flutter:color/green"
-    flutter:splashColor="#33691E"
-    flutter:padding="8dp"
-    flutter:onPressed="http://flutter.dev"
-    flutter:onLongPressed="http://flutter.dev"
-    flutter:elevation="5dp">
+        <Text flutter:data="Restarted application in 233ms."/>
 
-    <Text flutter:data="MaterialButton" />
+      </Container>
 
-  </MaterialButton>
+      <Container
+        flutter:constraints.width="120dp"
+        flutter:constraints.minHeight="50dp"
+        flutter:constraints.maxHeight="150dp"
+        flutter:decoration.border.color="@flutter:color/deepPurpleAccent"
+        flutter:decoration.border.width="2dp"
+        flutter:decoration.radius="20dp"
+        flutter:decoration.radiusBottomRight="10dp"
+        flutter:clipBehavior="antiAlias">
 
-  <ElevatedButton/>
+        <Text flutter:data="Restarted application in 233ms."/>
 
-  <TextButton>
-    <Text flutter:data="this is TextButton" flutter:style.color="@color/darkGreen"/>
-  </TextButton>
-</Column>
+      </Container>
+
+      <MaterialButton
+        flutter:textTheme="primary"
+        flutter:textColor="@flutter:color/white"
+        flutter:color="@flutter:color/blue"
+        flutter:hoverColor="@flutter:color/lightGreen"
+        flutter:highlightColor="@flutter:color/green"
+        flutter:splashColor="#33691E"
+        flutter:padding="8dp"
+        flutter:onPressed="http://flutter.dev"
+        flutter:onLongPressed="http://flutter.dev"
+        flutter:elevation="5dp">
+
+        <Text flutter:data="MaterialButton" />
+
+      </MaterialButton>
+
+      <ElevatedButton/>
+
+      <TextButton>
+        <Text flutter:data="this is TextButton" flutter:style.color="@color/darkGreen"/>
+      </TextButton>
+    </Column>
+  </Center>
+</Scaffold>

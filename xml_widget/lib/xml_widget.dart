@@ -2,6 +2,7 @@ library durian;
 
 import 'dart:io';
 
+import 'package:flutter/gestures.dart' show DragStartBehavior;
 import 'package:flutter/material.dart';
 import 'package:xml/xml.dart';
 import 'element.dart';
@@ -72,6 +73,11 @@ class WidgetAssembler {
     const _XmlInkWellBuilder(),
     const _XmlStackBuilder(),
     const _XmlFlexBuilder(),
+    const _XmlScaffoldBuilder(),
+    const _XmlFloatingActionButtonBuilder(),
+    const _XmlAppBarBuilder(),
+    const _XmlIconBuilder(),
+    const _XmlCenterBuilder(),
   ];
 
   static final _defaultBuilders = {

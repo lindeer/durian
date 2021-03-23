@@ -228,3 +228,49 @@ class _XmlInkWellBuilder extends CommonWidgetBuilder {
     );
   }
 }
+
+class _XmlFloatingActionButtonBuilder extends CommonWidgetBuilder {
+  const _XmlFloatingActionButtonBuilder() : super('FloatingActionButton');
+
+  @override
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+    final attrs = element.attrs;
+    final handler = element.context.onPressHandler;
+    final pressUri = attrs["onPressed"];
+    final onPressed = handler != null && pressUri != null ? () => handler.onPressed(pressUri) : null;
+    return FloatingActionButton(
+      child: descendant.isEmpty ? null : descendant.first.child,
+      onPressed: onPressed,
+      tooltip: attrs['tooltip'],
+      foregroundColor: attrs["foregroundColor"]?.toColor(),
+      backgroundColor: attrs["backgroundColor"]?.toColor(),
+      focusColor: attrs['focusColor']?.toColor(),
+      hoverColor: attrs['hoverColor']?.toColor(),
+      splashColor: attrs['splashColor']?.toColor(),
+      elevation: attrs['elevation']?.toSize(),
+      focusElevation: attrs['focusElevation']?.toDouble(),
+      hoverElevation: attrs['hoverElevation']?.toDouble(),
+      highlightElevation: attrs['highlightElevation']?.toDouble(),
+      disabledElevation: attrs['disabledElevation']?.toDouble(),
+      mini: attrs['mini'] == "true",
+      clipBehavior: _clip[attrs['clipBehavior']] ?? Clip.none,
+      autofocus: attrs['autofocus'] == "true",
+      materialTapTargetSize: _materialTapTargetSize[attrs["materialTapTargetSize"]],
+      isExtended: attrs['isExtended'] == "true",
+    );
+  }
+}
+
+class _XmlCenterBuilder extends CommonWidgetBuilder {
+  const _XmlCenterBuilder() : super('Center');
+
+  @override
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+    final attrs = element.attrs;
+    return Center(
+      child: descendant.isEmpty ? null : descendant.first.child,
+      widthFactor: attrs['widthFactor']?.toDouble(),
+      heightFactor: attrs['heightFactor']?.toDouble(),
+    );
+  }
+}

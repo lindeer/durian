@@ -28,3 +28,23 @@ class _XmlTextBuilder extends CommonWidgetBuilder {
     );
   }
 }
+
+class _XmlIconBuilder extends CommonWidgetBuilder {
+
+  const _XmlIconBuilder() : super('Icon');
+
+  @override
+  bool get childless => true;
+
+  @override
+  Widget build(AssembleElement element, List<AssembleChildElement> children) {
+    final attrs = element.attrs;
+    return Icon(
+      Icons.add,
+      size: attrs['size']?.toSize(),
+      color: attrs['color']?.toColor(),
+      semanticLabel: attrs['semanticLabel'],
+      textDirection: _textDirection[attrs['textDirection']],
+    );
+  }
+}
