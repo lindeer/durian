@@ -274,3 +274,28 @@ class _XmlCenterBuilder extends CommonWidgetBuilder {
     );
   }
 }
+
+class _XmlIntrinsicWidthBuilder extends CommonWidgetBuilder {
+  const _XmlIntrinsicWidthBuilder() : super('IntrinsicWidth');
+
+  @override
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+    final attrs = element.attrs;
+    return IntrinsicWidth(
+      child: descendant.isEmpty ? null : descendant.first.child,
+      stepWidth: attrs['stepWidth']?.toDouble(),
+      stepHeight: attrs['stepHeight']?.toDouble(),
+    );
+  }
+}
+
+class _XmlIntrinsicHeightBuilder extends CommonWidgetBuilder {
+  const _XmlIntrinsicHeightBuilder() : super('IntrinsicHeight');
+
+  @override
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+    return IntrinsicHeight(
+      child: descendant.isEmpty ? null : descendant.first.child,
+    );
+  }
+}
