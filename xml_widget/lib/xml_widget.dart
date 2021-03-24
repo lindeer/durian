@@ -80,6 +80,7 @@ class WidgetAssembler {
     const _XmlCenterBuilder(),
     const _XmlIntrinsicWidthBuilder(),
     const _XmlIntrinsicHeightBuilder(),
+    const _XmlImageBuilder(),
   ];
 
   static final _defaultBuilders = {

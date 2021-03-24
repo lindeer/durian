@@ -48,3 +48,84 @@ class _XmlIconBuilder extends CommonWidgetBuilder {
     );
   }
 }
+
+class _XmlImageBuilder extends CommonWidgetBuilder {
+  const _XmlImageBuilder() : super('Image');
+
+  @override
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+    final attrs = element.attrs;
+    final src = attrs['src'] ?? '';
+    File file;
+    final scale = attrs['scale']?.toDouble();
+    final ltrb = attrs['centerSlice']?.split(' ').map((e) => e.toSize()).whereType<double>().toList(growable: false);
+    final rect = ltrb != null && ltrb.length == 4 ? Rect.fromLTRB(ltrb[0], ltrb[1], ltrb[2], ltrb[3]) : null;
+    if (src.startsWith('http')) {
+      return Image.network(
+        src,
+        scale: scale ?? 1.0,
+        semanticLabel: attrs['semanticLabel'],
+        excludeFromSemantics: attrs['excludeFromSemantics'] == "true",
+        width: attrs['width']?.toDouble(),
+        height: attrs['height']?.toDouble(),
+        color: attrs['color']?.toColor(),
+        colorBlendMode: _blendMode[attrs['colorBlendMode']],
+        fit: _boxFit[attrs['fit']],
+        alignment: _alignment[attrs['alignment']] ?? Alignment.center,
+        repeat: _imageRepeat[attrs['repeat']] ?? ImageRepeat.noRepeat,
+        centerSlice: rect,
+        matchTextDirection: attrs['matchTextDirection'] == "true",
+        gaplessPlayback: attrs['gaplessPlayback'] == "true",
+        filterQuality: _filterQuality[attrs['filterQuality']] ?? FilterQuality.low,
+        isAntiAlias: attrs['isAntiAlias'] == "true",
+        cacheWidth: attrs['cacheWidth']?.toInt(),
+        cacheHeight: attrs['cacheHeight']?.toInt(),
+      );
+    } else if (src.startsWith('@image/')) {
+      final res = src.substring(7);
+      return Image.asset(
+        res,
+        scale: scale,
+        semanticLabel: attrs['semanticLabel'],
+        excludeFromSemantics: attrs['excludeFromSemantics'] == "true",
+        width: attrs['width']?.toDouble(),
+        height: attrs['height']?.toDouble(),
+        color: attrs['color']?.toColor(),
+        colorBlendMode: _blendMode[attrs['colorBlendMode']],
+        fit: _boxFit[attrs['fit']],
+        alignment: _alignment[attrs['alignment']] ?? Alignment.center,
+        repeat: _imageRepeat[attrs['repeat']] ?? ImageRepeat.noRepeat,
+        centerSlice: rect,
+        matchTextDirection: attrs['matchTextDirection'] == "true",
+        gaplessPlayback: attrs['gaplessPlayback'] == "true",
+        filterQuality: _filterQuality[attrs['filterQuality']] ?? FilterQuality.low,
+        isAntiAlias: attrs['isAntiAlias'] == "true",
+        cacheWidth: attrs['cacheWidth']?.toInt(),
+        cacheHeight: attrs['cacheHeight']?.toInt(),
+      );
+    } else if ((file = File(src)).existsSync()) {
+      return Image.file(
+        file,
+        scale: scale ?? 1.0,
+        semanticLabel: attrs['semanticLabel'],
+        excludeFromSemantics: attrs['excludeFromSemantics'] == "true",
+        width: attrs['width']?.toDouble(),
+        height: attrs['height']?.toDouble(),
+        color: attrs['color']?.toColor(),
+        colorBlendMode: _blendMode[attrs['colorBlendMode']],
+        fit: _boxFit[attrs['fit']],
+        alignment: _alignment[attrs['alignment']] ?? Alignment.center,
+        repeat: _imageRepeat[attrs['repeat']] ?? ImageRepeat.noRepeat,
+        centerSlice: rect,
+        matchTextDirection: attrs['matchTextDirection'] == "true",
+        gaplessPlayback: attrs['gaplessPlayback'] == "true",
+        filterQuality: _filterQuality[attrs['filterQuality']] ?? FilterQuality.low,
+        isAntiAlias: attrs['isAntiAlias'] == "true",
+        cacheWidth: attrs['cacheWidth']?.toInt(),
+        cacheHeight: attrs['cacheHeight']?.toInt(),
+      );
+    } else {
+      return SizedBox.shrink();
+    }
+  }
+}

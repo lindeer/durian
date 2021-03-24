@@ -271,6 +271,30 @@ const _drawerDragStartBehavior = const {
   "down": DragStartBehavior.down,
 };
 
+const _boxFit = const {
+  "fill": BoxFit.fill,
+  "contain": BoxFit.contain,
+  "cover": BoxFit.cover,
+  "fitWidth": BoxFit.fitWidth,
+  "fitHeight": BoxFit.fitHeight,
+  "none": BoxFit.none,
+  "scaleDown": BoxFit.scaleDown,
+};
+
+const _imageRepeat = const {
+  "repeat": ImageRepeat.repeat,
+  "repeatX": ImageRepeat.repeatX,
+  "repeatY": ImageRepeat.repeatY,
+  "noRepeat": ImageRepeat.noRepeat,
+};
+
+const _filterQuality = const {
+  "none": FilterQuality.none,
+  "low": FilterQuality.low,
+  "medium": FilterQuality.medium,
+  "high": FilterQuality.high,
+};
+
 const _flutterColorPrefix = '@flutter:color/';
 const _flutterColorPrefixLength = _flutterColorPrefix.length;
 const _resColorPrefix = '@color/';
