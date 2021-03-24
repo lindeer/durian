@@ -299,3 +299,125 @@ class _XmlIntrinsicHeightBuilder extends CommonWidgetBuilder {
     );
   }
 }
+
+class _XmlAlignBuilder extends CommonWidgetBuilder {
+  const _XmlAlignBuilder() : super('Align');
+
+  @override
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+    final attrs = element.attrs;
+    return Align(
+      child: descendant.isEmpty ? null : descendant.first.child,
+      alignment: _alignment[attrs['alignment']] ?? Alignment.center,
+      widthFactor: attrs['widthFactor']?.toDouble(),
+      heightFactor: attrs['heightFactor']?.toDouble(),
+    );
+  }
+}
+
+class _XmlAspectRatioBuilder extends CommonWidgetBuilder {
+  const _XmlAspectRatioBuilder() : super('AspectRatio');
+
+  @override
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+    final attrs = element.attrs;
+    final ratio = attrs['aspectRatio']?.toDouble();
+    if (ratio == null) {
+      return ErrorWidget.withDetails(message: "No aspectRatio value!");
+    }
+    return AspectRatio(
+      child: descendant.isEmpty ? null : descendant.first.child,
+      aspectRatio: ratio,
+    );
+  }
+}
+
+class _XmlFittedBoxBuilder extends CommonWidgetBuilder {
+  const _XmlFittedBoxBuilder() : super('FittedBox');
+
+  @override
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+    final attrs = element.attrs;
+    return FittedBox(
+      child: descendant.isEmpty ? null : descendant.first.child,
+      fit: _boxFit[attrs['fit']] ?? BoxFit.contain,
+      alignment: _alignment[attrs['alignment']] ?? Alignment.center,
+      clipBehavior: _clip[attrs['clipBehavior']] ?? Clip.none,
+    );
+  }
+}
+
+class _XmlBaselineBuilder extends CommonWidgetBuilder {
+  const _XmlBaselineBuilder() : super('Baseline');
+
+  @override
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+    final attrs = element.attrs;
+    final baseline = attrs['baseline']?.toDouble();
+    final type = _textBaseline[attrs['baselineType']];
+    if (baseline == null || type == null) {
+      return ErrorWidget.withDetails(message: "Baseline should contain valid baseline value and baselineType!");
+    }
+    return Baseline(
+      child: descendant.isEmpty ? null : descendant.first.child,
+      baseline: baseline,
+      baselineType: type,
+    );
+  }
+}
+
+class _XmlPositionedBuilder extends CommonWidgetBuilder {
+  const _XmlPositionedBuilder() : super('Positioned');
+
+  @override
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+    final attrs = element.attrs;
+    if (descendant.isEmpty) {
+      return ErrorWidget.withDetails(message: "Positioned should contain one child!");
+    }
+    return Positioned(
+      child: descendant.first.child,
+      left: attrs['left']?.toSize(),
+      top: attrs['top']?.toSize(),
+      right: attrs['right']?.toSize(),
+      bottom: attrs['bottom']?.toSize(),
+      width: attrs['width']?.toSize(),
+      height: attrs['height']?.toSize(),
+    );
+  }
+}
+
+class _XmlSizedBoxBuilder extends CommonWidgetBuilder {
+  const _XmlSizedBoxBuilder() : super('SizedBox');
+
+  @override
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+    final attrs = element.attrs;
+    if (descendant.isEmpty) {
+      return ErrorWidget.withDetails(message: "Positioned should contain one child!");
+    }
+    return SizedBox(
+      child: descendant.isEmpty ? null : descendant.first.child,
+      width: attrs['width']?.toSize(),
+      height: attrs['height']?.toSize(),
+    );
+  }
+}
+
+class _XmlOpacityBuilder extends CommonWidgetBuilder {
+  const _XmlOpacityBuilder() : super('Opacity');
+
+  @override
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+    final attrs = element.attrs;
+    final opacity = attrs['opacity']?.toDouble();
+    if (opacity == null) {
+      return ErrorWidget.withDetails(message: "Opacity should have 'opacity' value!");
+    }
+    return Opacity(
+      child: descendant.isEmpty ? null : descendant.first.child,
+      opacity: opacity,
+      alwaysIncludeSemantics: attrs['alwaysIncludeSemantics'] == "true",
+    );
+  }
+}
