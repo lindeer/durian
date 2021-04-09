@@ -6,8 +6,35 @@ import 'package:mockito/mockito.dart';
 class _MockBuildContext extends Mock implements BuildContext {}
 
 void main() {
-  final assembler = WidgetAssembler(buildContext: _MockBuildContext());
-
+  testWidgets('test template-if', (WidgetTester tester) async {
+    const xml = """
+    <Column>
+      <Text
+        flutter:if="false"
+        flutter:data="{{message}}"
+        flutter:maxLines="3"
+        flutter:softWrap="true"
+        flutter:textDirection="rtl"/>
+      <Text flutter:data="good"/>
+    </Column>
+""";
+    await tester.pumpWidget(MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: Builder(builder: (ctx) {
+        final assembler = WidgetAssembler(buildContext: ctx);
+        return assembler.fromSource(xml);
+      },),
+    ));
+    final target = find.byType(ConditionWidget);
+    expect(target, findsOneWidget);
+    expect(find.text('{{message}}'), findsNothing);
+    expect(find.text('good'), findsOneWidget);
+    await tester.pump();
+  });
+  /*
   test('test template-if', () {
     const xml = """
     <Column>
@@ -158,4 +185,6 @@ void main() {
     expect(c2.children.length, 1);
     expect(c2.children[0].raw['flutter:if'], "condition == 2");
   });
+
+   */
 }

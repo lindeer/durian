@@ -15,6 +15,8 @@ part 'container.dart';
 part 'resource.dart';
 part 'condition.dart';
 
+typedef AssembleWidgetBuilder = Widget Function(AssembleElement element, List<AssembleChildElement> descendant);
+
 abstract class XmlWidgetBuilder {
   String get name;
 
@@ -119,12 +121,16 @@ class WidgetAssembler {
       }
     }
 
-    final children = containIf ? _ChildMaker.merge(childrenElements) : childrenElements;
+    final fn = builder == null ? _assembleDefaultWidget : builder.build;
     Widget w;
-    if (builder != null) {
-      w = builder.build(element, children);
+    if (containIf) {
+      w = ConditionWidget(element: element,
+        children: childrenElements,
+        builder: fn,
+      );
     } else {
-      w = _assembleDefaultWidget(element, children);
+      final children = childrenElements;
+      w = fn.call(element, children);
     }
 
     return w;

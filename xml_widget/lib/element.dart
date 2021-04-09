@@ -46,4 +46,6 @@ class AssembleChildElement {
   const AssembleChildElement.widget(Widget child) : this(_emptyAttr, _emptyAttr, child);
 
   static const _emptyAttr = const <String, String>{};
+
+  static const zero = AssembleChildElement.widget(SizedBox.shrink());
 }

@@ -2,14 +2,14 @@ part of durian;
 
 abstract class _ChildMaker {
 
-  AssembleChildElement get child;
+  AssembleChildElement make(BuildContext context);
 
   factory _ChildMaker.single(AssembleChildElement element) => _NormalMaker(element);
 
   factory _ChildMaker.condition(List<AssembleChildElement> conditions) => _ConditionMaker(conditions);
 
 
-  static List<AssembleChildElement> merge(List<AssembleChildElement> elements) {
+  static List<_ChildMaker> merge(List<AssembleChildElement> elements) {
     final makers = <_ChildMaker>[];
     final group = <AssembleChildElement>[];
     final parser = _IfParse();
@@ -40,7 +40,7 @@ abstract class _ChildMaker {
       makers.add(_ChildMaker.condition(List.of(group)));
       group.clear();
     }
-    return makers.map((m) => m.child).toList(growable: false);
+    return makers;
   }
 }
 
@@ -50,7 +50,7 @@ class _NormalMaker implements _ChildMaker {
   const _NormalMaker(this._child);
 
   @override
-  AssembleChildElement get child => _child;
+  AssembleChildElement make(BuildContext context) => _child;
 
 }
 
@@ -60,7 +60,16 @@ class _ConditionMaker implements _ChildMaker {
   _ConditionMaker(this.children);
 
   @override
-  AssembleChildElement get child => AssembleChildElement.widget(ConditionWidget(children: children,));
+  AssembleChildElement make(BuildContext context) {
+    for (final child in children) {
+      final attrs = child.raw;
+      final condition = attrs['flutter:if'] ?? attrs['flutter:elseif'] ?? attrs['flutter:else'];
+      if (condition == "true") {
+        return child;
+      }
+    }
+    return AssembleChildElement.zero;
+  }
 }
 
 enum _IfParseState {
@@ -131,18 +140,24 @@ class _IfParse {
 }
 
 class ConditionWidget extends StatelessWidget {
-  final List<AssembleChildElement> children;
+  final AssembleElement element;
+  final List<_ChildMaker> makers;
+  final AssembleWidgetBuilder builder;
 
-  const ConditionWidget({Key? key, required this.children}) : super(key: key);
+  const ConditionWidget._(this.element, this.makers, this.builder, {Key? key,}) : super(key: key);
+
+  factory ConditionWidget({
+    required AssembleElement element,
+    required List<AssembleChildElement> children,
+    required AssembleWidgetBuilder builder,
+  }) {
+    final makers = _ChildMaker.merge(children);
+    return ConditionWidget._(element, makers, builder,);
+  }
 
   @override
   Widget build(BuildContext context) {
-    for (final child in children) {
-      final condition = child.attrs['flutter:if'] ?? child.attrs['flutter:elseif'] ?? child.attrs['flutter:else'];
-      if (condition == "true") {
-        return child.child;
-      }
-    }
-    return SizedBox.shrink();
+    final children = makers.map((e) => e.make(context)).toList(growable: false);
+    return builder.call(element, children);
   }
 }
