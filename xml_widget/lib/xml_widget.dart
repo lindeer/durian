@@ -13,6 +13,7 @@ part 'text.dart';
 part 'group.dart';
 part 'container.dart';
 part 'resource.dart';
+part 'condition.dart';
 
 abstract class XmlWidgetBuilder {
   String get name;
@@ -106,21 +107,33 @@ class WidgetAssembler {
     final name = e.name.qualified;
     final builder = _builders[name];
 
+    final childrenElements = builder != null && builder.childless ? _noChild
+        : _inflateChildren(element);
+
+    bool containIf = false;
+    for (final e in childrenElements) {
+      final ifStat = e.raw['flutter:if'];
+      containIf = ifStat?.isNotEmpty ?? false;
+      if (containIf) {
+        break;
+      }
+    }
+
+    final children = containIf ? _ChildMaker.merge(childrenElements) : childrenElements;
     Widget w;
     if (builder != null) {
-      final children = builder.childless ? _noChild
-          : _inflateChildren(element);
       w = builder.build(element, children);
     } else {
-      w = _assembleDefaultWidget(element, _inflateChildren(element));
+      w = _assembleDefaultWidget(element, children);
     }
+
     return w;
   }
 
   List<AssembleChildElement> _inflateChildren(AssembleElement element) => element.e.children
       .where((node) => node.nodeType == XmlNodeType.ELEMENT)
       .map((e) => AssembleElement(e as XmlElement, element.context))
-      .map((e) => AssembleChildElement(e.attrs, _assembleByElement(e)))
+      .map((e) => AssembleChildElement(e.attrs, e.raw, _assembleByElement(e)))
       .toList(growable: false);
 
   Widget fromFile(String path) {
