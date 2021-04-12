@@ -1,145 +1,58 @@
 part of durian;
 
-abstract class _ChildMaker {
+class _ChildMaker {
+  final AssembleChildElement child;
+  final List<AssembleChildElement>? elseifChildren;
+  final AssembleChildElement? elseChild;
 
-  AssembleChildElement make(BuildContext context);
+  _ChildMaker({required this.child, this.elseifChildren, this.elseChild});
 
-  factory _ChildMaker.single(AssembleChildElement element) => _NormalMaker(element);
-
-  factory _ChildMaker.condition(List<AssembleChildElement> conditions) => _ConditionMaker(conditions);
-
-
-  static List<_ChildMaker> merge(List<AssembleChildElement> elements) {
-    final makers = <_ChildMaker>[];
-    final group = <AssembleChildElement>[];
-    final parser = _IfParse();
-    elements.forEach((e) {
-      switch (parser.hitTest(e.raw)) {
-        case _IfParseState.none:
-          if (group.isNotEmpty) {
-            makers.add(_ChildMaker.condition(List.of(group)));
-            group.clear();
-          }
-          makers.add(_ChildMaker.single(e));
-          break;
-        case _IfParseState.if_:
-          if (group.isNotEmpty) {
-            makers.add(_ChildMaker.condition(List.of(group)));
-            group.clear();
-          }
-          group.add(e);
-          break;
-        case _IfParseState.else_:
-        case _IfParseState.elseif_:
-          group.add(e);
-          break;
-      }
-    });
-
-    if (group.isNotEmpty) {
-      makers.add(_ChildMaker.condition(List.of(group)));
-      group.clear();
-    }
-    return makers;
-  }
-}
-
-class _NormalMaker implements _ChildMaker {
-  final AssembleChildElement _child;
-
-  const _NormalMaker(this._child);
-
-  @override
-  AssembleChildElement make(BuildContext context) => _child;
-
-}
-
-class _ConditionMaker implements _ChildMaker {
-  final List<AssembleChildElement> children;
-
-  _ConditionMaker(this.children);
-
-  @override
   AssembleChildElement make(BuildContext context) {
     final engine = ExeEngineWidget.of(context);
-    for (final child in children) {
-      final attrs = child.raw;
-      final condition = attrs['flutter:if'] ?? attrs['flutter:elseif'] ?? attrs['flutter:else'];
-      if (condition == null || condition.isEmpty) {
+    final conditionIf = child.raw['flutter:if'];
+    if (conditionIf == null || engine.run(conditionIf) == "true") {
+      return child;
+    }
+    final middle = elseifChildren ?? const [];
+    for (final child in middle) {
+      final condition = child.raw['flutter:elseif'];
+      if (condition == null || engine.run(condition) == "true") {
         return child;
       }
-      if (engine.run(condition) == "true") {
-        return child;
-      }
+    }
+    if (elseChild != null) {
+      return elseChild!;
     }
     return AssembleChildElement.zero;
   }
-}
 
-enum _IfParseState {
-  none,
-  if_,
-  elseif_,
-  else_,
-}
-class _IfParse {
-  _IfParseState _state = _IfParseState.none;
+  static List<_ChildMaker> merge(List<AssembleChildElement> elements) {
+    final children = <_ChildMaker>[];
+    final length = elements.length;
+    int pos = 0;
+    while (pos < length) {
+      final first = elements[pos++];
+      final containIf = first.raw['flutter:if']?.isNotEmpty ?? false;
 
-
-  _IfParseState hitTest(Map<String, String> attrs) {
-    switch (_state) {
-      case _IfParseState.none: {
-        final ifStat = attrs['flutter:if'];
-        if (ifStat?.isNotEmpty ?? false) {
-          _state = _IfParseState.if_;
+      int start = 0, end = 0;
+      AssembleChildElement? elseChild;
+      if (containIf) {
+        start = pos;
+        while (pos < length && elements[pos].raw.containsKey('flutter:elseif')) {
+          pos++;
         }
-        break;
-      }
-      case _IfParseState.if_: {
-        final ifStat = attrs['flutter:if'];
-        final elseifStat = attrs['flutter:elseif'];
-        final elseStat = attrs['flutter:else'];
-        if (ifStat?.isNotEmpty ?? false) {
-        } else if (elseifStat?.isNotEmpty ?? false) {
-          _state = _IfParseState.elseif_;
-        } else if (elseStat != null) {
-          _state = _IfParseState.else_;
-        } else {
-          _state = _IfParseState.none;
+        end = pos;
+        if (pos < length && elements[pos].raw.containsKey('flutter:else')) {
+          elseChild = elements[pos++];
         }
-        break;
       }
-      case _IfParseState.elseif_: {
-        final ifStat = attrs['flutter:if'];
-        final elseifStat = attrs['flutter:elseif'];
-        final elseStat = attrs['flutter:else'];
-        if (ifStat?.isNotEmpty ?? false) {
-          _state = _IfParseState.if_;
-        } else if (elseifStat?.isNotEmpty ?? false) {
-        } else if (elseStat != null) {
-          _state = _IfParseState.else_;
-        } else {
-          _state = _IfParseState.none;
-        }
-        break;
-      }
-      case _IfParseState.else_: {
-        final ifStat = attrs['flutter:if'];
-        final elseifStat = attrs['flutter:elseif'];
-        final elseStat = attrs['flutter:else'];
-        if (ifStat?.isNotEmpty ?? false) {
-          _state = _IfParseState.if_;
-        } else if (elseifStat?.isNotEmpty ?? false) {
-          _state = _IfParseState.none;
-        } else if (elseStat != null) {
-          _state = _IfParseState.none;
-        } else {
-          _state = _IfParseState.none;
-        }
-        break;
-      }
+      children.add(_ChildMaker(
+        child: first,
+        elseifChildren: start < end ? elements.sublist(start, end) : null,
+        elseChild: elseChild,
+      ));
     }
-    return _state;
+    return children;
   }
 }
 
