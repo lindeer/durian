@@ -5,11 +5,24 @@ import 'package:xml_widget/xml_widget.dart';
 
 class _TestEngine implements ExeEngine {
   final Map<String, String> map;
+  VoidCallback? cb;
 
   _TestEngine(this.map);
 
   @override
   String run(String statement) => map[statement] ?? "";
+
+  @override
+  void registerNotifier(List<String> keywords, VoidCallback cb) {
+    this.cb = cb;
+  }
+
+  void operator []=(String key, String value) {
+    if (map[key] != value) {
+      map[key] = value;
+      cb?.call();
+    }
+  }
 }
 
 void main() {
@@ -47,7 +60,10 @@ void main() {
     expect(target, findsOneWidget);
     expect(find.text('{{message}}'), findsNothing);
     expect(find.text('good'), findsOneWidget);
+
+    engine['condition == 1'] = "true";
     await tester.pump();
+    expect(find.text('{{message}}'), findsOneWidget);
   });
   /*
   test('test template-if', () {
