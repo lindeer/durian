@@ -26,11 +26,6 @@ class _TestEngine implements ExeEngine {
 }
 
 void main() {
-  final engine = _TestEngine({
-    "condition == 1" : "false",
-    "condition == 2" : "true",
-  });
-
   testWidgets('test template-if', (WidgetTester tester) async {
     const xml = """
     <Column>
@@ -43,6 +38,11 @@ void main() {
       <Text flutter:data="good"/>
     </Column>
 """;
+    final engine = _TestEngine({
+      "condition == 1" : "false",
+      "condition == 2" : "true",
+    });
+
     await tester.pumpWidget(MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -64,30 +64,13 @@ void main() {
     engine['condition == 1'] = "true";
     await tester.pump();
     expect(find.text('{{message}}'), findsOneWidget);
-  });
-  /*
-  test('test template-if', () {
-    const xml = """
-    <Column>
-      <Text
-        flutter:if="condition == 1"
-        flutter:data="{{message}}"
-        flutter:maxLines="3"
-        flutter:softWrap="true"
-        flutter:textDirection="rtl"/>
-      <Text flutter:data="good"/>
-    </Column>
-""";
-    final widget = assembler.fromSource(xml) as Column;
-    expect(widget.children.length, 2);
-    expect(widget.children[0] is ConditionWidget, true);
-    expect(widget.children[1] is Text, true);
-    final condition = widget.children[0] as ConditionWidget;
-    expect(condition.children.length, 1);
-    expect(condition.children[0].raw['flutter:if'], "condition == 1");
+
+    engine['condition == 1'] = "false";
+    await tester.pump();
+    expect(find.text('{{message}}'), findsNothing);
   });
 
-  test('test template-if-else', () {
+  testWidgets('test template-if-else', (WidgetTester tester) async {
     const xml = """
     <Column>
       <Text
@@ -99,16 +82,34 @@ void main() {
       <Text flutter:else="" flutter:data="good"/>
     </Column>
 """;
-    final widget = assembler.fromSource(xml) as Column;
-    expect(widget.children.length, 1);
-    expect(widget.children[0] is ConditionWidget, true);
-    final condition = widget.children[0] as ConditionWidget;
-    expect(condition.children.length, 2);
-    expect(condition.children[0].raw['flutter:if'], "condition == 1");
-    expect(condition.children[1].raw['flutter:else'], "");
+    final engine = _TestEngine({
+      "condition == 1" : "false",
+    });
+    await tester.pumpWidget(MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: ExeEngineWidget(
+        engine: engine,
+        child: Builder(builder: (ctx) {
+          final assembler = WidgetAssembler(buildContext: ctx);
+          return assembler.fromSource(xml);
+        },),
+      ),
+    ));
+    final target = find.byType(ConditionWidget);
+    expect(target, findsOneWidget);
+    expect(find.text('{{message}}'), findsNothing);
+    expect(find.text('good'), findsOneWidget);
+
+    engine['condition == 1'] = "true";
+    await tester.pump();
+    expect(find.text('{{message}}'), findsOneWidget);
+    expect(find.text('good'), findsNothing);
   });
 
-  test('test template-if-elseif', () {
+  testWidgets('test template-elseif', (WidgetTester tester) async {
     const xml = """
     <Column>
       <Text
@@ -117,24 +118,43 @@ void main() {
         flutter:maxLines="3"
         flutter:softWrap="true"
         flutter:textDirection="rtl"/>
-      <VGroup flutter:elseif="condition == 2">
-        <Text
-          flutter:data="{{message}}"
-          flutter:maxLines="3"
-          flutter:softWrap="true"
-          flutter:textDirection="rtl"/>
-        <Text flutter:data="good"/>
-      </VGroup>
-      <Image flutter:src="http://flutter.dev" />
+      <Text
+        flutter:elseif="condition == 2"
+        flutter:data="good"/>
+      <Container flutter:src="http://flutter.dev" />
     </Column>
 """;
-    final widget = assembler.fromSource(xml) as Column;
-    expect(widget.children.length, 2);
-    expect(widget.children[0] is ConditionWidget, true);
-    expect(widget.children[1] is Image, true);
+    final engine = _TestEngine({
+      "condition == 1" : "false",
+      "condition == 2" : "true",
+    });
+    await tester.pumpWidget(MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: ExeEngineWidget(
+        engine: engine,
+        child: Builder(builder: (ctx) {
+          final assembler = WidgetAssembler(buildContext: ctx);
+          return assembler.fromSource(xml);
+        },),
+      ),
+    ));
+    final target = find.byType(ConditionWidget);
+    expect(target, findsOneWidget);
+    expect(find.text('{{message}}'), findsNothing);
+    expect(find.text('good'), findsOneWidget);
+    expect(find.byType(Container), findsOneWidget);
+
+    engine['condition == 1'] = "true";
+    await tester.pump();
+    expect(find.text('{{message}}'), findsOneWidget);
+    expect(find.text('good'), findsNothing);
+    expect(find.byType(Container), findsOneWidget);
   });
 
-  test('test template-if-elseif2', () {
+  testWidgets('test template-elseif2', (WidgetTester tester) async {
     const xml = """
     <Column>
       <Text
@@ -143,28 +163,57 @@ void main() {
         flutter:maxLines="3"
         flutter:softWrap="true"
         flutter:textDirection="rtl"/>
-      <VGroup flutter:elseif="condition == 2">
-        <Text
-          flutter:data="{{message}}"
-          flutter:maxLines="3"
-          flutter:softWrap="true"
-          flutter:textDirection="rtl"/>
-        <Text flutter:data="good"/>
-      </VGroup>
-      <Image flutter:elseif="condition == 3" flutter:src="{{url}}" />
+      <Text
+        flutter:elseif="condition == 2"
+        flutter:data="good"/>
+      <Container flutter:elseif="condition == 3" />
     </Column>
 """;
-    final widget = assembler.fromSource(xml) as Column;
-    expect(widget.children.length, 1);
-    expect(widget.children[0] is ConditionWidget, true);
-    final condition = widget.children[0] as ConditionWidget;
-    expect(condition.children.length, 3);
-    expect(condition.children[0].raw['flutter:if'], "condition == 1");
-    expect(condition.children[1].raw['flutter:elseif'], "condition == 2");
-    expect(condition.children[2].raw['flutter:elseif'], "condition == 3");
+    final engine = _TestEngine({
+      "condition == 1" : "false",
+      "condition == 2" : "true",
+      "condition == 3" : "true",
+    });
+    await tester.pumpWidget(MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: ExeEngineWidget(
+        engine: engine,
+        child: Builder(builder: (ctx) {
+          final assembler = WidgetAssembler(buildContext: ctx);
+          return assembler.fromSource(xml);
+        },),
+      ),
+    ));
+    final target = find.byType(ConditionWidget);
+    expect(target, findsOneWidget);
+    expect(find.text('{{message}}'), findsNothing);
+    expect(find.text('good'), findsOneWidget);
+    expect(find.byType(Container), findsNothing);
+
+    engine['condition == 1'] = "true";
+    await tester.pump();
+    expect(find.text('{{message}}'), findsOneWidget);
+    expect(find.text('good'), findsNothing);
+    expect(find.byType(Container), findsNothing);
+
+    engine['condition == 1'] = "false";
+    engine['condition == 2'] = "false";
+    await tester.pump();
+    expect(find.text('{{message}}'), findsNothing);
+    expect(find.text('good'), findsNothing);
+    expect(find.byType(Container), findsOneWidget);
+
+    engine['condition == 3'] = "false";
+    await tester.pump();
+    expect(find.text('{{message}}'), findsNothing);
+    expect(find.text('good'), findsNothing);
+    expect(find.byType(Container), findsNothing);
   });
 
-  test('test template-if-elseif-else', () {
+  testWidgets('test template-elseif-else', (WidgetTester tester) async {
     const xml = """
     <Column>
       <Text
@@ -173,27 +222,49 @@ void main() {
         flutter:maxLines="3"
         flutter:softWrap="true"
         flutter:textDirection="rtl"/>
-      <VGroup flutter:elseif="condition == 2">
-        <Text
-          flutter:data="{{message}}"
-          flutter:maxLines="3"
-          flutter:softWrap="true"
-          flutter:textDirection="rtl"/>
-        <Text flutter:data="good"/>
-      </VGroup>
-      <Image flutter:else="" flutter:src="{{url}}" />
+      <Text
+        flutter:elseif="condition == 2"
+        flutter:data="good"/>
+      <Container flutter:else="" />
     </Column>
 """;
-    final widget = assembler.fromSource(xml) as Column;
-    expect(widget.children.length, 1);
-    expect(widget.children[0] is ConditionWidget, true);
-    final condition = widget.children[0] as ConditionWidget;
-    expect(condition.children.length, 3);
-    expect(condition.children[0].raw['flutter:if'], "condition == 1");
-    expect(condition.children[1].raw['flutter:elseif'], "condition == 2");
-    expect(condition.children[2].raw['flutter:else'], "");
+    final engine = _TestEngine({
+      "condition == 1" : "true",
+      "condition == 2" : "false",
+    });
+    await tester.pumpWidget(MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: ExeEngineWidget(
+        engine: engine,
+        child: Builder(builder: (ctx) {
+          final assembler = WidgetAssembler(buildContext: ctx);
+          return assembler.fromSource(xml);
+        },),
+      ),
+    ));
+    final target = find.byType(ConditionWidget);
+    expect(target, findsOneWidget);
+    expect(find.text('{{message}}'), findsOneWidget);
+    expect(find.text('good'), findsNothing);
+    expect(find.byType(Container), findsNothing);
+
+    engine['condition == 1'] = "false";
+    await tester.pump();
+    expect(find.text('{{message}}'), findsNothing);
+    expect(find.text('good'), findsNothing);
+    expect(find.byType(Container), findsOneWidget);
+
+    engine['condition == 2'] = "true";
+    await tester.pump();
+    expect(find.text('{{message}}'), findsNothing);
+    expect(find.text('good'), findsOneWidget);
+    expect(find.byType(Container), findsNothing);
   });
-  test('test if-if', () {
+
+  testWidgets('test template-elseif-else', (WidgetTester tester) async {
     const xml = """
     <Column>
       <Text
@@ -202,20 +273,46 @@ void main() {
         flutter:maxLines="3"
         flutter:softWrap="true"
         flutter:textDirection="rtl"/>
-      <Text flutter:data="good"/>
-      <Image flutter:if="condition == 2" flutter:src="{{url}}" />
+      <Text
+        flutter:data="good"/>
+      <Container
+        flutter:if="condition == 2"
+        flutter:else="" />
     </Column>
 """;
-    final widget = assembler.fromSource(xml) as Column;
-    expect(widget.children.length, 3);
-    expect(widget.children[0] is ConditionWidget, true);
-    expect(widget.children[2] is ConditionWidget, true);
-    final condition = widget.children[0] as ConditionWidget;
-    expect(condition.children.length, 1);
-    final c2 = widget.children[2] as ConditionWidget;
-    expect(c2.children.length, 1);
-    expect(c2.children[0].raw['flutter:if'], "condition == 2");
-  });
+    final engine = _TestEngine({
+      "condition == 1" : "true",
+      "condition == 2" : "true",
+    });
+    await tester.pumpWidget(MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: ExeEngineWidget(
+        engine: engine,
+        child: Builder(builder: (ctx) {
+          final assembler = WidgetAssembler(buildContext: ctx);
+          return assembler.fromSource(xml);
+        },),
+      ),
+    ));
+    final target = find.byType(ConditionWidget);
+    expect(target, findsOneWidget);
+    expect(find.text('{{message}}'), findsOneWidget);
+    expect(find.text('good'), findsOneWidget);
+    expect(find.byType(Container), findsOneWidget);
 
-   */
+    engine['condition == 1'] = "false";
+    await tester.pump();
+    expect(find.text('{{message}}'), findsNothing);
+    expect(find.text('good'), findsOneWidget);
+    expect(find.byType(Container), findsOneWidget);
+
+    engine['condition == 2'] = "false";
+    await tester.pump();
+    expect(find.text('{{message}}'), findsNothing);
+    expect(find.text('good'), findsOneWidget);
+    expect(find.byType(Container), findsNothing);
+  });
 }
