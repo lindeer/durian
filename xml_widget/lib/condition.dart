@@ -61,10 +61,14 @@ class _ConditionMaker implements _ChildMaker {
 
   @override
   AssembleChildElement make(BuildContext context) {
+    final engine = ExeEngineWidget.of(context);
     for (final child in children) {
       final attrs = child.raw;
       final condition = attrs['flutter:if'] ?? attrs['flutter:elseif'] ?? attrs['flutter:else'];
-      if (condition == "true") {
+      if (condition == null || condition.isEmpty) {
+        return child;
+      }
+      if (engine.run(condition) == "true") {
         return child;
       }
     }
@@ -139,7 +143,7 @@ class _IfParse {
   }
 }
 
-class ConditionWidget extends StatelessWidget {
+class ConditionWidget extends StatefulWidget {
   final AssembleElement element;
   final List<_ChildMaker> makers;
   final AssembleWidgetBuilder builder;
@@ -156,7 +160,16 @@ class ConditionWidget extends StatelessWidget {
   }
 
   @override
+  ConditionState createState() => ConditionState();
+}
+
+class ConditionState extends State<ConditionWidget> {
+
+  @override
   Widget build(BuildContext context) {
+    final makers = widget.makers;
+    final builder = widget.builder;
+    final element = widget.element;
     final children = makers.map((e) => e.make(context)).toList(growable: false);
     return builder.call(element, children);
   }

@@ -1,16 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:xml_widget/exe_engine.dart';
 import 'package:xml_widget/xml_widget.dart';
-import 'package:mockito/mockito.dart';
 
-class _MockBuildContext extends Mock implements BuildContext {}
+class _TestEngine implements ExeEngine {
+  final Map<String, String> map;
+
+  _TestEngine(this.map);
+
+  @override
+  String run(String statement) => map[statement] ?? "";
+}
 
 void main() {
+  final engine = _TestEngine({
+    "condition == 1" : "false",
+    "condition == 2" : "true",
+  });
+
   testWidgets('test template-if', (WidgetTester tester) async {
     const xml = """
     <Column>
       <Text
-        flutter:if="false"
+        flutter:if="condition == 1"
         flutter:data="{{message}}"
         flutter:maxLines="3"
         flutter:softWrap="true"
@@ -23,10 +35,13 @@ void main() {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Builder(builder: (ctx) {
-        final assembler = WidgetAssembler(buildContext: ctx);
-        return assembler.fromSource(xml);
-      },),
+      home: ExeEngineWidget(
+        engine: engine,
+        child: Builder(builder: (ctx) {
+          final assembler = WidgetAssembler(buildContext: ctx);
+          return assembler.fromSource(xml);
+        },),
+      ),
     ));
     final target = find.byType(ConditionWidget);
     expect(target, findsOneWidget);
