@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'js_engine.dart';
 
 abstract class ExeEngine {
   String run(String statement);
@@ -7,6 +7,8 @@ abstract class ExeEngine {
   void registerNotifier(List<String> keywords, VoidCallback cb);
 
   factory ExeEngine.fake() => _FakeEngine();
+
+  factory ExeEngine({String? code,}) = JSEngine;
 }
 
 class _FakeEngine implements ExeEngine {

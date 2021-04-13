@@ -10,7 +10,7 @@
   <FloatingActionButton
     flutter:scaffold="floatingActionButton"
     flutter:tooltip="Increment"
-    flutter:onPressed="https://flutter.dev">
+    flutter:onPressed="onFloatButtonClick">
 
     <Icon flutter:icon="@flutter:icons/add"/>
   </FloatingActionButton>
@@ -22,7 +22,21 @@
       <Text flutter:data="@{data.data}"
         flutter:style.color="@flutter:color/lightGreen"
         flutter:style="@theme/textTheme.headline4"/>
-
+      <Text
+          flutter:if="size < 0"
+          flutter:data="size < 0"
+          flutter:style.color="@flutter:color/lightGreen"
+          flutter:style="@theme/textTheme.headline4"/>
+      <Text
+          flutter:elseif="size == 0"
+          flutter:data="size == 0"
+          flutter:style.color="@flutter:color/deepOrange"
+          flutter:style="@theme/textTheme.headline4"/>
+      <Text
+          flutter:else=""
+          flutter:data="size > 0"
+          flutter:style.color="@flutter:color/blueAccent"
+          flutter:style="@theme/textTheme.headline4"/>
       <Container
         flutter:width="80dp"
         flutter:height="80dp"
@@ -61,7 +75,7 @@
         flutter:highlightColor="@flutter:color/green"
         flutter:splashColor="#33691E"
         flutter:padding="8dp"
-        flutter:onPressed="http://flutter.dev"
+        flutter:onPressed="onFloatButtonClick"
         flutter:onLongPressed="http://flutter.dev"
         flutter:elevation="5dp">
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:xml_widget/exe_engine.dart';
 import 'package:xml_widget/xml_widget.dart';
 
 void main() {
@@ -23,7 +24,18 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: ExeEngineWidget(
+        engine: ExeEngine(code: """
+let size = 0;
+function onFloatButtonClick() {
+  size++;
+  if (size > 1) size = -1;
+  console.log(`js: size=\${size}`);
+  notifyChange(["size"]);
+}
+        """),
+        child: MyHomePage(title: 'Flutter Demo Home Page'),
+      ),
     );
   }
 }
@@ -67,6 +79,8 @@ class _MyHomePageState extends State<MyHomePage> implements OnPressHandler {
   @override
   void onPressed(String uri) {
     print("onPressed: $uri");
+    final engine = ExeEngineWidget.of(context);
+    engine.run('$uri();');
   }
 
   @override

@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   xml: ^5.0.2
+  flutter_js: ^0.4.0+2
 
 dev_dependencies:
   flutter_test:

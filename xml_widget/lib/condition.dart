@@ -60,8 +60,9 @@ class ConditionWidget extends StatefulWidget {
   final AssembleElement element;
   final List<_ChildMaker> makers;
   final AssembleWidgetBuilder builder;
+  final List<String> variables;
 
-  const ConditionWidget._(this.element, this.makers, this.builder, {Key? key,}) : super(key: key);
+  const ConditionWidget._(this.element, this.makers, this.builder, this.variables, {Key? key,}) : super(key: key);
 
   factory ConditionWidget({
     required AssembleElement element,
@@ -69,7 +70,7 @@ class ConditionWidget extends StatefulWidget {
     required AssembleWidgetBuilder builder,
   }) {
     final makers = _ChildMaker.merge(children);
-    final variables = <String>[];
+    final variables = <String>{};
     final reg = RegExp(r'\w+(.\w+)*');
     for (final child in children) {
       final condition = child.raw['flutter:if'] ?? child.raw['flutter:elseif'];
@@ -78,7 +79,7 @@ class ConditionWidget extends StatefulWidget {
         variables.addAll(matches.map((m) => m[0]).whereType<String>());
       }
     }
-    return ConditionWidget._(element, makers, builder,);
+    return ConditionWidget._(element, makers, builder, List.of(variables, growable: false));
   }
 
   @override
@@ -92,7 +93,7 @@ class ConditionState extends State<ConditionWidget> {
     super.didChangeDependencies();
 
     final engine = ExeEngineWidget.of(context);
-    engine.registerNotifier([], _onNotified);
+    engine.registerNotifier(widget.variables, _onNotified);
   }
 
   @override
