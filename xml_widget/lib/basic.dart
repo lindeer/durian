@@ -295,6 +295,11 @@ const _filterQuality = const {
   "high": FilterQuality.high,
 };
 
+const _scrollViewKeyboardDismissBehavior = const {
+  "manual": ScrollViewKeyboardDismissBehavior.manual,
+  "onDrag": ScrollViewKeyboardDismissBehavior.onDrag,
+};
+
 const _flutterColorPrefix = '@flutter:color/';
 const _flutterColorPrefixLength = _flutterColorPrefix.length;
 const _resColorPrefix = '@color/';
