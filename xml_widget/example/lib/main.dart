@@ -27,11 +27,17 @@ class MyApp extends StatelessWidget {
       home: ExeEngineWidget(
         engine: ExeEngine(code: """
 let size = 0;
+let message = '';
 function onFloatButtonClick() {
   size++;
   if (size > 1) size = -1;
   console.log(`js: size=\${size}`);
   notifyChange(["size"]);
+}
+
+function onMessageButtonClick() {
+  message = 'nice' + size;
+  notifyChange(["message"]);
 }
         """),
         child: MyHomePage(title: 'Flutter Demo Home Page'),

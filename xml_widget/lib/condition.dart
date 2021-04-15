@@ -61,51 +61,76 @@ class ConditionWidget extends StatefulWidget {
   final List<_ChildMaker> makers;
   final AssembleWidgetBuilder builder;
   final List<String> variables;
+  final List<String> words;
 
-  const ConditionWidget._(this.element, this.makers, this.builder, this.variables, {Key? key,}) : super(key: key);
+  const ConditionWidget._(
+      this.element,
+      this.makers,
+      this.builder,
+      this.variables,
+      this.words,
+      {
+        Key? key,
+      }) : super(key: key);
 
   factory ConditionWidget({
     required AssembleElement element,
     required List<AssembleChildElement> children,
     required AssembleWidgetBuilder builder,
+    List<String>? bindingWords,
   }) {
     final makers = _ChildMaker.merge(children);
-    final variables = <String>{};
-    final reg = RegExp(r'\w+(.\w+)*');
+    final variables = <String>[];
     for (final child in children) {
       final condition = child.raw['flutter:if'] ?? child.raw['flutter:elseif'];
       if (condition != null && condition.isNotEmpty) {
-        final matches = reg.allMatches(condition);
-        variables.addAll(matches.map((m) => m[0]).whereType<String>());
+        variables.addAll(DataBinding.matchWords(condition));
       }
     }
-    return ConditionWidget._(element, makers, builder, List.of(variables, growable: false));
+    bindingWords ??= DataBinding.hasMatch(element) ? DataBinding.matchKeys(element) : null;
+    return ConditionWidget._(
+      element,
+      makers,
+      builder,
+      variables,
+      bindingWords ?? const [],
+    );
   }
 
   @override
-  ConditionState createState() => ConditionState();
+  _ConditionState createState() => _ConditionState();
 }
 
-class ConditionState extends State<ConditionWidget> {
+class _ConditionState extends State<ConditionWidget> {
+  bool rebuildChildren = true;
+  final _children = <AssembleChildElement>[];
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
     final engine = ExeEngineWidget.of(context);
-    engine.registerNotifier(widget.variables, _onNotified);
+    engine.registerNotifier(widget.variables, () {
+      rebuildChildren = true;
+      setState(() {});
+    });
+    if (widget.words.isNotEmpty) {
+      engine.registerNotifier(widget.words, () {
+        setState(() {});
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final makers = widget.makers;
     final builder = widget.builder;
     final element = widget.element;
-    final children = makers.map((e) => e.make(context)).toList(growable: false);
-    return builder.call(element, children);
-  }
-
-  void _onNotified() {
-    setState(() {});
+    if (rebuildChildren) {
+      final makers = widget.makers;
+      final children = makers.map((e) => e.make(context)).toList(growable: false);
+      _children..clear()..addAll(children);
+      rebuildChildren = false;
+    }
+    return builder.call(element, _children);
   }
 }

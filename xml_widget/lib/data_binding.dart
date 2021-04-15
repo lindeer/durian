@@ -22,11 +22,15 @@ class DataBinding {
       final matches = _reg.allMatches(value);
       final items = matches.map((m) => m[0]).whereType<String>();
       for (final item in items) {
-        final words = _wordReg.allMatches(item).map((m) => m[0]).whereType<String>();
+        final words = matchWords(item);
         keys.addAll(words);
       }
     }
     return keys.toList(growable: false);
+  }
+
+  static Iterable<String> matchWords(String text) {
+    return _wordReg.allMatches(text).map((m) => m[0]).whereType<String>();
   }
 
   static void bind(AssembleElement element, String getter(String code)) {

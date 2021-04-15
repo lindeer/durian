@@ -127,17 +127,18 @@ class WidgetAssembler {
       }
     }
 
+    final words = DataBinding.hasMatch(element) ? DataBinding.matchKeys(element) : null;
     final fn = builder == null ? _assembleDefaultWidget : builder.build;
     Widget w;
     if (containIf) {
       w = ConditionWidget(element: element,
         children: childrenElements,
         builder: fn,
+        bindingWords: words,
       );
     } else {
       final children = childrenElements;
-      if (DataBinding.hasMatch(element)) {
-        final words = DataBinding.matchKeys(element);
+      if (words != null && words.isNotEmpty) {
         w = BindingWidget(
           words: words,
           builder: (ctx) {
