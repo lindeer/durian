@@ -421,3 +421,36 @@ class _XmlOpacityBuilder extends CommonWidgetBuilder {
     );
   }
 }
+
+class _XmlFlexibleBuilder extends CommonWidgetBuilder {
+  const _XmlFlexibleBuilder() : super('Flexible');
+
+  @override
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+    final attrs = element.attrs;
+    if (descendant.isEmpty) {
+      return ErrorWidget.withDetails(message: "Flexible should contain one child!");
+    }
+    return Flexible(
+      child: descendant.first.child,
+      flex: attrs['flex']?.toInt() ?? 1,
+      fit: _flexFit[attrs['fit']] ?? FlexFit.loose,
+    );
+  }
+}
+
+class _XmlExpandedBuilder extends CommonWidgetBuilder {
+  const _XmlExpandedBuilder() : super('Expanded');
+
+  @override
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+    final attrs = element.attrs;
+    if (descendant.isEmpty) {
+      return ErrorWidget.withDetails(message: "Expanded should contain one child!");
+    }
+    return Expanded(
+      child: descendant.first.child,
+      flex: attrs['flex']?.toInt() ?? 1,
+    );
+  }
+}

@@ -300,6 +300,11 @@ const _scrollViewKeyboardDismissBehavior = const {
   "onDrag": ScrollViewKeyboardDismissBehavior.onDrag,
 };
 
+const _flexFit = const {
+  "tight": FlexFit.tight,
+  "loose": FlexFit.loose,
+};
+
 const _flutterColorPrefix = '@flutter:color/';
 const _flutterColorPrefixLength = _flutterColorPrefix.length;
 const _resColorPrefix = '@color/';

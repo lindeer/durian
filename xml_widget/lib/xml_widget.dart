@@ -15,6 +15,7 @@ part 'group.dart';
 part 'container.dart';
 part 'resource.dart';
 part 'condition.dart';
+part 'list_view.dart';
 
 typedef AssembleWidgetBuilder = Widget Function(AssembleElement element, List<AssembleChildElement> descendant);
 
@@ -92,6 +93,9 @@ class WidgetAssembler {
     const _XmlPositionedBuilder(),
     const _XmlSizedBoxBuilder(),
     const _XmlOpacityBuilder(),
+    const _XmlListViewBuilder(),
+    const _XmlFlexibleBuilder(),
+    const _XmlExpandedBuilder(),
   ];
 
   static final _defaultBuilders = {

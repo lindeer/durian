@@ -88,6 +88,59 @@
       <TextButton>
         <Text flutter:data="this is TextButton" flutter:style.color="@color/darkGreen"/>
       </TextButton>
+
+      <Flexible>
+        <ListView>
+          <Text
+            flutter:data="test1"
+            flutter:style.color="@flutter:color/blueAccent"
+            flutter:style="@theme/textTheme.headline3" />
+          <Text
+            flutter:data="test1"
+            flutter:style.color="@flutter:color/blueAccent"
+            flutter:style="@theme/textTheme.headline3" />
+          <Text
+            flutter:data="test1"
+            flutter:style.color="@flutter:color/blueAccent"
+            flutter:style="@theme/textTheme.headline3" />
+          <Text
+            flutter:data="test1"
+            flutter:style.color="@flutter:color/blueAccent"
+            flutter:style="@theme/textTheme.headline3" />
+          <Text
+            flutter:data="test1"
+            flutter:style.color="@flutter:color/blueAccent"
+            flutter:style="@theme/textTheme.headline3" />
+          <Text
+            flutter:data="test1"
+            flutter:style.color="@flutter:color/blueAccent"
+            flutter:style="@theme/textTheme.headline3" />
+          <Text
+            flutter:data="test1"
+            flutter:style.color="@flutter:color/blueAccent"
+            flutter:style="@theme/textTheme.headline3" />
+          <Text
+            flutter:data="test2"
+            flutter:style.color="@flutter:color/blueAccent"
+            flutter:style="@theme/textTheme.headline3" />
+          <Text
+            flutter:data="test2"
+            flutter:style.color="@flutter:color/blueAccent"
+            flutter:style="@theme/textTheme.headline3" />
+          <Text
+            flutter:data="test1"
+            flutter:style.color="@flutter:color/blueAccent"
+            flutter:style="@theme/textTheme.headline3" />
+          <Text
+            flutter:data="test1"
+            flutter:style.color="@flutter:color/blueAccent"
+            flutter:style="@theme/textTheme.headline3" />
+          <Text
+            flutter:data="test1"
+            flutter:style.color="@flutter:color/blueAccent"
+            flutter:style="@theme/textTheme.headline3" />
+        </ListView>
+      </Flexible>
     </Column>
   </Center>
 </Scaffold>
