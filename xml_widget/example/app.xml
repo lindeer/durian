@@ -86,7 +86,10 @@
       <ElevatedButton/>
 
       <TextButton>
-        <Text flutter:data="this is TextButton" flutter:style.color="@color/darkGreen"/>
+        <Text
+          flutter:data="this is TextButton({{size}})"
+          flutter:style.fontSize="{{(size + 2) * 2 + 20}}sp"
+          flutter:style.color="@color/darkGreen"/>
       </TextButton>
 
       <Flexible>

@@ -16,6 +16,7 @@ part 'container.dart';
 part 'resource.dart';
 part 'condition.dart';
 part 'list_view.dart';
+part 'data_binding.dart';
 
 typedef AssembleWidgetBuilder = Widget Function(AssembleElement element, List<AssembleChildElement> descendant);
 
@@ -135,7 +136,19 @@ class WidgetAssembler {
       );
     } else {
       final children = childrenElements;
-      w = fn.call(element, children);
+      if (DataBinding.hasMatch(element)) {
+        final words = DataBinding.matchKeys(element);
+        w = BindingWidget(
+          words: words,
+          builder: (ctx) {
+            final engine = ExeEngineWidget.of(ctx);
+            DataBinding.bind(element, engine.run);
+            return fn.call(element, children);
+          },
+        );
+      } else {
+        w = fn.call(element, children);
+      }
     }
 
     return w;
