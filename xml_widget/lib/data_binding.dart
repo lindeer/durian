@@ -29,6 +29,8 @@ class DataBinding {
     return keys.toList(growable: false);
   }
 
+  static String? matchKey(String? text) => text == null ? null : _reg.firstMatch(text)?[1];
+
   static Iterable<String> matchWords(String text) {
     return _wordReg.allMatches(text).map((m) => m[0]).whereType<String>();
   }

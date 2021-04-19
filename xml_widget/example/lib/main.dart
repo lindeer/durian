@@ -28,6 +28,9 @@ class MyApp extends StatelessWidget {
         engine: ExeEngine(code: """
 let size = 0;
 let message = '';
+let details = [
+ { text: "t11",}
+];
 function onFloatButtonClick() {
   size++;
   if (size > 1) size = -1;
@@ -36,8 +39,10 @@ function onFloatButtonClick() {
 }
 
 function onMessageButtonClick() {
-  message = 'nice' + size;
-  notifyChange(["message"]);
+  details.push({
+    text: `t\${details.length}`,
+  });
+  notifyChange(["details"]);
 }
         """),
         child: MyHomePage(title: 'Flutter Demo Home Page'),

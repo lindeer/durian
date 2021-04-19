@@ -28,3 +28,106 @@ class _XmlListViewBuilder extends CommonWidgetBuilder {
     );
   }
 }
+
+class LoopWidget extends StatefulWidget {
+  final AssembleElement element;
+  final AssembleElement item;
+  final List<_ChildMaker>? _headers;
+  final List<_ChildMaker>? _footers;
+  final String word;
+
+  const LoopWidget._(this.element, this.item, this.word, this._headers, this._footers) : super();
+
+  factory LoopWidget(AssembleElement element, List<AssembleElement> children, int pos) {
+    final item = children[pos];
+    final assembleFn = element.context.assemble;
+    final headers = pos > 0 ? _ChildMaker.merge(children.sublist(0, pos)
+        .map((e) => AssembleChildElement(e.attrs, e.raw, assembleFn.call(e)))
+        .toList(growable: false))
+        : null;
+    final footers = pos < children.length - 1 ? _ChildMaker.merge(children.sublist(pos + 1)
+        .map((e) => AssembleChildElement(e.attrs, e.raw, assembleFn.call(e)))
+        .toList(growable: false))
+        : null;
+    final word = DataBinding.matchKey(item.raw['flutter:for']) ?? '';
+    return LoopWidget._(element, item, word, headers, footers);
+  }
+
+  @override
+  _LoopState createState() => _LoopState();
+
+  static bool hasLoop(Map<String, String> attr) => attr['flutter:for']?.isNotEmpty ?? false;
+
+  static int loopPosition(List<AssembleElement> elements) {
+    int pos = 0;
+    for (final e in elements) {
+      if (hasLoop(e.raw)) {
+        return pos;
+      }
+      pos++;
+    }
+    return -1;
+  }
+}
+
+class _LoopState extends State<LoopWidget> {
+
+  String _from = 'create';
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final word = widget.word;
+    final engine = ExeEngineWidget.of(context);
+    if (word.isNotEmpty) {
+      engine.registerNotifier([word], () { _onNotify('loop'); });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final headers = widget._headers?.map((e) => e.make(context)).toList(growable: false);
+    final footers = widget._footers?.map((e) => e.make(context)).toList(growable: false);
+    final head = headers?.length ?? 0;
+
+    final engine = ExeEngineWidget.of(context);
+    final size = int.tryParse(engine.run('${widget.word}.length')) ?? 0;
+
+    final len = head + size;
+    final tail = footers?.length ?? 0;
+
+    print("LoopState build from $_from");
+    return ListView.builder(
+      itemCount: len + tail,
+      itemBuilder: (BuildContext ctx, int index) {
+        if (index < head) {
+          return headers![index].child;
+        } else if (index < len) {
+          int pos = index - head;
+          return _buildItem(engine, pos);
+        } else {
+          int pos = index - len;
+          return footers![pos].child;
+        }
+      },
+    );
+  }
+
+  Widget _buildItem(ExeEngine engine, int index) {
+    final item = widget.item;
+    final at = DateTime.now().millisecondsSinceEpoch;
+    try {
+      return widget.element.context.assemble.call(item);
+    } finally {
+      final cost = DateTime.now().millisecondsSinceEpoch - at;
+      print("_buildItem($index) cost $cost ms");
+    }
+  }
+
+  void _onNotify(String from) {
+    setState(() {
+      _from = from;
+    });
+  }
+}

@@ -10,12 +10,15 @@ abstract class OnPressHandler {
   void onLongPressed(String uri);
 }
 
+typedef AssembleFn = Widget Function(AssembleElement element);
+
 class AssembleContext {
   final ThemeData theme;
   final ResColor color;
   final OnPressHandler? onPressHandler;
+  final AssembleFn assemble;
 
-  AssembleContext(BuildContext context, this.color, this.onPressHandler)
+  AssembleContext(BuildContext context, this.color, this.onPressHandler, this.assemble)
       : theme = Theme.of(context);
 }
 

@@ -96,52 +96,17 @@
       <Flexible>
         <ListView>
           <Text
-            flutter:data="test1"
+            flutter:data="header1"
+            flutter:style.color="@flutter:color/orange"
+            flutter:style="@theme/textTheme.headline2" />
+          <Text
+            flutter:data="header2"
             flutter:style.color="@flutter:color/blueAccent"
             flutter:style="@theme/textTheme.headline3" />
           <Text
-            flutter:data="test1"
-            flutter:style.color="@flutter:color/blueAccent"
-            flutter:style="@theme/textTheme.headline3" />
-          <Text
-            flutter:data="test1"
-            flutter:style.color="@flutter:color/blueAccent"
-            flutter:style="@theme/textTheme.headline3" />
-          <Text
-            flutter:data="test1"
-            flutter:style.color="@flutter:color/blueAccent"
-            flutter:style="@theme/textTheme.headline3" />
-          <Text
-            flutter:data="test1"
-            flutter:style.color="@flutter:color/blueAccent"
-            flutter:style="@theme/textTheme.headline3" />
-          <Text
-            flutter:data="test1"
-            flutter:style.color="@flutter:color/blueAccent"
-            flutter:style="@theme/textTheme.headline3" />
-          <Text
-            flutter:data="test1"
-            flutter:style.color="@flutter:color/blueAccent"
-            flutter:style="@theme/textTheme.headline3" />
-          <Text
-            flutter:data="test2"
-            flutter:style.color="@flutter:color/blueAccent"
-            flutter:style="@theme/textTheme.headline3" />
-          <Text
-            flutter:data="test2"
-            flutter:style.color="@flutter:color/blueAccent"
-            flutter:style="@theme/textTheme.headline3" />
-          <Text
-            flutter:data="test1"
-            flutter:style.color="@flutter:color/blueAccent"
-            flutter:style="@theme/textTheme.headline3" />
-          <Text
-            flutter:data="test1"
-            flutter:style.color="@flutter:color/blueAccent"
-            flutter:style="@theme/textTheme.headline3" />
-          <Text
-            flutter:data="test1"
-            flutter:style.color="@flutter:color/blueAccent"
+            flutter:for="{{details}}"
+            flutter:data="item.text"
+            flutter:style.color="@flutter:color/deepOrangeAccent"
             flutter:style="@theme/textTheme.headline3" />
         </ListView>
       </Flexible>

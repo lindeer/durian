@@ -51,7 +51,7 @@ class WidgetAssembler {
     OnPressHandler? onPressHandler,
     List<XmlWidgetBuilder>? builders,
   }) {
-    context = AssembleContext(buildContext, _colors, onPressHandler);
+    context = AssembleContext(buildContext, _colors, onPressHandler, _assembleByElement);
     if (builders != null && builders.isNotEmpty) {
       final map = {
         for (final b in builders) b.name: b
@@ -115,8 +115,18 @@ class WidgetAssembler {
     final name = e.name.qualified;
     final builder = _builders[name];
 
+    final rawChildren = element.e.children
+        .where((node) => node.nodeType == XmlNodeType.ELEMENT)
+        .map((e) => AssembleElement(e as XmlElement, element.context))
+        .toList(growable: false);
+
+    int pos;
+    if (name == 'ListView' && (pos = LoopWidget.loopPosition(rawChildren)) != -1) {
+      return LoopWidget(element, rawChildren, pos);
+    }
+
     final childrenElements = builder != null && builder.childless ? _noChild
-        : _inflateChildren(element);
+        : rawChildren.map((e) => AssembleChildElement(e.attrs, e.raw, _assembleByElement(e))).toList(growable: false);
 
     bool containIf = false;
     for (final e in childrenElements) {
@@ -154,12 +164,6 @@ class WidgetAssembler {
 
     return w;
   }
-
-  List<AssembleChildElement> _inflateChildren(AssembleElement element) => element.e.children
-      .where((node) => node.nodeType == XmlNodeType.ELEMENT)
-      .map((e) => AssembleElement(e as XmlElement, element.context))
-      .map((e) => AssembleChildElement(e.attrs, e.raw, _assembleByElement(e)))
-      .toList(growable: false);
 
   Widget fromFile(String path) {
     final file = File('colors.xml');
