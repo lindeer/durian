@@ -105,7 +105,7 @@
             flutter:style="@theme/textTheme.headline3" />
           <Text
             flutter:for="{{details}}"
-            flutter:data="item.text"
+            flutter:data="{{item.text}}"
             flutter:style.color="@flutter:color/deepOrangeAccent"
             flutter:style="@theme/textTheme.headline3" />
         </ListView>
