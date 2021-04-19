@@ -9,7 +9,7 @@ class JSEngine implements ExeEngine {
   JSEngine._(this._rt);
 
   factory JSEngine({String? code,}) {
-    final runtime = js.getJavascriptRuntime();
+    final runtime = js.getJavascriptRuntime(xhr: false);
     runtime.evaluate("""
 async function notifyChange(keys) {
   await sendMessage('_onVariableChanged', JSON.stringify(keys));
