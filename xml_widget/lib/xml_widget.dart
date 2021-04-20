@@ -103,42 +103,24 @@ class WidgetAssembler {
     for (final builder in _builtinBuilders) builder.name: builder
   };
 
-  Widget _assembleDefaultWidget(AssembleElement element, List<AssembleChildElement> descendant) {
-    final children = descendant.map((e) => e.child).toList(growable: false);
-    return Row(
-      children: children,
-    );
-  }
-
   Widget _assembleByElement(AssembleElement element) {
-    final e = element.e;
-    final name = e.name.qualified;
-    final builder = _builders[name];
+    final name = element.name;
+    final builder = _builders[name] ?? const _XmlWrapBuilder();
 
-    final rawChildren = element.e.children
-        .where((node) => node.nodeType == XmlNodeType.ELEMENT)
-        .map((e) => AssembleElement(e as XmlElement, element.context))
-        .toList(growable: false);
+    final rawChildren = element.children;
 
     int pos;
-    if (name == 'ListView' && (pos = LoopWidget.loopPosition(rawChildren)) != -1) {
-      return LoopWidget(element, rawChildren, pos);
+    if (name == 'ListView' && (pos = _ElementUtils.loopPosition(rawChildren)) != -1) {
+      return LoopWidget(element, pos);
     }
 
-    final childrenElements = builder != null && builder.childless ? _noChild
+    final childrenElements = builder.childless ? _noChild
         : rawChildren.map((e) => AssembleChildElement(e, _assembleByElement(e))).toList(growable: false);
 
-    bool containIf = false;
-    for (final e in childrenElements) {
-      final ifStat = e.raw['flutter:if'];
-      containIf = ifStat?.isNotEmpty ?? false;
-      if (containIf) {
-        break;
-      }
-    }
+    bool containIf = _ElementUtils.containIf(rawChildren);
 
     final words = DataBinding.hasMatch(element) ? DataBinding.matchKeys(element) : null;
-    final fn = builder == null ? _assembleDefaultWidget : builder.build;
+    final fn = builder.build;
     Widget w;
     if (containIf) {
       w = ConditionWidget(element: element,
@@ -177,7 +159,32 @@ class WidgetAssembler {
   Widget fromSource(String source) {
     final doc = XmlDocument.parse(source);
     final root = doc.rootElement;
-    final element = AssembleElement(root, context);
+    final element = AssembleElement.fromXml(root, context);
     return _assembleByElement(element);
+  }
+}
+
+class _ElementUtils {
+  static bool containIf(List<AssembleElement> elements) {
+    for (final e in elements) {
+      final ifStat = e.raw['flutter:if'];
+      if (ifStat?.isNotEmpty ?? false) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  static bool hasLoop(Map<String, String> attr) => attr['flutter:for']?.isNotEmpty ?? false;
+
+  static int loopPosition(List<AssembleElement> elements) {
+    int pos = 0;
+    for (final e in elements) {
+      if (hasLoop(e.raw)) {
+        return pos;
+      }
+      pos++;
+    }
+    return -1;
   }
 }

@@ -23,19 +23,23 @@ class AssembleContext {
 }
 
 class AssembleElement {
-  final XmlElement e;
+  final String name;
   final AssembleContext context;
   final Map<String, String> attrs;
   final Map<String, String> raw;
+  final List<AssembleElement> children;
 
-  const AssembleElement._(this.e, this.context, this.attrs, this.raw);
+  const AssembleElement._(this.name, this.context, this.attrs, this.raw, this.children);
 
-  factory AssembleElement(XmlElement e, AssembleContext context) {
-    final map = Map.fromEntries(e.attributes.map(
-            (attr) => MapEntry(attr.name, attr.value)));
-    final raw = map.map((key, value) => MapEntry(key.qualified, value));
-    final attrs = map.map((key, value) => MapEntry(key.local, value));
-    return AssembleElement._(e, context, attrs, raw);
+  static AssembleElement fromXml(XmlElement e, AssembleContext context) {
+    final children = e.children.where((child) => child.nodeType == XmlNodeType.ELEMENT)
+        .map((child) => fromXml(child as XmlElement, context)).toList(growable: false);
+    final map = e.attributes.map(
+            (attr) => MapEntry(attr.name, attr.value));
+    final raw = Map.fromEntries(map.map((entry) => MapEntry(entry.key.qualified, entry.value)));
+    final attrs = Map.fromEntries(map.map((entry) => MapEntry(entry.key.local, entry.value)));
+    final name = e.name.qualified;
+    return AssembleElement._(name, context, attrs, raw, children);
   }
 }
 

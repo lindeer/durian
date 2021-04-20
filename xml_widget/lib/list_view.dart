@@ -38,7 +38,8 @@ class LoopWidget extends StatefulWidget {
 
   const LoopWidget._(this.element, this.item, this.word, this._headers, this._footers) : super();
 
-  factory LoopWidget(AssembleElement element, List<AssembleElement> children, int pos) {
+  factory LoopWidget(AssembleElement element, int pos) {
+    final children = element.children;
     final item = children[pos];
     final assembleFn = element.context.assemble;
     final headers = pos > 0 ? _ChildMaker.merge(children.sublist(0, pos)
@@ -55,19 +56,6 @@ class LoopWidget extends StatefulWidget {
 
   @override
   _LoopState createState() => _LoopState();
-
-  static bool hasLoop(Map<String, String> attr) => attr['flutter:for']?.isNotEmpty ?? false;
-
-  static int loopPosition(List<AssembleElement> elements) {
-    int pos = 0;
-    for (final e in elements) {
-      if (hasLoop(e.raw)) {
-        return pos;
-      }
-      pos++;
-    }
-    return -1;
-  }
 }
 
 class _LoopState extends State<LoopWidget> {
