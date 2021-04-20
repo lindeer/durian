@@ -23,7 +23,7 @@ class _ChildMaker {
     if (elseChild != null) {
       return elseChild!;
     }
-    return AssembleChildElement.zero;
+    return AssembleChildElement(child.element, SizedBox.shrink());
   }
 
   static List<_ChildMaker> merge(List<AssembleChildElement> elements) {

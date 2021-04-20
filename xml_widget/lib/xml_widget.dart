@@ -126,7 +126,7 @@ class WidgetAssembler {
     }
 
     final childrenElements = builder != null && builder.childless ? _noChild
-        : rawChildren.map((e) => AssembleChildElement(e.attrs, e.raw, _assembleByElement(e))).toList(growable: false);
+        : rawChildren.map((e) => AssembleChildElement(e, _assembleByElement(e))).toList(growable: false);
 
     bool containIf = false;
     for (final e in childrenElements) {

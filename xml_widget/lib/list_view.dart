@@ -42,11 +42,11 @@ class LoopWidget extends StatefulWidget {
     final item = children[pos];
     final assembleFn = element.context.assemble;
     final headers = pos > 0 ? _ChildMaker.merge(children.sublist(0, pos)
-        .map((e) => AssembleChildElement(e.attrs, e.raw, assembleFn.call(e)))
+        .map((e) => AssembleChildElement(element, assembleFn.call(e)))
         .toList(growable: false))
         : null;
     final footers = pos < children.length - 1 ? _ChildMaker.merge(children.sublist(pos + 1)
-        .map((e) => AssembleChildElement(e.attrs, e.raw, assembleFn.call(e)))
+        .map((e) => AssembleChildElement(element, assembleFn.call(e)))
         .toList(growable: false))
         : null;
     final word = DataBinding.matchKey(item.raw['flutter:for']) ?? '';

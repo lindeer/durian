@@ -40,15 +40,12 @@ class AssembleElement {
 }
 
 class AssembleChildElement {
-  final Map<String, String> attrs;
-  final Map<String, String> raw;
+  final AssembleElement element;
   final Widget child;
 
-  const AssembleChildElement(this.attrs, this.raw, this.child);
+  const AssembleChildElement(this.element, this.child);
 
-  const AssembleChildElement.widget(Widget child) : this(_emptyAttr, _emptyAttr, child);
+  Map<String, String> get raw => element.raw;
 
-  static const _emptyAttr = const <String, String>{};
-
-  static const zero = AssembleChildElement.widget(SizedBox.shrink());
+  Map<String, String> get attrs => element.attrs;
 }
