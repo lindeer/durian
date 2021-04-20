@@ -4,10 +4,9 @@ import 'package:flutter/widgets.dart';
 import 'package:xml/xml.dart';
 import 'xml_widget.dart';
 
-abstract class OnPressHandler {
-  void onPressed(String uri);
-
-  void onLongPressed(String uri);
+class CallbackHolder {
+  void Function(String value)? onPressed;
+  void Function(String value)? onLongPressed;
 }
 
 typedef AssembleFn = Widget Function(AssembleElement element);
@@ -15,11 +14,15 @@ typedef AssembleFn = Widget Function(AssembleElement element);
 class AssembleContext {
   final ThemeData theme;
   final ResColor color;
-  final OnPressHandler? onPressHandler;
+  final CallbackHolder _info;
   final AssembleFn assemble;
 
-  AssembleContext(BuildContext context, this.color, this.onPressHandler, this.assemble)
+  AssembleContext(BuildContext context, this.color, this._info, this.assemble)
       : theme = Theme.of(context);
+
+  void Function(String value)? get onPressed => _info.onPressed;
+
+  void Function(String value)? get onLongPressed => _info.onLongPressed;
 }
 
 class AssembleElement {

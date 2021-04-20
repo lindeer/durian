@@ -69,26 +69,9 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> implements OnPressHandler {
-  int _counter = 0;
+class _MyHomePageState extends State<MyHomePage> {
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
-  void onLongPressed(String uri) {
-  }
-
-  @override
-  void onPressed(String uri) {
+  void _onPressed(String uri) {
     print("onPressed: $uri");
     final engine = ExeEngineWidget.of(context);
     engine.run('$uri();');
@@ -98,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> implements OnPressHandler {
   Widget build(BuildContext context) {
     final assembler = WidgetAssembler(
       buildContext: context,
-      onPressHandler: this,
+      onPressed: _onPressed,
     );
     final w = assembler.fromFile('app.xml');
     return w;

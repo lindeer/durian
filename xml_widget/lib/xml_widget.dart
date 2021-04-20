@@ -44,21 +44,26 @@ class WidgetAssembler {
 
   final _builders = Map.of(_defaultBuilders);
   final _colors = XmlResColor();
-  late final AssembleContext context;
+  final _info = CallbackHolder();
+  final BuildContext buildContext;
 
   WidgetAssembler({
-    required BuildContext buildContext,
-    OnPressHandler? onPressHandler,
+    required this.buildContext,
+    void onPressed(String value)?,
+    void onLongPressed(String value)?,
     List<XmlWidgetBuilder>? builders,
   }) {
-    context = AssembleContext(buildContext, _colors, onPressHandler, _assembleByElement);
     if (builders != null && builders.isNotEmpty) {
       final map = {
         for (final b in builders) b.name: b
       };
       _builders.addAll(map);
     }
+    _info.onPressed = onPressed;
+    _info.onLongPressed = onLongPressed;
   }
+
+  AssembleContext get assembleContext => AssembleContext(buildContext, _colors, _info, _assembleByElement);
 
   static const _noChild = const <AssembleChildElement>[];
   static const _builtinBuilders = <XmlWidgetBuilder>[
@@ -159,7 +164,7 @@ class WidgetAssembler {
   Widget fromSource(String source) {
     final doc = XmlDocument.parse(source);
     final root = doc.rootElement;
-    final element = AssembleElement.fromXml(root, context);
+    final element = AssembleElement.fromXml(root, assembleContext);
     return _assembleByElement(element);
   }
 }
