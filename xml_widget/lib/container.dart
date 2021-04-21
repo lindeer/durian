@@ -10,13 +10,13 @@ class _XmlContainerBuilder extends CommonWidgetBuilder {
     return Container(
       child: descendant.isEmpty ? null : descendant.first.child,
       alignment: _alignment[attrs['alignment']],
-      padding: _PropertyStruct.padding(attrs),
+      padding: _PropertyStruct.padding(res, attrs),
       decoration: _PropertyStruct.boxDecoration(res, attrs),
       color: res[attrs['color']],
-      width: attrs['width']?.toSize(),
-      height: attrs['height']?.toSize(),
-      constraints: _PropertyStruct.constraints(attrs),
-      margin: _PropertyStruct.margin(attrs),
+      width: res.size(attrs['width']),
+      height: res.size(attrs['height']),
+      constraints: _PropertyStruct.constraints(res, attrs),
+      margin: _PropertyStruct.margin(res, attrs),
       transformAlignment: _alignment[attrs['transformAlignment']],
       clipBehavior: _clip[attrs['clipBehavior']] ?? Clip.none,
     );
@@ -32,11 +32,11 @@ class _XmlInkBuilder extends CommonWidgetBuilder {
     final res = element.context.resource;
     return Ink(
       child: descendant.isEmpty ? null : descendant.first.child,
-      padding: _PropertyStruct.padding(attrs),
+      padding: _PropertyStruct.padding(res, attrs),
       color: res[attrs['color']],
       decoration: _PropertyStruct.boxDecoration(res, attrs),
-      width: attrs['width']?.toSize(),
-      height: attrs['height']?.toSize(),
+      width: res.size(attrs['width']),
+      height: res.size(attrs['height']),
     );
   }
 }
@@ -69,19 +69,19 @@ class _XmlMaterialButtonBuilder extends CommonWidgetBuilder {
       highlightColor: res[attrs['highlightColor']],
       splashColor: res[attrs['splashColor']],
       colorBrightness: _brightness[attrs['colorBrightness']],
-      elevation: attrs['elevation']?.toSize(),
+      elevation: res.size(attrs['elevation']),
       focusElevation: attrs['focusElevation']?.toDouble(),
       hoverElevation: attrs['hoverElevation']?.toDouble(),
       highlightElevation: attrs['highlightElevation']?.toDouble(),
       disabledElevation: attrs['disabledElevation']?.toDouble(),
-      padding: _PropertyStruct.padding(attrs),
+      padding: _PropertyStruct.padding(res, attrs),
       visualDensity: _visualDensity[attrs['visualDensity']],
       clipBehavior: _clip[attrs['clipBehavior']] ?? Clip.none,
       autofocus: attrs['autofocus'] == "true",
       materialTapTargetSize: _materialTapTargetSize[attrs["materialTapTargetSize"]],
       animationDuration: attrs["animationDuration"]?.toDuration(),
-      minWidth: attrs["minWidth"]?.toSize(),
-      height: attrs["height"]?.toSize(),
+      minWidth: res.size(attrs["minWidth"]),
+      height: res.size(attrs["height"]),
       enableFeedback: attrs["enableFeedback"] != "false",
     );
   }
@@ -195,7 +195,8 @@ class _XmlPaddingBuilder extends CommonWidgetBuilder {
   @override
   Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
-    final padding = _PropertyStruct.padding(attrs);
+    final res = element.context.resource;
+    final padding = _PropertyStruct.padding(res, attrs);
     if (padding == null) {
       return ErrorWidget.withDetails(message: 'Padding must have valid value!');
     }
@@ -228,8 +229,8 @@ class _XmlInkWellBuilder extends CommonWidgetBuilder {
       hoverColor: res[attrs['hoverColor']],
       highlightColor: res[attrs['highlightColor']],
       splashColor: res[attrs['splashColor']],
-      radius: attrs['radius']?.toSize(),
-      borderRadius: _PropertyStruct._borderRadius(attrs),
+      radius: res.size(attrs['radius']),
+      borderRadius: _PropertyStruct._borderRadius(res, attrs),
       enableFeedback: attrs['enableFeedback'] == "false",
       excludeFromSemantics: attrs['excludeFromSemantics'] == "true",
       canRequestFocus: attrs['canRequestFocus'] == "false",
@@ -257,7 +258,7 @@ class _XmlFloatingActionButtonBuilder extends CommonWidgetBuilder {
       focusColor: res[attrs['focusColor']],
       hoverColor: res[attrs['hoverColor']],
       splashColor: res[attrs['splashColor']],
-      elevation: attrs['elevation']?.toSize(),
+      elevation: res.size(attrs['elevation']),
       focusElevation: attrs['focusElevation']?.toDouble(),
       hoverElevation: attrs['hoverElevation']?.toDouble(),
       highlightElevation: attrs['highlightElevation']?.toDouble(),
@@ -382,17 +383,18 @@ class _XmlPositionedBuilder extends CommonWidgetBuilder {
   @override
   Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
+    final res = element.context.resource;
     if (descendant.isEmpty) {
       return ErrorWidget.withDetails(message: "Positioned should contain one child!");
     }
     return Positioned(
       child: descendant.first.child,
-      left: attrs['left']?.toSize(),
-      top: attrs['top']?.toSize(),
-      right: attrs['right']?.toSize(),
-      bottom: attrs['bottom']?.toSize(),
-      width: attrs['width']?.toSize(),
-      height: attrs['height']?.toSize(),
+      left: res.size(attrs['left']),
+      top: res.size(attrs['top']),
+      right: res.size(attrs['right']),
+      bottom: res.size(attrs['bottom']),
+      width: res.size(attrs['width']),
+      height: res.size(attrs['height']),
     );
   }
 }
@@ -403,13 +405,14 @@ class _XmlSizedBoxBuilder extends CommonWidgetBuilder {
   @override
   Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
+    final res = element.context.resource;
     if (descendant.isEmpty) {
       return ErrorWidget.withDetails(message: "Positioned should contain one child!");
     }
     return SizedBox(
       child: descendant.isEmpty ? null : descendant.first.child,
-      width: attrs['width']?.toSize(),
-      height: attrs['height']?.toSize(),
+      width: res.size(attrs['width']),
+      height: res.size(attrs['height']),
     );
   }
 }

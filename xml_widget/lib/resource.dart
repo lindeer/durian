@@ -8,6 +8,7 @@ class _StateColorItem {
 }
 
 class _ResImpl implements AssembleResource {
+  static final _digits = RegExp(r"\d+");
   final ThemeData _theme;
   final _stateColors = <String, MaterialStateProperty<Color?>>{};
   final _colors = <String, Color>{};
@@ -24,6 +25,28 @@ class _ResImpl implements AssembleResource {
   @override
   ThemeData get theme => _theme;
 
+  @override
+  double? size(String? value) {
+    if (value == null) return null;
+
+    final m = _digits.firstMatch(value);
+    final v = m?[0];
+    if (v == null || m == null) return null;
+    final n = double.tryParse(v);
+    if (n == null) return null;
+    final unit = value.substring(m.end).trim();
+    return unit.isEmpty ? n : _unitSize(n, unit);
+  }
+
+  double _unitSize(double v, String unit) {
+    switch (unit) {
+      case 'dp':
+      case 'sp':
+      case 'px':
+      default:
+    }
+    return v;
+  }
 
   @override
   String toString() => "{color=${_colors.toString()}, state=${_stateColors.toString()}}";

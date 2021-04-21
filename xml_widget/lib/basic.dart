@@ -7,11 +7,6 @@ extension _TExt<T> on T {
 const _poundSign = 0x23; // '#'
 const _atSign = 0x40; // '@'
 
-bool _notDigit(int n) {
-  final pos = n ^ 0x30;
-  return pos < 0 || pos > 9;
-}
-
 const _builtinColors = <String, Color>{
   "transparent": Colors.transparent,
   "black": Colors.black,
@@ -320,32 +315,6 @@ extension _StringExt on String {
 
   double optDouble({defVal = 0.0}) => double.tryParse(this) ?? defVal;
 
-  double? toSize() {
-    int n = this.length;
-
-    while (n-- > 0 && _notDigit(this.codeUnits[n])){}
-    if (n < 0) {
-      return null;
-    } else {
-      final num = n < length ? substring(0, n + 1) : this;
-      final unit = n < length ? substring(n + 1) : '';
-      return _unitSize(num, unit);
-    }
-  }
-
-  static double? _unitSize(String num, String unit) {
-    return double.tryParse(num)?.let((it) {
-      double v = it;
-      switch (unit) {
-        case 'dp':
-        case 'sp':
-        case 'px':
-        default:
-      }
-      return v;
-    });
-  }
-
   Duration? toDuration() {
     final n = int.tryParse(this);
     return n == null ? null : Duration(milliseconds: n);
@@ -399,7 +368,7 @@ class _PropertyStruct {
     return TextStyle(
       color: res[style['color']],
       backgroundColor: res[style['backgroundColor']],
-      fontSize: style['fontSize']?.toSize(),
+      fontSize: res.size(style['fontSize']),
     );
   }
 
@@ -417,7 +386,7 @@ class _PropertyStruct {
     return _textTheme(theme, secondary[0])?.tighten()[secondary[1]];
   }
 
-  static EdgeInsetsGeometry? _edge(String property, Map<String, String> attr) {
+  static EdgeInsetsGeometry? _edge(AssembleResource res, String property, Map<String, String> attr) {
     final keys = attr.keys.where((k) => k.startsWith(property));
     if (keys.isEmpty) {
       return null;
@@ -428,16 +397,16 @@ class _PropertyStruct {
     final paddingRight = attr['${property}Right'] ?? padding;
     final paddingBottom = attr['${property}Bottom'] ?? padding;
     return EdgeInsets.only(
-      left: paddingLeft?.toSize() ?? 0.0,
-      top: paddingTop?.toSize() ?? 0.0,
-      right: paddingRight?.toSize() ?? 0.0,
-      bottom: paddingBottom?.toSize() ?? 0.0,
+      left: res.size(paddingLeft) ?? 0.0,
+      top: res.size(paddingTop) ?? 0.0,
+      right: res.size(paddingRight) ?? 0.0,
+      bottom: res.size(paddingBottom) ?? 0.0,
     );
   }
 
-  static EdgeInsetsGeometry? padding(Map<String, String> map) => _edge('padding', map);
+  static EdgeInsetsGeometry? padding(AssembleResource res, Map<String, String> map) => _edge(res, 'padding', map);
 
-  static EdgeInsetsGeometry? margin(Map<String, String> map) => _edge('margin', map);
+  static EdgeInsetsGeometry? margin(AssembleResource res, Map<String, String> map) => _edge(res, 'margin', map);
 
   static BorderSide _side(AssembleResource res, String key, Map<String, String> attr) {
     final color = attr['$key.color'];
@@ -485,7 +454,7 @@ class _PropertyStruct {
     );
   }
 
-  static BorderRadius? _borderRadius(Map<String, String> attr) {
+  static BorderRadius? _borderRadius(AssembleResource res, Map<String, String> attr) {
     final keys = attr.keys.where((k) => k.startsWith('radius'));
     if (keys.isEmpty) {
       return null;
@@ -497,7 +466,7 @@ class _PropertyStruct {
     final bottomRight = attr['radiusBottomRight'] ?? radius;
 
     Radius _radius(String? s) {
-      final r = s?.toSize();
+      final r = res.size(s);
       return r == null ? Radius.zero : Radius.circular(r);
     }
     return BorderRadius.only(
@@ -520,13 +489,13 @@ class _PropertyStruct {
     return BoxDecoration(
       color: res[style['color']],
       border: _boxBorder(res, style),
-      borderRadius: _borderRadius(style),
+      borderRadius: _borderRadius(res, style),
       backgroundBlendMode: _blendMode[style['backgroundBlendMode']],
       shape: _boxShape[style['shape']] ?? BoxShape.rectangle,
     );
   }
 
-  static BoxConstraints? constraints(Map<String, String> attr) {
+  static BoxConstraints? constraints(AssembleResource res, Map<String, String> attr) {
     const prefix = 'constraints.';
     final keys = attr.keys.where((k) => k.startsWith(prefix));
     if (keys.isEmpty) {
@@ -541,10 +510,10 @@ class _PropertyStruct {
     final minHeight = style['minHeight'] ?? height;
     final maxHeight = style['maxHeight'] ?? height;
     return BoxConstraints(
-      minWidth: minWidth?.toSize() ?? 0.0,
-      maxWidth: maxWidth?.toSize() ?? double.infinity,
-      minHeight: minHeight?.toSize() ?? 0.0,
-      maxHeight: maxHeight?.toSize() ?? double.infinity,
+      minWidth: res.size(minWidth) ?? 0.0,
+      maxWidth: res.size(maxWidth) ?? double.infinity,
+      minHeight: res.size(minHeight) ?? 0.0,
+      maxHeight: res.size(maxHeight) ?? double.infinity,
     );
   }
 }

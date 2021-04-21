@@ -43,7 +43,7 @@ class _XmlIconBuilder extends CommonWidgetBuilder {
     final res = element.context.resource;
     return Icon(
       Icons.add,
-      size: attrs['size']?.toSize(),
+      size: res.size(attrs['size']),
       color: res[attrs['color']],
       semanticLabel: attrs['semanticLabel'],
       textDirection: _textDirection[attrs['textDirection']],
@@ -61,7 +61,7 @@ class _XmlImageBuilder extends CommonWidgetBuilder {
     final src = attrs['src'] ?? '';
     File file;
     final scale = attrs['scale']?.toDouble();
-    final ltrb = attrs['centerSlice']?.split(' ').map((e) => e.toSize()).whereType<double>().toList(growable: false);
+    final ltrb = attrs['centerSlice']?.split(' ').map((e) => resource.size(e)).whereType<double>().toList(growable: false);
     final rect = ltrb != null && ltrb.length == 4 ? Rect.fromLTRB(ltrb[0], ltrb[1], ltrb[2], ltrb[3]) : null;
     if (src.startsWith('http')) {
       return Image.network(

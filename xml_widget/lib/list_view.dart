@@ -7,13 +7,14 @@ class _XmlListViewBuilder extends CommonWidgetBuilder {
   Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
     final children = descendant.map((e) => e.child).toList(growable: false);
     final attrs = element.attrs;
+    final res = element.context.resource;
     return ListView(
       children: children,
       scrollDirection: _axis[attrs['scrollDirection']] ?? Axis.vertical,
       reverse: attrs['reverse'] == "true",
       primary: attrs['primary']?.let((it) => it == "false"),
       shrinkWrap: attrs['shrinkWrap'] == "true",
-      padding: _PropertyStruct.padding(attrs),
+      padding: _PropertyStruct.padding(res, attrs),
       itemExtent: attrs['itemExtent']?.toDouble(),
       addAutomaticKeepAlives: attrs['addAutomaticKeepAlives'] == "false",
       addRepaintBoundaries: attrs['addRepaintBoundaries'] == "false",
