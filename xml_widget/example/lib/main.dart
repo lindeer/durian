@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:xml_widget/exe_engine.dart';
 import 'package:xml_widget/xml_widget.dart';
 
@@ -79,11 +80,24 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final assembler = WidgetAssembler(
-      buildContext: context,
-      onPressed: _onPressed,
+    return FutureBuilder(
+      future: rootBundle.loadString('assets/app.xml'),
+      initialData: '',
+      builder: (ctx, AsyncSnapshot<String> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError) {
+            return Text('error: ${snapshot.error}');
+          } else {
+            final assembler = WidgetAssembler(
+              buildContext: context,
+              onPressed: _onPressed,
+            );
+            return assembler.fromSource(snapshot.requireData);
+          }
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
     );
-    final w = assembler.fromFile('app.xml');
-    return w;
   }
 }
