@@ -6,12 +6,13 @@ class _XmlContainerBuilder extends CommonWidgetBuilder {
   @override
   Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
+    final res = element.context.resource;
     return Container(
       child: descendant.isEmpty ? null : descendant.first.child,
       alignment: _alignment[attrs['alignment']],
       padding: _PropertyStruct.padding(attrs),
-      decoration: _PropertyStruct.boxDecoration(attrs),
-      color: attrs['color']?.toColor(),
+      decoration: _PropertyStruct.boxDecoration(res, attrs),
+      color: res[attrs['color']],
       width: attrs['width']?.toSize(),
       height: attrs['height']?.toSize(),
       constraints: _PropertyStruct.constraints(attrs),
@@ -28,11 +29,12 @@ class _XmlInkBuilder extends CommonWidgetBuilder {
   @override
   Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
+    final res = element.context.resource;
     return Ink(
       child: descendant.isEmpty ? null : descendant.first.child,
       padding: _PropertyStruct.padding(attrs),
-      color: attrs['color']?.toColor(),
-      decoration: _PropertyStruct.boxDecoration(attrs),
+      color: res[attrs['color']],
+      decoration: _PropertyStruct.boxDecoration(res, attrs),
       width: attrs['width']?.toSize(),
       height: attrs['height']?.toSize(),
     );
@@ -45,6 +47,7 @@ class _XmlMaterialButtonBuilder extends CommonWidgetBuilder {
   @override
   Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
+    final res = element.context.resource;
     final pressFn = element.context.onPressed;
     final pressUri = attrs["onPressed"];
     final onPressed = pressFn != null && pressUri != null ? () => pressFn.call(pressUri) : null;
@@ -57,14 +60,14 @@ class _XmlMaterialButtonBuilder extends CommonWidgetBuilder {
       onPressed: onPressed,
       onLongPress: onLongPressed,
       textTheme: _buttonTextTheme[attrs['textTheme']],
-      textColor: attrs['textColor']?.toColor(),
-      disabledTextColor: attrs['disabledTextColor']?.toColor(),
-      color: attrs['color']?.toColor(),
-      disabledColor: attrs['disabledColor']?.toColor(),
-      focusColor: attrs['focusColor']?.toColor(),
-      hoverColor: attrs['hoverColor']?.toColor(),
-      highlightColor: attrs['highlightColor']?.toColor(),
-      splashColor: attrs['splashColor']?.toColor(),
+      textColor: res[attrs['textColor']],
+      disabledTextColor: res[attrs['disabledTextColor']],
+      color: res[attrs['color']],
+      disabledColor: res[attrs['disabledColor']],
+      focusColor: res[attrs['focusColor']],
+      hoverColor: res[attrs['hoverColor']],
+      highlightColor: res[attrs['highlightColor']],
+      splashColor: res[attrs['splashColor']],
       colorBrightness: _brightness[attrs['colorBrightness']],
       elevation: attrs['elevation']?.toSize(),
       focusElevation: attrs['focusElevation']?.toDouble(),
@@ -209,6 +212,7 @@ class _XmlInkWellBuilder extends CommonWidgetBuilder {
   @override
   Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
+    final res = element.context.resource;
     final pressFn = element.context.onPressed;
     final pressUri = attrs["onTap"];
     final onPressed = pressFn != null && pressUri != null ? () => pressFn.call(pressUri) : null;
@@ -220,10 +224,10 @@ class _XmlInkWellBuilder extends CommonWidgetBuilder {
       child: descendant.isEmpty ? null : descendant.first.child,
       onTap: onPressed,
       onLongPress: onLongPressed,
-      focusColor: attrs['focusColor']?.toColor(),
-      hoverColor: attrs['hoverColor']?.toColor(),
-      highlightColor: attrs['highlightColor']?.toColor(),
-      splashColor: attrs['splashColor']?.toColor(),
+      focusColor: res[attrs['focusColor']],
+      hoverColor: res[attrs['hoverColor']],
+      highlightColor: res[attrs['highlightColor']],
+      splashColor: res[attrs['splashColor']],
       radius: attrs['radius']?.toSize(),
       borderRadius: _PropertyStruct._borderRadius(attrs),
       enableFeedback: attrs['enableFeedback'] == "false",
@@ -240,6 +244,7 @@ class _XmlFloatingActionButtonBuilder extends CommonWidgetBuilder {
   @override
   Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
+    final res = element.context.resource;
     final handler = element.context.onPressed;
     final pressUri = attrs["onPressed"];
     final onPressed = handler != null && pressUri != null ? () => handler.call(pressUri) : null;
@@ -247,11 +252,11 @@ class _XmlFloatingActionButtonBuilder extends CommonWidgetBuilder {
       child: descendant.isEmpty ? null : descendant.first.child,
       onPressed: onPressed,
       tooltip: attrs['tooltip'],
-      foregroundColor: attrs["foregroundColor"]?.toColor(),
-      backgroundColor: attrs["backgroundColor"]?.toColor(),
-      focusColor: attrs['focusColor']?.toColor(),
-      hoverColor: attrs['hoverColor']?.toColor(),
-      splashColor: attrs['splashColor']?.toColor(),
+      foregroundColor: res[attrs["foregroundColor"]],
+      backgroundColor: res[attrs["backgroundColor"]],
+      focusColor: res[attrs['focusColor']],
+      hoverColor: res[attrs['hoverColor']],
+      splashColor: res[attrs['splashColor']],
       elevation: attrs['elevation']?.toSize(),
       focusElevation: attrs['focusElevation']?.toDouble(),
       hoverElevation: attrs['hoverElevation']?.toDouble(),

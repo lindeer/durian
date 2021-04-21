@@ -109,6 +109,7 @@ class _XmlScaffoldBuilder extends CommonWidgetBuilder {
   @override
   Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
+    final res = element.context.resource;
     final components = <String, AssembleChildElement>{};
     descendant.where((e) => e.attrs.keys.contains('scaffold')).forEach((e) {
       final key = e.attrs['scaffold'] ?? '';
@@ -125,13 +126,13 @@ class _XmlScaffoldBuilder extends CommonWidgetBuilder {
       endDrawer: components['endDrawer']?.child,
       bottomNavigationBar: components['bottomNavigationBar']?.child,
       bottomSheet: components['bottomSheet']?.child,
-      backgroundColor: attrs['backgroundColor']?.toColor(),
+      backgroundColor: res[attrs['backgroundColor']],
       resizeToAvoidBottomInset: attrs['backgroundColor']?.let((it) => it == "true"),
       primary: attrs['primary'] != "false",
       drawerDragStartBehavior: _drawerDragStartBehavior[attrs['drawerDragStartBehavior']] ?? DragStartBehavior.start,
       extendBody: attrs['extendBody'] == "true",
       extendBodyBehindAppBar: attrs['extendBodyBehindAppBar'] == "true",
-      drawerScrimColor: attrs['drawerScrimColor']?.toColor(),
+      drawerScrimColor: res[attrs['drawerScrimColor']],
       drawerEdgeDragWidth: attrs['drawerEdgeDragWidth']?.toDouble(),
       drawerEnableOpenDragGesture: attrs['drawerEnableOpenDragGesture'] != "false",
       endDrawerEnableOpenDragGesture: attrs['endDrawerEnableOpenDragGesture'] != "false",
@@ -146,6 +147,7 @@ class _XmlAppBarBuilder extends CommonWidgetBuilder {
   @override
   Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
+    final res = element.context.resource;
     final components = <String, AssembleChildElement>{};
     descendant.where((e) => e.attrs.keys.contains('appBar')).forEach((e) {
       final key = e.attrs['appBar'] ?? '';
@@ -158,9 +160,9 @@ class _XmlAppBarBuilder extends CommonWidgetBuilder {
       flexibleSpace: components['flexibleSpace']?.child,
       bottom: components['bottom']?.child as PreferredSizeWidget?,
       elevation: attrs['elevation']?.toSize(),
-      shadowColor: attrs['shadowColor']?.toColor(),
-      foregroundColor: attrs["foregroundColor"]?.toColor(),
-      backgroundColor: attrs["backgroundColor"]?.toColor(),
+      shadowColor: res[attrs['shadowColor']],
+      foregroundColor: res[attrs["foregroundColor"]],
+      backgroundColor: res[attrs["backgroundColor"]],
       brightness: _brightness[attrs["brightness"]],
       // iconTheme: ,
       // actionsIconTheme: ,

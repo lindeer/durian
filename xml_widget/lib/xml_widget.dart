@@ -5,9 +5,10 @@ import 'dart:io';
 import 'package:flutter/gestures.dart' show DragStartBehavior;
 import 'package:flutter/material.dart';
 import 'package:xml/xml.dart';
-import 'package:xml_widget/exe_engine.dart';
+import 'exe_engine.dart';
 import 'element.dart';
 export 'element.dart';
+import 'xml_resource.dart';
 
 part 'basic.dart';
 part 'text.dart';
@@ -42,28 +43,36 @@ abstract class CommonWidgetBuilder implements XmlWidgetBuilder {
 
 class WidgetAssembler {
 
-  final _builders = Map.of(_defaultBuilders);
-  final _colors = XmlResColor();
-  final _info = CallbackHolder();
-  final BuildContext buildContext;
+  final Map<String, XmlWidgetBuilder> _builders;
+  final CallbackHolder _holder;
+  final _ResImpl _res;
 
-  WidgetAssembler({
-    required this.buildContext,
+  WidgetAssembler._(this._builders, this._holder, this._res);
+
+  factory WidgetAssembler({
+    required BuildContext buildContext,
     void onPressed(String value)?,
     void onLongPressed(String value)?,
     List<XmlWidgetBuilder>? builders,
   }) {
+    final xmlBuilders = {
+      for (final builder in _builtinBuilders) builder.name: builder
+    };
     if (builders != null && builders.isNotEmpty) {
-      final map = {
-        for (final b in builders) b.name: b
-      };
-      _builders.addAll(map);
+      builders.forEach((b) {
+        xmlBuilders[b.name] = b;
+      });
     }
+    final _info = CallbackHolder();
     _info.onPressed = onPressed;
     _info.onLongPressed = onLongPressed;
+    final res = _ResImpl(buildContext);
+    return WidgetAssembler._(xmlBuilders, _info, res);
   }
 
-  AssembleContext get assembleContext => AssembleContext(buildContext, _colors, _info, _assembleByElement);
+  AssembleContext get assembleContext => AssembleContext(_res, _holder, _assembleByElement);
+
+  _ResImpl get resource => _res;
 
   static const _noChild = const <AssembleChildElement>[];
   static const _builtinBuilders = <XmlWidgetBuilder>[
@@ -103,10 +112,6 @@ class WidgetAssembler {
     const _XmlFlexibleBuilder(),
     const _XmlExpandedBuilder(),
   ];
-
-  static final _defaultBuilders = {
-    for (final builder in _builtinBuilders) builder.name: builder
-  };
 
   Widget _assembleByElement(AssembleElement element) {
     final name = element.name;
@@ -155,7 +160,7 @@ class WidgetAssembler {
   Widget fromFile(String path) {
     final file = File('colors.xml');
     if (file.existsSync()) {
-      _colors.loadResource(file.readAsStringSync());
+      _res.loadResource(file.readAsStringSync());
     }
     final f = File(path);
     return fromSource(f.readAsStringSync());

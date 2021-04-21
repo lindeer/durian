@@ -10,6 +10,7 @@ class _XmlTextBuilder extends CommonWidgetBuilder {
   @override
   Widget build(AssembleElement element, List<AssembleChildElement> children) {
     final attrs = element.attrs;
+    final res = element.context.resource;
     final styleAttr = attrs['style'];
     TextStyle? textStyle;
     if (styleAttr?.startsWith('@theme/') ?? false) {
@@ -17,7 +18,7 @@ class _XmlTextBuilder extends CommonWidgetBuilder {
       final path = styleAttr!.substring(7);
       textStyle = _PropertyStruct.themeTextStyle(theme, path);
     }
-    final overrideStyle = _PropertyStruct.toTextStyle(attrs);
+    final overrideStyle = _PropertyStruct.toTextStyle(res, attrs);
     textStyle = textStyle != null ? textStyle.merge(overrideStyle) : overrideStyle;
     return Text(
       attrs['data'] ?? '',
@@ -39,10 +40,11 @@ class _XmlIconBuilder extends CommonWidgetBuilder {
   @override
   Widget build(AssembleElement element, List<AssembleChildElement> children) {
     final attrs = element.attrs;
+    final res = element.context.resource;
     return Icon(
       Icons.add,
       size: attrs['size']?.toSize(),
-      color: attrs['color']?.toColor(),
+      color: res[attrs['color']],
       semanticLabel: attrs['semanticLabel'],
       textDirection: _textDirection[attrs['textDirection']],
     );
@@ -55,6 +57,7 @@ class _XmlImageBuilder extends CommonWidgetBuilder {
   @override
   Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
+    final resource = element.context.resource;
     final src = attrs['src'] ?? '';
     File file;
     final scale = attrs['scale']?.toDouble();
@@ -68,7 +71,7 @@ class _XmlImageBuilder extends CommonWidgetBuilder {
         excludeFromSemantics: attrs['excludeFromSemantics'] == "true",
         width: attrs['width']?.toDouble(),
         height: attrs['height']?.toDouble(),
-        color: attrs['color']?.toColor(),
+        color: resource[attrs['color']],
         colorBlendMode: _blendMode[attrs['colorBlendMode']],
         fit: _boxFit[attrs['fit']],
         alignment: _alignment[attrs['alignment']] ?? Alignment.center,
@@ -90,7 +93,7 @@ class _XmlImageBuilder extends CommonWidgetBuilder {
         excludeFromSemantics: attrs['excludeFromSemantics'] == "true",
         width: attrs['width']?.toDouble(),
         height: attrs['height']?.toDouble(),
-        color: attrs['color']?.toColor(),
+        color: resource[attrs['color']],
         colorBlendMode: _blendMode[attrs['colorBlendMode']],
         fit: _boxFit[attrs['fit']],
         alignment: _alignment[attrs['alignment']] ?? Alignment.center,
@@ -111,7 +114,7 @@ class _XmlImageBuilder extends CommonWidgetBuilder {
         excludeFromSemantics: attrs['excludeFromSemantics'] == "true",
         width: attrs['width']?.toDouble(),
         height: attrs['height']?.toDouble(),
-        color: attrs['color']?.toColor(),
+        color: resource[attrs['color']],
         colorBlendMode: _blendMode[attrs['colorBlendMode']],
         fit: _boxFit[attrs['fit']],
         alignment: _alignment[attrs['alignment']] ?? Alignment.center,

@@ -310,37 +310,7 @@ const _flutterColorPrefixLength = _flutterColorPrefix.length;
 const _resColorPrefix = '@color/';
 const _resColorPrefixLength = _resColorPrefix.length;
 
-abstract class ColorProvider {
-  Color? operator[](String key);
-}
-
-late ColorProvider _resourceColors;
-
-@visibleForTesting
-final testResColors = _resourceColors;
-
 extension _StringExt on String {
-
-  Color? toColor() {
-    final first = codeUnitAt(0);
-    if (first == _poundSign) {
-      final text = substring(1);
-      final value = text.length == 3 ? text.split('').map((e) => '$e$e').join('') : text;
-      final color = int.tryParse(value, radix: 16)?.let((color) =>
-      color <= 0xffffff ? Color(color).withAlpha(255) : Color(color));
-      return color;
-    }
-    if (startsWith(_flutterColorPrefix)) {
-      final key = substring(_flutterColorPrefixLength);
-      return _builtinColors[key];
-    }
-    if (startsWith(_resColorPrefix)) {
-      final key = substring(_resColorPrefixLength);
-      return _resourceColors[key];
-    }
-
-    return null;
-  }
 
   int? toInt() => int.tryParse(this);
 
@@ -418,7 +388,7 @@ extension _TextThemeExt on TextTheme {
 }
 
 class _PropertyStruct {
-  static TextStyle? toTextStyle(Map<String, String> attr) {
+  static TextStyle? toTextStyle(AssembleResource res, Map<String, String> attr) {
     const prefix = 'style.';
     final keys = attr.keys.where((k) => k.startsWith(prefix));
     if (keys.isEmpty) {
@@ -427,8 +397,8 @@ class _PropertyStruct {
     final start = prefix.length;
     final style = {for (final k in keys) k.substring(start): attr[k]};
     return TextStyle(
-      color: style['color']?.toColor(),
-      backgroundColor: style['backgroundColor']?.toColor(),
+      color: res[style['color']],
+      backgroundColor: res[style['backgroundColor']],
       fontSize: style['fontSize']?.toSize(),
     );
   }
@@ -469,25 +439,25 @@ class _PropertyStruct {
 
   static EdgeInsetsGeometry? margin(Map<String, String> map) => _edge('margin', map);
 
-  static BorderSide _side(String key, Map<String, String> attr) {
+  static BorderSide _side(AssembleResource res, String key, Map<String, String> attr) {
     final color = attr['$key.color'];
     final width = attr['$key.width'];
     final style = attr['$key.style'];
 
     return BorderSide(
-      color: color?.toColor() ?? Colors.black,
+      color: res[color] ?? Colors.black,
       width: width?.toDouble() ?? 1.0,
       style: _borderStyle[style] ?? BorderStyle.solid,
     );
   }
 
-  static BoxBorder? _boxBorder(Map<String, String> attr) {
+  static BoxBorder? _boxBorder(AssembleResource res, Map<String, String> attr) {
     final keys = attr.keys.where((k) => k.startsWith('border'));
     if (keys.isEmpty) {
       return null;
     }
     final borderKeys = keys.where((k) => k.startsWith('border.'));
-    final side = borderKeys.isEmpty ? null : _side('border', attr);
+    final side = borderKeys.isEmpty ? null : _side(res, 'border', attr);
 
     const keyLeft = 'borderLeft';
     const keyTop = 'borderTop';
@@ -495,16 +465,16 @@ class _PropertyStruct {
     const keyBottom = 'borderBottom';
 
     final leftKeys = keys.where((k) => k.startsWith(keyLeft));
-    final left = leftKeys.isEmpty ? side : _side(keyLeft, attr);
+    final left = leftKeys.isEmpty ? side : _side(res, keyLeft, attr);
 
     final topKeys = keys.where((k) => k.startsWith(keyTop));
-    final top = topKeys.isEmpty ? side : _side(keyTop, attr);
+    final top = topKeys.isEmpty ? side : _side(res, keyTop, attr);
 
     final rightKeys = keys.where((k) => k.startsWith(keyRight));
-    final right = rightKeys.isEmpty ? side : _side(keyRight, attr);
+    final right = rightKeys.isEmpty ? side : _side(res, keyRight, attr);
 
     final bottomKeys = keys.where((k) => k.startsWith(keyBottom));
-    final bottom = bottomKeys.isEmpty ? side : _side(keyBottom, attr);
+    final bottom = bottomKeys.isEmpty ? side : _side(res, keyBottom, attr);
 
     return left == null && top == null && right == null && bottom == null ? null :
     Border(
@@ -538,7 +508,7 @@ class _PropertyStruct {
     );
   }
 
-  static BoxDecoration? boxDecoration(Map<String, String> attr) {
+  static BoxDecoration? boxDecoration(AssembleResource res, Map<String, String> attr) {
     const prefix = 'decoration.';
     final keys = attr.keys.where((k) => k.startsWith(prefix));
     if (keys.isEmpty) {
@@ -548,8 +518,8 @@ class _PropertyStruct {
     final style = {for (final k in keys) k.substring(start): attr[k]!};
 
     return BoxDecoration(
-      color: style['color']?.toColor(),
-      border: _boxBorder(style),
+      color: res[style['color']],
+      border: _boxBorder(res, style),
       borderRadius: _borderRadius(style),
       backgroundBlendMode: _blendMode[style['backgroundBlendMode']],
       shape: _boxShape[style['shape']] ?? BoxShape.rectangle,

@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:xml/xml.dart';
-import 'xml_widget.dart';
+import 'xml_resource.dart';
 
 class CallbackHolder {
   void Function(String value)? onPressed;
@@ -12,13 +12,13 @@ class CallbackHolder {
 typedef AssembleFn = Widget Function(AssembleElement element);
 
 class AssembleContext {
-  final ThemeData theme;
-  final ResColor color;
+  final AssembleResource resource;
   final CallbackHolder _info;
   final AssembleFn assemble;
 
-  AssembleContext(BuildContext context, this.color, this._info, this.assemble)
-      : theme = Theme.of(context);
+  const AssembleContext(this.resource, this._info, this.assemble);
+
+  ThemeData get theme => resource.theme;
 
   void Function(String value)? get onPressed => _info.onPressed;
 

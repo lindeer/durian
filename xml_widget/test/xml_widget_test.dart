@@ -66,7 +66,7 @@ void main() {
 
 </resources>
 """;
-    final res = XmlResColor();
+    final res = assembler.resource;
     res.loadResource(xml);
     expect(res['colorPrimary'], Color(0xffffffff));
     expect(res['orange']?.value, testColors['orange']?.value);
@@ -96,7 +96,7 @@ void main() {
 
 </resources>
 """;
-    final res = XmlResColor();
+    final res = assembler.resource;
     res.loadResource(xml);
 
     final state = res.state('color_state_text');
@@ -105,7 +105,6 @@ void main() {
 
     final c2 = state?.resolve({MaterialState.dragged});
     expect(c2?.value, res['colorAccent']?.value);
-    expect(c2?.value, testResColors['colorAccent']?.value);
 
   });
 }
