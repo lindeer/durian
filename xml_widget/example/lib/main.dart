@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: ExeEngineWidget(
-        engine: ExeEngine(code: """
+        engine: ScriptEngine(code: """
 let size = 0;
 let message = '';
 let details = [
@@ -74,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _onPressed(String uri) {
     print("onPressed: $uri");
     final engine = ExeEngineWidget.of(context);
-    engine.run('$uri();');
+    engine.eval('$uri();');
   }
 
   @override

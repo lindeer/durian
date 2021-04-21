@@ -145,7 +145,7 @@ class WidgetAssembler {
           words: words,
           builder: (ctx) {
             final engine = ExeEngineWidget.of(ctx);
-            DataBinding.bind(element, engine.run);
+            DataBinding.bind(element, engine.eval);
             return fn.call(element, children);
           },
         );

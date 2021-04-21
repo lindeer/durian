@@ -80,7 +80,7 @@ class _LoopState extends State<LoopWidget> {
     final head = headers?.length ?? 0;
 
     final engine = ExeEngineWidget.of(context);
-    final size = int.tryParse(engine.run('${widget.word}.length')) ?? 0;
+    final size = int.tryParse(engine.eval('${widget.word}.length')) ?? 0;
 
     final len = head + size;
     final tail = footers?.length ?? 0;
@@ -93,7 +93,7 @@ class _LoopState extends State<LoopWidget> {
           return headers![index].child;
         } else if (index < len) {
           int pos = index - head;
-          engine.run("var item = ${widget.word}[$pos];");
+          engine.eval("var item = ${widget.word}[$pos];");
           return _buildItem(engine, pos);
         } else {
           int pos = index - len;
@@ -103,7 +103,7 @@ class _LoopState extends State<LoopWidget> {
     );
   }
 
-  Widget _buildItem(ExeEngine engine, int index) {
+  Widget _buildItem(ScriptEngine engine, int index) {
     final item = widget.item;
     final at = DateTime.now().millisecondsSinceEpoch;
     try {

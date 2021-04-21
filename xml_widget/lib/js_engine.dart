@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_js/flutter_js.dart' as js;
 import 'exe_engine.dart';
 
-class JSEngine implements ExeEngine {
+class JSEngine implements ScriptEngine {
   final js.JavascriptRuntime _rt;
   final _notifiers = <String, Set<VoidCallback>>{};
 
@@ -49,7 +49,7 @@ async function notifyChange(keys) {
   }
 
   @override
-  String run(String statement) {
+  String eval(String statement) {
     final result = _rt.evaluate(statement);
     return result.stringResult;
   }

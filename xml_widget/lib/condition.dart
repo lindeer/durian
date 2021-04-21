@@ -10,13 +10,13 @@ class _ChildMaker {
   AssembleChildElement make(BuildContext context) {
     final engine = ExeEngineWidget.of(context);
     final conditionIf = child.raw['flutter:if'];
-    if (conditionIf == null || engine.run(conditionIf) == "true") {
+    if (conditionIf == null || engine.eval(conditionIf) == "true") {
       return child;
     }
     final middle = elseifChildren ?? const [];
     for (final child in middle) {
       final condition = child.raw['flutter:elseif'];
-      if (condition == null || engine.run(condition) == "true") {
+      if (condition == null || engine.eval(condition) == "true") {
         return child;
       }
     }

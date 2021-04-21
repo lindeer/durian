@@ -28,7 +28,7 @@ void main() {
     </Column>
 """;
 
-    final engine = ExeEngine(
+    final engine = ScriptEngine(
       code: """
 let size = 0;
       """,
@@ -52,13 +52,13 @@ let size = 0;
     expect(find.text('size == 0'), findsOneWidget);
     expect(find.text('size > 0'), findsNothing);
 
-    engine.run('size = 1; notifyChange(["size"]);');
+    engine.eval('size = 1; notifyChange(["size"]);');
     await tester.pump();
     expect(find.text('size < 0'), findsNothing);
     expect(find.text('size == 0'), findsNothing);
     expect(find.text('size > 0'), findsOneWidget);
 
-    engine.run('size = -1; notifyChange(["size"]);');
+    engine.eval('size = -1; notifyChange(["size"]);');
     await tester.pump();
     expect(find.text('size < 0'), findsOneWidget);
     expect(find.text('size == 0'), findsNothing);

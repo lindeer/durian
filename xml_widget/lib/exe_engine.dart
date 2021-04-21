@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'js_engine.dart';
 
-abstract class ExeEngine {
-  String run(String statement);
+abstract class ScriptEngine {
+  String eval(String statement);
 
   void registerNotifier(List<String> keywords, VoidCallback cb);
 
-  factory ExeEngine.fake() => _FakeEngine();
+  factory ScriptEngine.fake() => _FakeEngine();
 
-  factory ExeEngine({String? code,}) = JSEngine;
+  factory ScriptEngine({String? code,}) = JSEngine;
 }
 
-class _FakeEngine implements ExeEngine {
+class _FakeEngine implements ScriptEngine {
   @override
-  String run(String statement) => "";
+  String eval(String statement) => "";
 
   @override
   void registerNotifier(List<String> keywords, VoidCallback cb) {
@@ -21,8 +21,8 @@ class _FakeEngine implements ExeEngine {
 }
 
 class ExeEngineWidget extends InheritedWidget {
-  static final _fake = ExeEngine.fake();
-  final ExeEngine engine;
+  static final _fake = ScriptEngine.fake();
+  final ScriptEngine engine;
 
   ExeEngineWidget({required this.engine, required Widget child}) : super(child: child);
 
@@ -31,7 +31,7 @@ class ExeEngineWidget extends InheritedWidget {
     return engine != oldWidget.engine;
   }
 
-  static ExeEngine of(BuildContext context) {
+  static ScriptEngine of(BuildContext context) {
     final ExeEngineWidget? widget = context.dependOnInheritedWidgetOfExactType<ExeEngineWidget>();
     return widget?.engine ?? _fake;
   }

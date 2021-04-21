@@ -3,14 +3,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:xml_widget/exe_engine.dart';
 import 'package:xml_widget/xml_widget.dart';
 
-class _TestEngine implements ExeEngine {
+class _TestEngine implements ScriptEngine {
   final Map<String, String> map;
   VoidCallback? cb;
 
   _TestEngine(this.map);
 
   @override
-  String run(String statement) => map[statement] ?? "";
+  String eval(String statement) => map[statement] ?? "";
 
   @override
   void registerNotifier(List<String> keywords, VoidCallback cb) {
