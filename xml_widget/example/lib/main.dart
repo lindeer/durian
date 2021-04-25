@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:xml_widget/exe_engine.dart';
@@ -70,6 +72,49 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+class _ByteDataSink implements Sink<ByteData> {
+  final Sink<List<int>> sink;
+
+  _ByteDataSink(this.sink);
+  @override
+  void add(ByteData data) {
+    sink.add(data.buffer.asInt8List());
+  }
+
+  @override
+  void close() {
+    sink.close();
+  }
+}
+
+class _BDConverter extends Converter<ByteData, List<int>> {
+  const _BDConverter();
+
+  @override
+  List<int> convert(ByteData input) => input.buffer.asInt8List();
+
+  @override
+  Sink<ByteData> startChunkedConversion(Sink<List<int>> sink) {
+    return _ByteDataSink(sink);
+  }
+}
+
+const _bd = const _BDConverter();
+
+final _loading = Container(
+  color: Colors.white,
+  constraints: const BoxConstraints.tightFor(
+    width: 128,
+    height: 128,
+  ),
+  alignment: Alignment.center,
+  child: const CircularProgressIndicator(
+    valueColor: AlwaysStoppedAnimation<Color>(
+      Colors.deepOrangeAccent,
+    ),
+  ),
+);
+
 class _MyHomePageState extends State<MyHomePage> {
 
   void _onPressed(String uri) {
@@ -80,22 +125,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final assembler = WidgetAssembler(
+      buildContext: context,
+      onPressed: _onPressed,
+    );
+
     return FutureBuilder(
-      future: rootBundle.loadString('assets/app.xml'),
-      initialData: '',
-      builder: (ctx, AsyncSnapshot<String> snapshot) {
+      future: assembler.fromStream(rootBundle.load('assets/app.xml').asStream().transform(_bd)),
+      initialData: _loading,
+      builder: (ctx, AsyncSnapshot<Widget> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
             return Text('error: ${snapshot.error}');
           } else {
-            final assembler = WidgetAssembler(
-              buildContext: context,
-              onPressed: _onPressed,
-            );
-            return assembler.fromSource(snapshot.requireData);
+            return snapshot.requireData;
           }
         } else {
-          return CircularProgressIndicator();
+          return _loading;
         }
       },
     );

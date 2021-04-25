@@ -34,6 +34,12 @@ class AssembleElement {
 
   const AssembleElement._(this.name, this.context, this.attrs, this.raw, this.children);
 
+  factory AssembleElement(String name, AssembleContext context, Map<String, String> raw,
+      List<AssembleElement> children) {
+    final attrs = raw.map((key, value) => MapEntry(key.replaceAll('flutter:', ''), value));
+    return AssembleElement._(name, context, attrs, raw, children);
+  }
+
   static AssembleElement fromXml(XmlElement e, AssembleContext context) {
     final children = e.children.where((child) => child.nodeType == XmlNodeType.ELEMENT)
         .map((child) => fromXml(child as XmlElement, context)).toList(growable: false);

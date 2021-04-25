@@ -1,10 +1,12 @@
 library durian;
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/gestures.dart' show DragStartBehavior;
 import 'package:flutter/material.dart';
 import 'package:xml/xml.dart';
+import 'package:xml/xml_events.dart';
 import 'exe_engine.dart';
 import 'element.dart';
 export 'element.dart';
@@ -170,6 +172,42 @@ class WidgetAssembler {
     final doc = XmlDocument.parse(source);
     final root = doc.rootElement;
     final element = AssembleElement.fromXml(root, assembleContext);
+    return _assembleByElement(element);
+  }
+
+  Future<AssembleElement> _elementFromStream(Stream<List<int>> stream) async {
+    final stack = <AssembleElement>[];
+    final context = assembleContext;
+    late AssembleElement root;
+    await stream
+        .transform(utf8.decoder)
+        .toXmlEvents()
+        .normalizeEvents()
+        .forEachEvent(
+      onStartElement: (event) {
+        final map = event.attributes.map(
+                (attr) => MapEntry(attr.name, attr.value));
+        final raw = Map.fromEntries(map.map((entry) => MapEntry(entry.key, entry.value)));
+        final element = AssembleElement(event.name, context, raw, []);
+        if (stack.isEmpty) {
+          root = element;
+        } else {
+          final parent = stack.last;
+          parent.children.add(element);
+        }
+        if (!event.isSelfClosing) {
+          stack.add(element);
+        }
+      },
+      onEndElement: (event) {
+        stack.removeLast();
+      },
+    );
+    return root;
+  }
+
+  Future<Widget> fromStream(Stream<List<int>> stream) async {
+    final element = await _elementFromStream(stream);
     return _assembleByElement(element);
   }
 }
