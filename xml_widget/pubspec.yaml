@@ -1,8 +1,7 @@
 name: xml_widget
 description: A new Flutter package project.
-version: 0.0.1
-author:
-homepage:
+version: 0.0.1+1
+homepage: https://github.com/lindeer/durian
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
