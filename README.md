@@ -1,6 +1,6 @@
 # durian
 
-A new Flutter package project.
+A xml to widget with script engine flutter package project.
 
 ## Getting Started
 
