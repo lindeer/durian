@@ -84,7 +84,7 @@ class ConditionWidget extends StatefulWidget {
     for (final child in children) {
       final condition = child.raw['flutter:if'] ?? child.raw['flutter:elseif'];
       if (condition != null && condition.isNotEmpty) {
-        variables.addAll(DataBinding.matchWords(condition));
+        DataBinding.matchKey(condition)?.let((it) => variables.add(it));
       }
     }
     bindingWords ??= DataBinding.hasMatch(element) ? DataBinding.matchKeys(element) : null;

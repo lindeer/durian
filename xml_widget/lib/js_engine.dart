@@ -24,8 +24,11 @@ async function notifyChange(keys) {
       if (args is List) {
         final callbacks = <VoidCallback>{};
         for (final key in args) {
-          final cb = engine._notifiers[key];
-          if (cb != null) {
+          final cbs = engine._notifiers.keys
+              .where((expr) => expr.contains(key))
+              .map((expr) => engine._notifiers[expr])
+              .whereType<Set<VoidCallback>>();
+          for (final cb in cbs) {
             callbacks.addAll(cb);
           }
         }

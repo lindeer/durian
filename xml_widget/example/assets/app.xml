@@ -24,18 +24,18 @@
         flutter:style.color="@flutter:color/lightGreen"
         flutter:style="@theme/textTheme.headline4"/>
       <Text
-          flutter:if="size < 0"
-          flutter:data="size = {{size}}"
+          flutter:if="{{size < 0}}"
+          flutter:data="label-if.size = {{size}}"
           flutter:style.color="@flutter:color/lightGreen"
           flutter:style="@theme/textTheme.headline4"/>
       <Text
-          flutter:elseif="size == 0"
-          flutter:data="size = {{size}}"
+          flutter:elseif="{{size == 0}}"
+          flutter:data="label-elseif.size = {{size}}"
           flutter:style.color="@flutter:color/deepOrange"
           flutter:style="@theme/textTheme.headline4"/>
       <Text
           flutter:else=""
-          flutter:data="size = {{size}}"
+          flutter:data="label-else.size = {{size}}"
           flutter:style.color="@flutter:color/blueAccent"
           flutter:style="@theme/textTheme.headline4"/>
       <Container

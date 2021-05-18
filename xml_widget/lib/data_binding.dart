@@ -3,7 +3,6 @@ part of durian;
 class DataBinding {
 
   static final _reg = RegExp(r'{{(.+?)}}');
-  static final _wordReg = RegExp(r'[a-zA-Z_]\w*(\.\w+)*');
 
   static bool hasMatch(AssembleElement element) {
     final values = element.raw.values;
@@ -20,20 +19,13 @@ class DataBinding {
     final keys = <String>{};
     for (final value in values) {
       final matches = _reg.allMatches(value);
-      final items = matches.map((m) => m[0]).whereType<String>();
-      for (final item in items) {
-        final words = matchWords(item);
-        keys.addAll(words);
-      }
+      final items = matches.map((m) => m[1]).whereType<String>();
+      keys.addAll(items);
     }
     return keys.toList(growable: false);
   }
 
   static String? matchKey(String? text) => text == null ? null : _reg.firstMatch(text)?[1];
-
-  static Iterable<String> matchWords(String text) {
-    return _wordReg.allMatches(text).map((m) => m[0]).whereType<String>();
-  }
 
   static void bind(AssembleElement element, String getter(String code)) {
     final attrs = Map.of(element.raw);
