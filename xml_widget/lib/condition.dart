@@ -60,15 +60,15 @@ class ConditionWidget extends StatefulWidget {
   final AssembleElement element;
   final List<_ChildMaker> makers;
   final AssembleWidgetBuilder builder;
-  final List<String> variables;
-  final List<String> words;
+  final List<String> conditions;
+  final List<String> expressions;
 
   const ConditionWidget._(
       this.element,
       this.makers,
       this.builder,
-      this.variables,
-      this.words,
+      this.conditions,
+      this.expressions,
       {
         Key? key,
       }) : super(key: key);
@@ -102,22 +102,33 @@ class ConditionWidget extends StatefulWidget {
 }
 
 class _ConditionState extends State<ConditionWidget> {
-  bool rebuildChildren = true;
+  static const REBUILD_REASON_NONE = 0;
+  static const REBUILD_REASON_INIT = 1;
+  static const REBUILD_REASON_NOTIFIED = 2;
+
+  int rebuildChildren = REBUILD_REASON_INIT;
   final _children = <AssembleChildElement>[];
+
+  // if-else children widget need rebuild
+  void _onChildrenChanged() {
+    setState(() {
+      rebuildChildren = REBUILD_REASON_NOTIFIED;
+    });
+  }
+
+  // rebuild target widget of its own without children
+  void _onWidgetChanged() {
+    setState(() {});
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
     final engine = ExeEngineWidget.of(context);
-    engine.registerNotifier(widget.variables, () {
-      rebuildChildren = true;
-      setState(() {});
-    });
-    if (widget.words.isNotEmpty) {
-      engine.registerNotifier(widget.words, () {
-        setState(() {});
-      });
+    engine.addListener(widget.conditions, _onChildrenChanged);
+    if (widget.expressions.isNotEmpty) {
+      engine.addListener(widget.expressions, _onWidgetChanged);
     }
   }
 
@@ -125,11 +136,11 @@ class _ConditionState extends State<ConditionWidget> {
   Widget build(BuildContext context) {
     final builder = widget.builder;
     final element = widget.element;
-    if (rebuildChildren) {
+    if (rebuildChildren != REBUILD_REASON_NONE) {
       final makers = widget.makers;
       final children = makers.map((e) => e.make(context)).toList(growable: false);
       _children..clear()..addAll(children);
-      rebuildChildren = false;
+      rebuildChildren = REBUILD_REASON_NONE;
     }
     return builder.call(element, _children);
   }

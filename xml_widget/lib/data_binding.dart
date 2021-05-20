@@ -60,15 +60,18 @@ class BindingWidget extends StatefulWidget {
 }
 
 class _DataBindingState extends State<BindingWidget> {
+  void _update() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
     final engine = ExeEngineWidget.of(context);
-    engine.registerNotifier(widget.words, () {
-      setState(() {});
-    });
+    engine.addListener(widget.words, _update);
   }
 
   @override

@@ -13,8 +13,16 @@ class _TestEngine implements ScriptEngine {
   String eval(String statement) => map[statement] ?? "";
 
   @override
-  void registerNotifier(List<String> keywords, VoidCallback cb) {
+  void addListener(List<String> keywords, VoidCallback cb) {
     this.cb = cb;
+  }
+
+  @override
+  Future<void> prepare(BuildContext context) => Future.value();
+
+  @override
+  void dispose() {
+    this.cb = null;
   }
 
   void operator []=(String key, String value) {

@@ -60,8 +60,7 @@ class LoopWidget extends StatefulWidget {
 }
 
 class _LoopState extends State<LoopWidget> {
-
-  String _from = 'create';
+  int _from = 0;
 
   @override
   void didChangeDependencies() {
@@ -70,7 +69,7 @@ class _LoopState extends State<LoopWidget> {
     final word = widget.word;
     final engine = ExeEngineWidget.of(context);
     if (word.isNotEmpty) {
-      engine.registerNotifier([word], () { _onNotify('loop'); });
+      engine.addListener([word], _update);
     }
   }
 
@@ -115,9 +114,9 @@ class _LoopState extends State<LoopWidget> {
     }
   }
 
-  void _onNotify(String from) {
+  void _update() {
     setState(() {
-      _from = from;
+      _from++;
     });
   }
 }

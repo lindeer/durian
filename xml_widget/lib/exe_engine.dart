@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'js_engine.dart';
 
 abstract class ScriptEngine {
+
+  Future<void> prepare(BuildContext context);
+
+  void dispose();
+
   String eval(String statement);
 
-  void registerNotifier(List<String> keywords, VoidCallback cb);
+  void addListener(List<String> keywords, VoidCallback cb);
 
   factory ScriptEngine.fake() => _FakeEngine();
 
@@ -12,11 +17,19 @@ abstract class ScriptEngine {
 }
 
 class _FakeEngine implements ScriptEngine {
+
+  @override
+  Future<void> prepare(BuildContext context) => Future.value();
+
+  @override
+  void dispose() {
+  }
+
   @override
   String eval(String statement) => "";
 
   @override
-  void registerNotifier(List<String> keywords, VoidCallback cb) {
+  void addListener(List<String> keywords, VoidCallback cb) {
   }
 }
 
@@ -33,36 +46,65 @@ final _loading = Container(
   ),
 );
 
-class ExeEngineWidget extends InheritedWidget {
+class ExeEngineWidget extends StatefulWidget {
   static final _fake = ScriptEngine.fake();
   final ScriptEngine engine;
+  final Widget child;
 
-  ExeEngineWidget({required this.engine, required Widget child}) : super(child: child);
+  ExeEngineWidget({required this.engine, required this.child, Key? key}) : super(key: key);
 
   @override
-  bool updateShouldNotify(covariant ExeEngineWidget oldWidget) {
-    return engine != oldWidget.engine;
-  }
+  State<StatefulWidget> createState() => _EngineState();
 
   static ScriptEngine of(BuildContext context) {
-    final widget = context.getElementForInheritedWidgetOfExactType<ExeEngineWidget>()?.widget as ExeEngineWidget?;
+    final widget = context.getElementForInheritedWidgetOfExactType<_ShareEngineWidget>()?.widget as _ShareEngineWidget?;
     return widget?.engine ?? _fake;
   }
+}
 
-  // only if engine is ready
-  static Widget attachAsync(Future<ScriptEngine> future, Widget child) {
-    return FutureBuilder<ScriptEngine>(
-      future: future,
+class _EngineState extends State<ExeEngineWidget> {
+
+  @override
+  Widget build(BuildContext context) {
+    final engine = widget.engine;
+    return FutureBuilder<void>(
+      future: engine.prepare(context),
       builder: (ctx, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-          return ExeEngineWidget(
-            engine: snapshot.requireData,
-            child: child,
+        if (snapshot.connectionState == ConnectionState.done) {
+          return _ShareEngineWidget(
+            engine: engine,
+            child: widget.child,
           );
         } else {
           return _loading;
         }
       },
     );
+  }
+
+  @override
+  void didUpdateWidget(ExeEngineWidget oldWidget) {
+    if (widget.engine != oldWidget.engine) {
+      oldWidget.engine.dispose();
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    widget.engine.dispose();
+  }
+}
+
+class _ShareEngineWidget extends InheritedWidget {
+  final ScriptEngine engine;
+
+  _ShareEngineWidget({required this.engine, required Widget child}) : super(child: child);
+
+  @override
+  bool updateShouldNotify(_ShareEngineWidget oldWidget) {
+    return oldWidget.engine != engine;
   }
 }

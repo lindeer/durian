@@ -10,23 +10,28 @@ class JSEngine implements ScriptEngine {
 
   factory JSEngine({String? code,}) {
     final runtime = js.getJavascriptRuntime(xhr: false);
-    runtime.evaluate("""
-async function notifyChange(keys) {
-  await sendMessage('_onVariableChanged', JSON.stringify(keys));
-}
-    """);
     if (code != null) {
       runtime.evaluate(code);
     }
     final engine = JSEngine._(runtime);
-    runtime.onMessage('_onVariableChanged', (args) {
+    return engine;
+  }
+
+  @override
+  Future<void> prepare(BuildContext context) async {
+    _rt.evaluate("""
+async function notifyChange(keys) {
+  await sendMessage('_onVariableChanged', JSON.stringify(keys));
+}
+    """);
+    _rt.onMessage('_onVariableChanged', (args) {
       print('onVariableChanged(Dart): args=$args');
       if (args is List) {
         final callbacks = <VoidCallback>{};
         for (final key in args) {
-          final cbs = engine._notifiers.keys
+          final cbs = _notifiers.keys
               .where((expr) => expr.contains(key))
-              .map((expr) => engine._notifiers[expr])
+              .map((expr) => _notifiers[expr])
               .whereType<Set<VoidCallback>>();
           for (final cb in cbs) {
             callbacks.addAll(cb);
@@ -35,11 +40,16 @@ async function notifyChange(keys) {
         callbacks.forEach((cb) => cb());
       }
     });
-    return engine;
+    return Future.value();
   }
 
   @override
-  void registerNotifier(List<String> keywords, VoidCallback callback) {
+  void dispose() {
+    _notifiers.clear();
+  }
+
+  @override
+  void addListener(List<String> keywords, VoidCallback callback) {
     print("registerNotifier: keywords=$keywords");
     keywords.forEach((key) {
       final old = _notifiers[key];
