@@ -11,15 +11,15 @@ void main() {
         flutter:style="@theme/textTheme.headline4"
         flutter:data="start"/>
       <Text
-        flutter:if="size < 0"
+        flutter:if="{{size < 0}}"
         flutter:data="size < 0"
         flutter:style="@theme/textTheme.headline4"/>
       <Text
-        flutter:if="size == 0"
+        flutter:if="{{size == 0}}"
         flutter:data="size == 0"
         flutter:style="@theme/textTheme.headline4"/>
       <Text
-        flutter:if="size > 0"
+        flutter:if="{{size > 0}}"
         flutter:data="size > 0"
         flutter:style="@theme/textTheme.headline4"/>
       <Text
@@ -46,6 +46,7 @@ let size = 0;
         },),
       ),
     ));
+    await tester.pumpAndSettle();
     final target = find.byType(ConditionWidget);
     expect(target, findsOneWidget);
     expect(find.text('size < 0'), findsNothing);

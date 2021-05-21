@@ -5,16 +5,16 @@ import 'package:xml_widget/xml_widget.dart';
 
 class _TestEngine implements ScriptEngine {
   final Map<String, String> map;
-  VoidCallback? cb;
+  final listeners = <VoidCallback>[];
 
   _TestEngine(this.map);
 
   @override
-  String eval(String statement) => map[statement] ?? "";
+  String eval(String statement) => map[statement] ?? "{{$statement}}";
 
   @override
   void addListener(List<String> keywords, VoidCallback cb) {
-    this.cb = cb;
+    listeners.add(cb);
   }
 
   @override
@@ -22,13 +22,13 @@ class _TestEngine implements ScriptEngine {
 
   @override
   void dispose() {
-    this.cb = null;
+    listeners.clear();
   }
 
   void operator []=(String key, String value) {
     if (map[key] != value) {
       map[key] = value;
-      cb?.call();
+      listeners.forEach((l) { l.call(); });
     }
   }
 }
@@ -64,6 +64,7 @@ void main() {
         },),
       ),
     ));
+    await tester.pumpAndSettle();
     final target = find.byType(ConditionWidget);
     expect(target, findsOneWidget);
     expect(find.text('{{message}}'), findsNothing);
@@ -106,6 +107,7 @@ void main() {
         },),
       ),
     ));
+    await tester.pumpAndSettle();
     final target = find.byType(ConditionWidget);
     expect(target, findsOneWidget);
     expect(find.text('{{message}}'), findsNothing);
@@ -149,6 +151,7 @@ void main() {
         },),
       ),
     ));
+    await tester.pumpAndSettle();
     final target = find.byType(ConditionWidget);
     expect(target, findsOneWidget);
     expect(find.text('{{message}}'), findsNothing);
@@ -195,6 +198,7 @@ void main() {
         },),
       ),
     ));
+    await tester.pumpAndSettle();
     final target = find.byType(ConditionWidget);
     expect(target, findsOneWidget);
     expect(find.text('{{message}}'), findsNothing);
@@ -253,6 +257,7 @@ void main() {
         },),
       ),
     ));
+    await tester.pumpAndSettle();
     final target = find.byType(ConditionWidget);
     expect(target, findsOneWidget);
     expect(find.text('{{message}}'), findsOneWidget);
@@ -305,6 +310,7 @@ void main() {
         },),
       ),
     ));
+    await tester.pumpAndSettle();
     final target = find.byType(ConditionWidget);
     expect(target, findsOneWidget);
     expect(find.text('{{message}}'), findsOneWidget);

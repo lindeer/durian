@@ -98,6 +98,7 @@ void main() {
         },),
       ),
     ));
+    await tester.pumpAndSettle();
     final target = find.byType(ListView);
     expect(target, findsOneWidget);
     expect(find.text('nice'), findsOneWidget);
