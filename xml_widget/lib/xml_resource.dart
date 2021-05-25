@@ -9,4 +9,6 @@ abstract class AssembleResource {
   MaterialStateProperty<Color?>? state(String key);
 
   double? size(String? value);
+
+  IconData? icon(String? key);
 }

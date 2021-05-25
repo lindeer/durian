@@ -1,115 +1,315 @@
-<Scaffold xmlns:flutter="http://flutter.dev/xml/flutter">
+<Stack xmlns:flutter="http://flutter.dev/xml/flutter">
+  <ListView>
+    <Ink
+      flutter:color="#eee">
+      <Column
+        flutter:mainAxisAlignment="center">
 
-  <AppBar flutter:scaffold="appBar">
-    <Text
-      flutter:appBar="title"
-      flutter:data="Flutter Xml Widget"/>
+        <SizedBox flutter:height="20"/>
 
-  </AppBar>
+        <ClipOval>
+          <Image
+            flutter:width="80"
+            flutter:height="80"
+            flutter:src="https://s3-gz01.didistatic.com/dchat-gz/cPs9U6UXizhaNq39hIFXti7Rdyz9yKmSexVpJr8Ju0BJ2s3yIu"/>
+        </ClipOval>
 
-  <FloatingActionButton
-    flutter:scaffold="floatingActionButton"
-    flutter:tooltip="Increment"
-    flutter:onPressed="onFloatButtonClick">
+        <Padding
+          flutter:paddingTop="10"
+          flutter:paddingBottom="10">
 
-    <Icon flutter:icon="@flutter:icons/add"/>
-  </FloatingActionButton>
+          <Text
+            flutter:data="@{name}"
+            flutter:style="@flutter:theme/textTheme.headline6"
+            flutter:style.color="#111"/>
 
-  <Center flutter:scaffold="body">
-    <Column
-      flutter:size="{{message}}"
-      flutter:mainAxisAlignment="center">
-      <Text flutter:data="You have pushed the button this many times:"/>
-      <Text flutter:data="@{data.data}"
-        flutter:style.color="@flutter:color/lightGreen"
-        flutter:style="@theme/textTheme.headline4"/>
-      <Text
-          flutter:if="{{size < 0}}"
-          flutter:data="label-if.size = {{size}}"
-          flutter:style.color="@flutter:color/lightGreen"
-          flutter:style="@theme/textTheme.headline4"/>
-      <Text
-          flutter:elseif="{{size == 0}}"
-          flutter:data="label-elseif.size = {{size}}"
-          flutter:style.color="@flutter:color/deepOrange"
-          flutter:style="@theme/textTheme.headline4"/>
-      <Text
-          flutter:else=""
-          flutter:data="label-else.size = {{size}}"
-          flutter:style.color="@flutter:color/blueAccent"
-          flutter:style="@theme/textTheme.headline4"/>
-      <Container
-        flutter:width="80dp"
-        flutter:height="80dp"
-        flutter:padding="10dp"
-        flutter:paddingLeft="16dp"
-        flutter:paddingRight="16dp"
-        flutter:decoration.color="@flutter:color/orange"
-        flutter:decoration.border.color="@flutter:color/orangeAccent"
-        flutter:decoration.border.width="2dp"
-        flutter:decoration.borderTop.color="@flutter:color/lightBlue"
-        flutter:margin="16dp">
+        </Padding>
 
-        <Text flutter:data="Restarted application in 233ms."/>
-
-      </Container>
-
-      <Container
-        flutter:constraints.width="120dp"
-        flutter:constraints.minHeight="50dp"
-        flutter:constraints.maxHeight="150dp"
-        flutter:decoration.border.color="@flutter:color/deepPurpleAccent"
-        flutter:decoration.border.width="2dp"
-        flutter:decoration.radius="20dp"
-        flutter:decoration.radiusBottomRight="10dp"
-        flutter:clipBehavior="antiAlias">
-
-        <Text flutter:data="Restarted application in 233ms."/>
-
-      </Container>
-
-      <MaterialButton
-        flutter:textTheme="primary"
-        flutter:textColor="@flutter:color/white"
-        flutter:color="@flutter:color/blue"
-        flutter:hoverColor="@flutter:color/lightGreen"
-        flutter:highlightColor="@flutter:color/green"
-        flutter:splashColor="#33691E"
-        flutter:padding="8dp"
-        flutter:onPressed="onMessageButtonClick"
-        flutter:onLongPressed="http://flutter.dev"
-        flutter:elevation="5dp">
-
-        <Text flutter:data="MaterialButton" />
-
-      </MaterialButton>
-
-      <ElevatedButton/>
-
-      <TextButton>
         <Text
-          flutter:data="this is TextButton({{size}})"
-          flutter:style.fontSize="{{(size + 2) * 2 + 20}}sp"
-          flutter:style.color="@color/darkGreen"/>
-      </TextButton>
+          flutter:data="@{job}"
+          flutter:style="@flutter:theme/textTheme.caption"
+          flutter:style.color="#666"/>
 
-      <Flexible>
-        <ListView>
+        <Padding
+          flutter:paddingTop="16"
+          flutter:paddingBottom="16">
+
+          <Row flutter:mainAxisAlignment="center">
+
+            <MaterialButton
+              flutter:color="#F8EBE4"
+              flutter:shape="circle"
+              flutter:paddingTop="20"
+              flutter:paddingBottom="20"
+              flutter:onPressed="onClickFavorite">
+
+              <Icon
+                flutter:icon="@flutter:icon/star_border"
+                flutter:size="20"
+                flutter:color="#FC8C4E"/>
+
+            </MaterialButton>
+
+            <MaterialButton
+              flutter:color="#F8EBE4"
+              flutter:shape="circle"
+              flutter:paddingTop="20"
+              flutter:paddingBottom="20"
+              flutter:onPressed="onClickShare">
+
+              <Icon
+                flutter:icon="@flutter:icon/share_outlined"
+                flutter:size="20"
+                flutter:color="#FC8C4E"/>
+
+            </MaterialButton>
+          </Row>
+        </Padding>
+      </Column>
+    </Ink>
+
+    <Padding
+        flutter:padding="20"
+        flutter:paddingBottom="0">
+
+      <TextButton
+        flutter:backgroundColor="#eee"
+        flutter:shape="rectangle"
+        flutter:shape.borderRadius="10"
+        flutter:shape.side="1 solid #eee"
+        flutter:onPressed="onClickStatus">
+        <Padding
+          flutter:padding="12">
+          <Row
+            flutter:mainAxisAlignment="center">
+
+            <Expanded>
+              <Text
+                flutter:data="@{_nameCard.status}"
+                flutter:style="=@flutter:theme/caption"
+                flutter:style.fontSize="16"/>
+            </Expanded>
+
+            <Icon
+              flutter:icon="@flutter:icon/edit"
+              flutter:color="#9E9E9E"/>
+          </Row>
+        </Padding>
+      </TextButton>
+    </Padding>
+
+    <Padding
+      flutter:paddingLeft="20"
+      flutter:paddingRight="20"
+      flutter:paddingTop="15"
+      flutter:paddingBottom="0">
+
+      <Text
+        flutter:data="昵称"
+        flutter:style="=@flutter:theme/subtitle2"
+        flutter:style.color="#999"/>
+
+    </Padding>
+    <InkWell flutter:onTap="onClickNickname">
+      <Padding
+        flutter:paddingLeft="20"
+        flutter:paddingRight="20"
+        flutter:paddingTop="15"
+        flutter:paddingBottom="15">
+        <Text
+            flutter:data="@{_nameCard.nickname}"
+            flutter:style="@flutter:theme/subtitle2"
+            flutter:style.color="#333"/>
+      </Padding>
+    </InkWell>
+    <Padding
+      flutter:paddingLeft="20">
+      <Divider
+        flutter:height="1"
+        flutter:color="#eee"/>
+    </Padding>
+
+
+    <Padding
+      flutter:paddingLeft="20"
+      flutter:paddingRight="20"
+      flutter:paddingTop="15"
+      flutter:paddingBottom="0">
+
+      <Text
+        flutter:data="工号"
+        flutter:style="=@flutter:theme/subtitle2"
+        flutter:style.color="#999"/>
+
+    </Padding>
+    <InkWell flutter:onTap="onClickEmpno">
+      <Padding
+        flutter:paddingLeft="20"
+        flutter:paddingRight="20"
+        flutter:paddingTop="15"
+        flutter:paddingBottom="15">
+        <Text
+          flutter:data="@{_nameCard.empno}"
+          flutter:style="@flutter:theme/subtitle2"
+          flutter:style.color="#333"/>
+      </Padding>
+    </InkWell>
+    <Padding
+      flutter:paddingLeft="20">
+      <Divider
+        flutter:height="1"
+        flutter:color="#eee"/>
+    </Padding>
+
+
+    <Padding
+      flutter:paddingLeft="20"
+      flutter:paddingRight="20"
+      flutter:paddingTop="15"
+      flutter:paddingBottom="0">
+
+      <Text
+        flutter:data="邮箱"
+        flutter:style="=@flutter:theme/subtitle2"
+        flutter:style.color="#999"/>
+
+    </Padding>
+    <InkWell flutter:onTap="onClickEmail">
+      <Padding
+        flutter:paddingLeft="20"
+        flutter:paddingRight="20"
+        flutter:paddingTop="15"
+        flutter:paddingBottom="15">
+        <Text
+          flutter:data="@{_nameCard.email}"
+          flutter:style="@flutter:theme/subtitle2"
+          flutter:style.color="#333"/>
+      </Padding>
+    </InkWell>
+    <Padding
+      flutter:paddingLeft="20">
+      <Divider
+        flutter:height="1"
+        flutter:color="#eee"/>
+    </Padding>
+
+
+    <Padding
+      flutter:paddingLeft="20"
+      flutter:paddingRight="20"
+      flutter:paddingTop="15"
+      flutter:paddingBottom="0">
+
+      <Text
+        flutter:data="城市"
+        flutter:style="=@flutter:theme/subtitle2"
+        flutter:style.color="#999"/>
+
+    </Padding>
+    <InkWell flutter:onTap="onClickCity">
+      <Padding
+        flutter:paddingLeft="20"
+        flutter:paddingRight="20"
+        flutter:paddingTop="15"
+        flutter:paddingBottom="15">
+        <Text
+          flutter:data="@{_nameCard.city}"
+          flutter:style="@flutter:theme/subtitle2"
+          flutter:style.color="#333"/>
+      </Padding>
+    </InkWell>
+    <Padding
+      flutter:paddingLeft="20">
+      <Divider
+        flutter:height="1"
+        flutter:color="#eee"/>
+    </Padding>
+
+
+    <Padding
+      flutter:paddingLeft="20"
+      flutter:paddingRight="20"
+      flutter:paddingTop="15"
+      flutter:paddingBottom="0">
+
+      <Text
+        flutter:data="部门"
+        flutter:style="=@flutter:theme/subtitle2"
+        flutter:style.color="#999"/>
+
+    </Padding>
+    <InkWell flutter:onTap="onClickDepartment">
+      <Padding
+        flutter:paddingLeft="20"
+        flutter:paddingRight="20"
+        flutter:paddingTop="15"
+        flutter:paddingBottom="15">
+        <Text
+          flutter:data="@{_nameCard.department}"
+          flutter:style="@flutter:theme/subtitle2"
+          flutter:style.color="#333"/>
+      </Padding>
+    </InkWell>
+    <Padding
+      flutter:paddingLeft="20">
+      <Divider
+        flutter:height="1"
+        flutter:color="#eee"/>
+    </Padding>
+
+
+    <Padding
+      flutter:paddingLeft="20"
+      flutter:paddingRight="20"
+      flutter:paddingTop="15"
+      flutter:paddingBottom="0">
+
+      <Text
+        flutter:data="上级"
+        flutter:style="=@flutter:theme/subtitle2"
+        flutter:style.color="#999"/>
+
+    </Padding>
+    <InkWell flutter:onTap="onClickSupervisor">
+      <Padding
+        flutter:paddingLeft="20"
+        flutter:paddingRight="20"
+        flutter:paddingTop="15"
+        flutter:paddingBottom="15">
+        <Text
+          flutter:data="@{_nameCard.supervisor}"
+          flutter:style="@flutter:theme/subtitle2"
+          flutter:style.color="#333"/>
+      </Padding>
+    </InkWell>
+    <Padding
+      flutter:paddingLeft="20">
+      <Divider
+        flutter:height="1"
+        flutter:color="#eee"/>
+    </Padding>
+
+
+    <SizedBox flutter:height="80"/>
+  </ListView>
+
+  <Align flutter:alignment="bottomCenter">
+    <Padding flutter:padding="20">
+      <SizedBox
+        flutter:width="infinity"
+        flutter:height="40">
+        <TextButton
+          flutter:shape="rectangle"
+          flutter:shape.borderRadius="20"
+          flutter:backgroundColor="#3D3D3D"
+          flutter:onPressed="onClickSend">
           <Text
-            flutter:data="header1"
-            flutter:style.color="@flutter:color/orange"
-            flutter:style="@theme/textTheme.headline2" />
-          <Text
-            flutter:data="header2"
-            flutter:style.color="@flutter:color/blueAccent"
-            flutter:style="@theme/textTheme.headline3" />
-          <Text
-            flutter:for="{{details}}"
-            flutter:data="{{item.text}}"
-            flutter:style.color="@flutter:color/deepOrangeAccent"
-            flutter:style="@theme/textTheme.headline3" />
-        </ListView>
-      </Flexible>
-    </Column>
-  </Center>
-</Scaffold>
+            flutter:data="发消息"
+            flutter:style="@flutter:theme/textTheme.button"
+            flutter:style.color="@flutter:color/white"/>
+        </TextButton>
+      </SizedBox>
+    </Padding>
+  </Align>
+
+</Stack>

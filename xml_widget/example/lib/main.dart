@@ -49,9 +49,7 @@ function onMessageButtonClick() {
   notifyChange(["details"]);
 }
         """),
-        child: Material(
-          child: NameCardPage(),
-        ),
+        child: MyHomePage(title: 'Flutter Demo Home Page'),
       ),
     );
   }
@@ -134,14 +132,21 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     return FutureBuilder(
-      future: assembler.fromStream(rootBundle.load('assets/app.xml').asStream().transform(_bd)),
+      future: rootBundle.loadString('assets/app.xml').then((s) => assembler.fromSource(s)),
       initialData: _loading,
       builder: (ctx, AsyncSnapshot<Widget> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
-            return Text('error: ${snapshot.error}');
+            return SingleChildScrollView(
+              child: Container(
+                color: Colors.white,
+                child: Text('error: ${snapshot.error}\n${snapshot.stackTrace}'),
+              ),
+            );
           } else {
-            return snapshot.requireData;
+            return Material(
+              child: snapshot.requireData,
+            );
           }
         } else {
           return _loading;

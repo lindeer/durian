@@ -42,7 +42,7 @@ class _XmlIconBuilder extends CommonWidgetBuilder {
     final attrs = element.attrs;
     final res = element.context.resource;
     return Icon(
-      Icons.add,
+      res.icon(attrs['icon']),
       size: res.size(attrs['size']),
       color: res[attrs['color']],
       semanticLabel: attrs['semanticLabel'],

@@ -83,6 +83,7 @@ class _XmlMaterialButtonBuilder extends CommonWidgetBuilder {
       minWidth: res.size(attrs["minWidth"]),
       height: res.size(attrs["height"]),
       enableFeedback: attrs["enableFeedback"] != "false",
+      shape: _PropertyStruct.shapeBorder(res, attrs),
     );
   }
 }
@@ -141,6 +142,7 @@ class _XmlTextButtonBuilder extends CommonWidgetBuilder {
   @override
   Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
+    final res = element.context.resource;
     final pressFn = element.context.onPressed;
     final pressUri = attrs["onPressed"];
     final onPressed = pressFn != null && pressUri != null ? () => pressFn.call(pressUri) : null;
@@ -158,6 +160,10 @@ class _XmlTextButtonBuilder extends CommonWidgetBuilder {
       onLongPress: onLongPressed,
       autofocus: attrs['autofocus'] == "true",
       clipBehavior: _clip[attrs['clipBehavior']] ?? Clip.none,
+      style: TextButton.styleFrom(
+        backgroundColor: res[attrs['backgroundColor']],
+        shape: _PropertyStruct.shapeBorder(res, attrs) as OutlinedBorder?,
+      ),
     );
   }
 }
@@ -406,9 +412,7 @@ class _XmlSizedBoxBuilder extends CommonWidgetBuilder {
   Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final res = element.context.resource;
-    if (descendant.isEmpty) {
-      return ErrorWidget.withDetails(message: "Positioned should contain one child!");
-    }
+
     return SizedBox(
       child: descendant.isEmpty ? null : descendant.first.child,
       width: res.size(attrs['width']),
@@ -464,6 +468,20 @@ class _XmlExpandedBuilder extends CommonWidgetBuilder {
     return Expanded(
       child: descendant.first.child,
       flex: attrs['flex']?.toInt() ?? 1,
+    );
+  }
+}
+
+class _XmlClipOvalBuilder extends CommonWidgetBuilder {
+  const _XmlClipOvalBuilder() : super('ClipOval');
+
+  @override
+  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+    final attrs = element.attrs;
+
+    return ClipOval(
+      child: descendant.isEmpty ? null : descendant.first.child,
+      clipBehavior: _clip[attrs['clipBehavior']] ?? Clip.antiAlias,
     );
   }
 }

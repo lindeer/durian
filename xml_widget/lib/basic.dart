@@ -300,6 +300,11 @@ const _flexFit = const {
   "loose": FlexFit.loose,
 };
 
+const _borderShape = const {
+  "circle" : const CircleBorder(),
+  "rectangle" : const RoundedRectangleBorder(),
+};
+
 const _flutterColorPrefix = '@flutter:color/';
 const _flutterColorPrefixLength = _flutterColorPrefix.length;
 const _resColorPrefix = '@color/';
@@ -515,5 +520,79 @@ class _PropertyStruct {
       minHeight: res.size(minHeight) ?? 0.0,
       maxHeight: res.size(maxHeight) ?? double.infinity,
     );
+  }
+
+  static BorderRadius? _borderRadius2(AssembleResource res, String? value) {
+    final radiusValues = value?.split(' ');
+    if (radiusValues == null || radiusValues.length == 0) {
+      return null;
+    }
+    if (radiusValues.length == 1) {
+      final r = res.size(radiusValues[0]);
+      return r == null ? null : BorderRadius.circular(r);
+    } else if (radiusValues.length == 2) {
+      final t = res.size(radiusValues[0]) ?? 0.0;
+      final b = res.size(radiusValues[1]) ?? 0.0;
+      return BorderRadius.only(
+        topLeft: Radius.circular(t),
+        topRight: Radius.circular(t),
+        bottomLeft: Radius.circular(b),
+        bottomRight: Radius.circular(b),
+      );
+    } else if (radiusValues.length == 4) {
+      final tl = res.size(radiusValues[0]) ?? 0.0;
+      final tr = res.size(radiusValues[1]) ?? 0.0;
+      final br = res.size(radiusValues[2]) ?? 0.0;
+      final bl = res.size(radiusValues[3]) ?? 0.0;
+      return BorderRadius.only(
+        topLeft: Radius.circular(tl),
+        topRight: Radius.circular(tr),
+        bottomRight: Radius.circular(br),
+        bottomLeft: Radius.circular(bl),
+      );
+    }
+  }
+
+  static BorderSide? _borderSide2(AssembleResource res, String? value) {
+    final sideValues = value?.split(' ')?..removeWhere((e) => e.isEmpty);
+    double? width;
+    Color? color;
+    BorderStyle? style;
+    BorderSide? side;
+    for (String v in (sideValues ?? List.empty())) {
+      if ((v.codeUnitAt(0) ^ 0x30) <= 9) {
+        width = double.tryParse(v);
+      } else if (_borderStyle.keys.contains(v)) {
+        style = _borderStyle[v];
+      } else {
+        color = res['v'];
+      }
+    }
+
+    if (width != null || color != null || style != null) {
+      side = BorderSide(
+        width: width ?? 1.0,
+        color: color ?? Colors.black,
+        style: style ?? BorderStyle.solid,
+      );
+    }
+    return side;
+  }
+
+  static ShapeBorder? shapeBorder(AssembleResource res, Map<String, String> attrs) {
+    final shapeName = attrs["shape"];
+    final _shape = _borderShape[shapeName];
+    final side = _borderSide2(res, attrs["shape.side"]);
+
+    var shape = side != null ? _shape?.copyWith(side: side) : _shape;
+    if (shapeName == 'circle') {
+      return shape;
+    }
+
+    BorderRadius? radius = _borderRadius2(res, attrs["shape.borderRadius"]);
+    if (radius != null) {
+      shape = (shape as RoundedRectangleBorder?)?.copyWith(borderRadius: radius);
+    }
+    return shape;
   }
 }

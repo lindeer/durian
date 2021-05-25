@@ -28,6 +28,7 @@ class _ResImpl implements AssembleResource {
   @override
   double? size(String? value) {
     if (value == null) return null;
+    if (value == "infinity") return double.infinity;
 
     final m = _digits.firstMatch(value);
     final v = m?[0];
@@ -46,6 +47,20 @@ class _ResImpl implements AssembleResource {
       default:
     }
     return v;
+  }
+
+  @override
+  IconData? icon(String? key) {
+    final pos = key?.indexOf('icon/') ?? -1;
+    if (key == null || pos < 0) {
+      return null;
+    }
+    final prefix = key.substring(0, pos);
+    final name = key.substring(pos + 5);
+
+    if ('@flutter:' == prefix) {
+      return sysIcons[name];
+    }
   }
 
   @override

@@ -11,6 +11,7 @@ import 'exe_engine.dart';
 import 'element.dart';
 export 'element.dart';
 import 'xml_resource.dart';
+import 'src/_icons.dart';
 
 part 'basic.dart';
 part 'text.dart';
@@ -113,6 +114,7 @@ class WidgetAssembler {
     const _XmlListViewBuilder(),
     const _XmlFlexibleBuilder(),
     const _XmlExpandedBuilder(),
+    const _XmlClipOvalBuilder(),
   ];
 
   Widget _assembleByElement(AssembleElement element) {
