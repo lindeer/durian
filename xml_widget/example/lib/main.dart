@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:xml_widget/exe_engine.dart';
 import 'package:xml_widget/xml_widget.dart';
+import 'name_card.dart';
 
 void main() {
   runApp(MyApp());
@@ -48,7 +49,9 @@ function onMessageButtonClick() {
   notifyChange(["details"]);
 }
         """),
-        child: MyHomePage(title: 'Flutter Demo Home Page'),
+        child: Material(
+          child: NameCardPage(),
+        ),
       ),
     );
   }
