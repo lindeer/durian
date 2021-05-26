@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:xml_widget/exe_engine.dart';
 import 'package:xml_widget/xml_widget.dart';
-import 'name_card.dart';
+import 'name_card_js.dart';
 
 void main() {
   runApp(MyApp());
@@ -28,28 +28,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: ExeEngineWidget(
-        engine: ScriptEngine(code: """
-let size = 0;
-let message = '';
-let details = [
- { text: "t11",}
-];
-function onFloatButtonClick() {
-  size++;
-  if (size > 1) size = -1;
-  console.log(`js: size=\${size}`);
-  notifyChange(["size"]);
-}
-
-function onMessageButtonClick() {
-  details.push({
-    text: `t\${details.length}`,
-  });
-  notifyChange(["details"]);
-}
-        """),
-        child: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: NameCardJSPage(
       ),
     );
   }
