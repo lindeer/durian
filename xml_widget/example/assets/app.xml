@@ -11,7 +11,7 @@
           <Image
             flutter:width="80"
             flutter:height="80"
-            flutter:src="https://s3-gz01.didistatic.com/dchat-gz/cPs9U6UXizhaNq39hIFXti7Rdyz9yKmSexVpJr8Ju0BJ2s3yIu"/>
+            flutter:src="{{avatar_url}}"/>
         </ClipOval>
 
         <Padding
@@ -19,14 +19,14 @@
           flutter:paddingBottom="10">
 
           <Text
-            flutter:data="@{name}"
+            flutter:data="{{fullname}}"
             flutter:style="@flutter:theme/textTheme.headline6"
             flutter:style.color="#111"/>
 
         </Padding>
 
         <Text
-          flutter:data="@{job}"
+          flutter:data="{{job}}"
           flutter:style="@flutter:theme/textTheme.caption"
           flutter:style.color="#666"/>
 
@@ -85,7 +85,7 @@
 
             <Expanded>
               <Text
-                flutter:data="@{_nameCard.status}"
+                flutter:data="{{work_status.text}}"
                 flutter:style="=@flutter:theme/caption"
                 flutter:style.fontSize="16"/>
             </Expanded>
@@ -117,7 +117,7 @@
         flutter:paddingTop="15"
         flutter:paddingBottom="15">
         <Text
-            flutter:data="@{_nameCard.nickname}"
+            flutter:data="{{nickname}}"
             flutter:style="@flutter:theme/subtitle2"
             flutter:style.color="#333"/>
       </Padding>
@@ -149,7 +149,7 @@
         flutter:paddingTop="15"
         flutter:paddingBottom="15">
         <Text
-          flutter:data="@{_nameCard.empno}"
+          flutter:data="{{emp_num}}"
           flutter:style="@flutter:theme/subtitle2"
           flutter:style.color="#333"/>
       </Padding>
@@ -181,7 +181,7 @@
         flutter:paddingTop="15"
         flutter:paddingBottom="15">
         <Text
-          flutter:data="@{_nameCard.email}"
+          flutter:data="{{email}}"
           flutter:style="@flutter:theme/subtitle2"
           flutter:style.color="#333"/>
       </Padding>
@@ -213,7 +213,7 @@
         flutter:paddingTop="15"
         flutter:paddingBottom="15">
         <Text
-          flutter:data="@{_nameCard.city}"
+          flutter:data="{{location.city}}"
           flutter:style="@flutter:theme/subtitle2"
           flutter:style.color="#333"/>
       </Padding>
@@ -245,7 +245,7 @@
         flutter:paddingTop="15"
         flutter:paddingBottom="15">
         <Text
-          flutter:data="@{_nameCard.department}"
+          flutter:data="{{department}}"
           flutter:style="@flutter:theme/subtitle2"
           flutter:style.color="#333"/>
       </Padding>
@@ -277,7 +277,7 @@
         flutter:paddingTop="15"
         flutter:paddingBottom="15">
         <Text
-          flutter:data="@{_nameCard.supervisor}"
+          flutter:data="{{manager_fullname}}"
           flutter:style="@flutter:theme/subtitle2"
           flutter:style.color="#333"/>
       </Padding>

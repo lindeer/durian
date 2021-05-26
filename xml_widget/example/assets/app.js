@@ -11,7 +11,7 @@ function Page(options) {
       let keys = Object.keys(obj);
       Object.assign(this.data, obj);
 
-      console.log("obj=",obj,"keys=",keys, "data=",this.data);
+      sendMessage('_onDataChanged', JSON.stringify(obj));
     }
 
     onClick() {
@@ -21,9 +21,11 @@ function Page(options) {
       console.log("avatar_url=",this.data.avatar_url);
     }
   }
+  sendMessage('_onPageCreated', JSON.stringify({id: 0}));
   return new _Page(options);
 }
 
+model['department'] = model.department_info.map((e) => e.name).join('/');
 let page = Page({
   data: model,
   onLoad: function () {

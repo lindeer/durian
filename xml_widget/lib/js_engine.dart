@@ -63,7 +63,7 @@ async function notifyChange(keys) {
 
   @override
   String eval(String statement) {
-    final result = _rt.evaluate(statement);
+    final result = _rt.evaluate("page.data.$statement");
     return result.stringResult;
   }
 }
