@@ -1,34 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:xml_widget/exe_engine.dart';
+import 'package:xml_widget/model_widget.dart';
+import 'package:xml_widget/script_engine.dart';
 import 'package:xml_widget/xml_widget.dart';
 
 class _TestEngine implements ScriptEngine {
   final Map<String, String> map;
-  final listeners = <VoidCallback>[];
 
   _TestEngine(this.map);
 
   @override
-  String eval(String statement) => map[statement] ?? "{{$statement}}";
-
-  @override
-  void addListener(List<String> keywords, VoidCallback cb) {
-    listeners.add(cb);
+  String eval(String statement, {StatementType type = StatementType.expression}) {
+    return map[statement] ?? "{{$statement}}";
   }
 
   @override
-  Future<void> prepare(BuildContext context) => Future.value();
+  void registerBridge(String name, void Function(Map<String, dynamic> result) bridge) {
+  }
+}
+
+class _TestMode extends NotifierModel {
+  final _TestEngine _engine;
+  _TestMode(this._engine);
 
   @override
-  void dispose() {
-    listeners.clear();
-  }
+  ScriptEngine get engine => _engine;
 
   void operator []=(String key, String value) {
+    final map = _engine.map;
     if (map[key] != value) {
       map[key] = value;
-      listeners.forEach((l) { l.call(); });
+      notifyDataChanged({key: value});
     }
   }
 }
@@ -46,18 +48,19 @@ void main() {
       <Text flutter:data="good"/>
     </Column>
 """;
-    final engine = _TestEngine({
+    final e = _TestEngine({
       "condition == 1" : "false",
       "condition == 2" : "true",
     });
+    final engine = _TestMode(e);
 
     await tester.pumpWidget(MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ExeEngineWidget(
-        engine: engine,
+      home: PageModelWidget(
+        model: engine,
         child: Builder(builder: (ctx) {
           final assembler = WidgetAssembler(buildContext: ctx);
           return assembler.fromSource(xml);
@@ -91,16 +94,17 @@ void main() {
       <Text flutter:else="" flutter:data="good"/>
     </Column>
 """;
-    final engine = _TestEngine({
+    final e = _TestEngine({
       "condition == 1" : "false",
     });
+    final engine = _TestMode(e);
     await tester.pumpWidget(MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ExeEngineWidget(
-        engine: engine,
+      home: PageModelWidget(
+        model: engine,
         child: Builder(builder: (ctx) {
           final assembler = WidgetAssembler(buildContext: ctx);
           return assembler.fromSource(xml);
@@ -134,17 +138,18 @@ void main() {
       <Container flutter:src="http://flutter.dev" />
     </Column>
 """;
-    final engine = _TestEngine({
+    final e = _TestEngine({
       "condition == 1" : "false",
       "condition == 2" : "true",
     });
+    final engine = _TestMode(e);
     await tester.pumpWidget(MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ExeEngineWidget(
-        engine: engine,
+      home: PageModelWidget(
+        model: engine,
         child: Builder(builder: (ctx) {
           final assembler = WidgetAssembler(buildContext: ctx);
           return assembler.fromSource(xml);
@@ -180,18 +185,19 @@ void main() {
       <Container flutter:elseif="condition == 3" />
     </Column>
 """;
-    final engine = _TestEngine({
+    final e = _TestEngine({
       "condition == 1" : "false",
       "condition == 2" : "true",
       "condition == 3" : "true",
     });
+    final engine = _TestMode(e);
     await tester.pumpWidget(MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ExeEngineWidget(
-        engine: engine,
+      home: PageModelWidget(
+        model: engine,
         child: Builder(builder: (ctx) {
           final assembler = WidgetAssembler(buildContext: ctx);
           return assembler.fromSource(xml);
@@ -240,17 +246,18 @@ void main() {
       <Container flutter:else="" />
     </Column>
 """;
-    final engine = _TestEngine({
+    final e = _TestEngine({
       "condition == 1" : "true",
       "condition == 2" : "false",
     });
+    final engine = _TestMode(e);
     await tester.pumpWidget(MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ExeEngineWidget(
-        engine: engine,
+      home: PageModelWidget(
+        model: engine,
         child: Builder(builder: (ctx) {
           final assembler = WidgetAssembler(buildContext: ctx);
           return assembler.fromSource(xml);
@@ -293,17 +300,18 @@ void main() {
         flutter:else="" />
     </Column>
 """;
-    final engine = _TestEngine({
+    final e = _TestEngine({
       "condition == 1" : "true",
       "condition == 2" : "true",
     });
+    final engine = _TestMode(e);
     await tester.pumpWidget(MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ExeEngineWidget(
-        engine: engine,
+      home: PageModelWidget(
+        model: engine,
         child: Builder(builder: (ctx) {
           final assembler = WidgetAssembler(buildContext: ctx);
           return assembler.fromSource(xml);

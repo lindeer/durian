@@ -1,34 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:xml_widget/exe_engine.dart';
+import 'package:xml_widget/model_widget.dart';
+import 'package:xml_widget/script_engine.dart';
 import 'package:xml_widget/xml_widget.dart';
 
 class _TestEngine implements ScriptEngine {
   final Map<String, String> map;
-  VoidCallback? cb;
 
   _TestEngine(this.map);
 
   @override
-  String eval(String statement) => map[statement] ?? "";
-
-  @override
-  void addListener(List<String> keywords, VoidCallback cb) {
-    this.cb = cb;
+  String eval(String statement, {StatementType type = StatementType.expression}) {
+    return map[statement] ?? "{{$statement}}";
   }
 
   @override
-  Future<void> prepare(BuildContext context) => Future.value();
+  void registerBridge(String name, void Function(Map<String, dynamic> result) bridge) {
+  }
+}
+
+class _TestMode extends NotifierModel {
+  final _TestEngine _engine;
+  _TestMode(this._engine);
 
   @override
-  void dispose() {
-    this.cb = null;
-  }
+  ScriptEngine get engine => _engine;
 
   void operator []=(String key, String value) {
+    final map = _engine.map;
     if (map[key] != value) {
       map[key] = value;
-      cb?.call();
+      notifyDataChanged({key: value});
     }
   }
 }
@@ -79,19 +81,20 @@ void main() {
     </ListView>
 """;
 
-    final engine = _TestEngine({
+    final e = _TestEngine({
       "condition == 1" : "false",
       "condition == 2" : "true",
       "condition == 3" : "true",
     });
+    final engine = _TestMode(e);
 
     await tester.pumpWidget(MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ExeEngineWidget(
-        engine: engine,
+      home: PageModelWidget(
+        model: engine,
         child: Builder(builder: (ctx) {
           final assembler = WidgetAssembler(buildContext: ctx);
           return assembler.fromSource(xml);

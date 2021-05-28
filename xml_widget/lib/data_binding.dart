@@ -19,13 +19,13 @@ class DataBinding {
     final keys = <String>{};
     for (final value in values) {
       final matches = _reg.allMatches(value);
-      final items = matches.map((m) => m[1]).whereType<String>();
+      final items = matches.map((m) => m[0]).whereType<String>();
       keys.addAll(items);
     }
     return keys.toList(growable: false);
   }
 
-  static String? matchKey(String? text) => text == null ? null : _reg.firstMatch(text)?[1];
+  static String? matchKey(String? text) => text == null ? null : _reg.firstMatch(text)?[1] ?? text;
 
   static void bind(AssembleElement element, String getter(String code)) {
     final attrs = Map.of(element.raw);

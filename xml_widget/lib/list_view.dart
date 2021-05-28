@@ -51,7 +51,8 @@ class LoopWidget extends StatefulWidget {
         .map((e) => AssembleChildElement(element, assembleFn.call(e)))
         .toList(growable: false))
         : null;
-    final word = DataBinding.matchKey(item.raw['flutter:for']) ?? '';
+    final key = item.raw['flutter:for'] ?? '';
+    final word = DataBinding.matchKey(key) ?? key;
     return LoopWidget._(element, item, word, headers, footers);
   }
 

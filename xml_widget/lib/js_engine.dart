@@ -3,16 +3,18 @@ import 'script_engine.dart';
 
 class JSEngine implements ScriptEngine {
   final js.JavascriptRuntime _rt;
+  final String domain;
 
-  JSEngine._(this._rt);
-  factory JSEngine() {
+  JSEngine._(this._rt, this.domain);
+
+  factory JSEngine({String prefix = 'page.data.'}) {
     final runtime = js.getJavascriptRuntime(xhr: false);
-    return JSEngine._(runtime);
+    return JSEngine._(runtime, prefix);
   }
 
   @override
   String eval(String statement, {StatementType type = StatementType.expression}) {
-    final code = type == StatementType.expression ? "page.data.$statement" : statement;
+    final code = type == StatementType.expression ? "$domain$statement" : statement;
     final result = _rt.evaluate(code);
     return result.stringResult;
   }
