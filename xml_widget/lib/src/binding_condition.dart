@@ -1,4 +1,4 @@
-part of durian;
+part of durian.binding;
 
 class _ChildMaker {
   final AssembleChildElement child;
@@ -84,7 +84,10 @@ class ConditionWidget extends StatefulWidget {
     for (final child in children) {
       final condition = child.raw['flutter:if'] ?? child.raw['flutter:elseif'];
       if (condition != null && condition.isNotEmpty) {
-        DataBinding.matchKey(condition)?.let((it) => variables.add(it));
+        final key = DataBinding.matchKey(condition);
+        if (key != null) {
+          variables.add(key);
+        }
       }
     }
     bindingWords ??= DataBinding.hasMatch(element) ? DataBinding.matchKeys(element) : null;

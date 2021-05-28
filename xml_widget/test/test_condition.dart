@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:xml_widget/model_widget.dart';
 import 'package:xml_widget/script_engine.dart';
 import 'package:xml_widget/xml_widget.dart';
+import 'package:xml_widget/src/binding.dart';
 
 class _TestEngine implements ScriptEngine {
   final Map<String, String> map;

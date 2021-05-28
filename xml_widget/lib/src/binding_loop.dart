@@ -1,4 +1,4 @@
-part of durian;
+part of durian.binding;
 
 class LoopWidget extends StatefulWidget {
   final AssembleElement element;

@@ -7,24 +7,19 @@ import 'package:flutter/gestures.dart' show DragStartBehavior;
 import 'package:flutter/material.dart';
 import 'package:xml/xml.dart';
 import 'package:xml/xml_events.dart';
-import 'xml_context.dart';
 import 'model_widget.dart';
-import 'xml_resource.dart';
-import 'script_engine.dart';
 import 'src/_icons.dart';
+import 'xml_context.dart';
+import 'xml_resource.dart';
+import 'src/binding.dart';
 
+part 'src/assemble_container.dart';
+part 'src/assemble_leaf.dart';
+part 'src/assemble_list.dart';
+part 'src/assemble_group.dart';
+part 'src/assemble_res.dart';
 part 'src/const.dart';
 part 'src/property.dart';
-part 'src/assemble_leaf.dart';
-part 'src/assemble_group.dart';
-part 'src/assemble_container.dart';
-part 'src/assemble_res.dart';
-part 'src/binding_loop.dart';
-part 'src/binding_condition.dart';
-part 'src/assemble_list.dart';
-part 'src/binding_data.dart';
-
-typedef AssembleWidgetBuilder = Widget Function(AssembleElement element, List<AssembleChildElement> descendant);
 
 abstract class XmlWidgetBuilder {
   String get name;

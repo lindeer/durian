@@ -10,6 +10,7 @@ class CallbackHolder {
 }
 
 typedef AssembleFn = Widget Function(AssembleElement element);
+typedef AssembleWidgetBuilder = Widget Function(AssembleElement element, List<AssembleChildElement> descendant);
 
 class AssembleContext {
   final AssembleResource resource;

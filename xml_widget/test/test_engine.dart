@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:xml_widget/js_engine.dart';
 import 'package:xml_widget/model_widget.dart';
 import 'package:xml_widget/script_engine.dart';
+import 'package:xml_widget/src/binding.dart';
 import 'package:xml_widget/xml_widget.dart';
 
 void main() {
