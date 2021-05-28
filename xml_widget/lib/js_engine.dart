@@ -1,5 +1,5 @@
 import 'package:flutter_js/flutter_js.dart' as js;
-import 'exe_engine.dart';
+import 'script_engine.dart';
 
 class JSEngine implements ScriptEngine {
   final js.JavascriptRuntime _rt;
