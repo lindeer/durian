@@ -98,6 +98,7 @@ class _ResImpl implements AssembleResource {
   }
 
   Color? _saveColor(String text, {String? name}) {
+    if (text.isEmpty) return null;
     Color? color = _colors[text];
     if (color != null) {
       if (name != null) {

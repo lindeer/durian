@@ -26,6 +26,8 @@ function Page(options) {
 }
 
 model['department'] = model.department_info.map((e) => e.name).join('/');
+model['self'] = false;
+model['job'] = '工程师';
 let page = Page({
   data: model,
   onLoad: function () {

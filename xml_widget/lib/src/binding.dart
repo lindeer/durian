@@ -35,8 +35,11 @@ class DataBinding {
 
   static String? matchKey(String? text) => text == null ? null : _reg.firstMatch(text)?[1] ?? text;
 
+  static const _ignoredKeys = ['flutter:if', 'flutter:elseif', 'flutter:else', 'flutter:for'];
+
   static void bind(AssembleElement element, String getter(String code)) {
     final attrs = Map.of(element.raw);
+    _ignoredKeys.forEach(attrs.remove);
     attrs.forEach((key, value) {
       if (value.contains("{{")) {
         final matches = _reg.allMatches(value);

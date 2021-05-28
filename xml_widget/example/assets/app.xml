@@ -26,6 +26,7 @@
         </Padding>
 
         <Text
+          flutter:if="{{!!job}}"
           flutter:data="{{job}}"
           flutter:style="@flutter:theme/textTheme.caption"
           flutter:style.color="#666"/>
@@ -73,15 +74,16 @@
         flutter:paddingBottom="0">
 
       <TextButton
-        flutter:backgroundColor="#eee"
+        flutter:backgroundColor="{{self ? '' : '#eee'}}"
+        flutter:alignment="centerLeft"
         flutter:shape="rectangle"
         flutter:shape.borderRadius="10"
-        flutter:shape.side="1 solid #eee"
+        flutter:shape.side="{{self ? '1 solid #eee' : 'none'}}"
         flutter:onPressed="onClickStatus">
         <Padding
           flutter:padding="12">
           <Row
-            flutter:mainAxisAlignment="center">
+            flutter:if="{{self}}">
 
             <Expanded>
               <Text
@@ -94,6 +96,12 @@
               flutter:icon="@flutter:icon/edit"
               flutter:color="#9E9E9E"/>
           </Row>
+          <Text
+            flutter:else=""
+            flutter:data="{{work_status.text}}"
+            flutter:style="=@flutter:theme/caption"
+            flutter:style.textAlign="left"
+            flutter:style.fontSize="16"/>
         </Padding>
       </TextButton>
     </Padding>

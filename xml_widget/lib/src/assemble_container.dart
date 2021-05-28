@@ -163,6 +163,7 @@ class _XmlTextButtonBuilder extends CommonWidgetBuilder {
       style: TextButton.styleFrom(
         backgroundColor: res[attrs['backgroundColor']],
         shape: _PropertyStruct.shapeBorder(res, attrs) as OutlinedBorder?,
+        alignment: _alignment[attrs['alignment']],
       ),
     );
   }
