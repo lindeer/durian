@@ -10,6 +10,7 @@ import 'package:xml/xml_events.dart';
 import 'exe_engine.dart';
 import 'element.dart';
 export 'element.dart';
+import 'model_widget.dart';
 import 'xml_resource.dart';
 import 'src/_icons.dart';
 
@@ -148,7 +149,7 @@ class WidgetAssembler {
         w = BindingWidget(
           words: words,
           builder: (ctx) {
-            final engine = ExeEngineWidget.of(ctx);
+            final engine = PageModelWidget.of(ctx).engine;
             DataBinding.bind(element, engine.eval);
             return fn.call(element, children);
           },

@@ -70,8 +70,8 @@ class _DataBindingState extends State<BindingWidget> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    final engine = ExeEngineWidget.of(context);
-    engine.addListener(widget.words, _update);
+    final model = PageModelWidget.of(context);
+    model.addListener(widget.words, _update);
   }
 
   @override

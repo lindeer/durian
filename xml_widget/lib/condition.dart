@@ -8,7 +8,7 @@ class _ChildMaker {
   _ChildMaker({required this.child, this.elseifChildren, this.elseChild});
 
   AssembleChildElement make(BuildContext context) {
-    final engine = ExeEngineWidget.of(context);
+    final engine = PageModelWidget.of(context).engine;
     final conditionIf = child.raw['flutter:if'];
     if (conditionIf == null || engine.eval(conditionIf) == "true") {
       return child;
@@ -125,10 +125,10 @@ class _ConditionState extends State<ConditionWidget> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    final engine = ExeEngineWidget.of(context);
-    engine.addListener(widget.conditions, _onChildrenChanged);
+    final model = PageModelWidget.of(context);
+    model.addListener(widget.conditions, _onChildrenChanged);
     if (widget.expressions.isNotEmpty) {
-      engine.addListener(widget.expressions, _onWidgetChanged);
+      model.addListener(widget.expressions, _onWidgetChanged);
     }
   }
 

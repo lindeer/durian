@@ -67,9 +67,9 @@ class _LoopState extends State<LoopWidget> {
     super.didChangeDependencies();
 
     final word = widget.word;
-    final engine = ExeEngineWidget.of(context);
+    final model = PageModelWidget.of(context);
     if (word.isNotEmpty) {
-      engine.addListener([word], _update);
+      model.addListener([word], _update);
     }
   }
 
@@ -79,7 +79,7 @@ class _LoopState extends State<LoopWidget> {
     final footers = widget._footers?.map((e) => e.make(context)).toList(growable: false);
     final head = headers?.length ?? 0;
 
-    final engine = ExeEngineWidget.of(context);
+    final engine = PageModelWidget.of(context).engine;
     final size = int.tryParse(engine.eval('${widget.word}.length')) ?? 0;
 
     final len = head + size;
@@ -93,7 +93,7 @@ class _LoopState extends State<LoopWidget> {
           return headers![index].child;
         } else if (index < len) {
           int pos = index - head;
-          engine.eval("var item = ${widget.word}[$pos];");
+          engine.eval("var item = ${widget.word}[$pos];", type: StatementType.declaration,);
           return _buildItem(engine, pos);
         } else {
           int pos = index - len;

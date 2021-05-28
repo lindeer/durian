@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:xml_widget/exe_engine.dart';
+import 'package:xml_widget/model_widget.dart';
 import 'package:xml_widget/xml_widget.dart';
 import 'name_card_js.dart';
 
@@ -99,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _onPressed(String uri) {
     print("onPressed: $uri");
-    final engine = ExeEngineWidget.of(context);
+    final engine = PageModelWidget.of(context).engine;
     engine.eval('$uri();');
   }
 

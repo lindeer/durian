@@ -1,24 +1,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:xml_widget/js_engine.dart';
 import 'package:xml_widget/xml_widget.dart';
-import 'package:xml_widget/exe_engine.dart';
+import 'package:xml_widget/model_widget.dart';
 
 class NameCardJSPage extends StatefulWidget {
   @override
   _NameCardState createState() => _NameCardState();
 }
 
-class _PageModel {
-  final ScriptEngine _engine;
-
-  _PageModel(this._engine);
-
-  String operator[](String? expr) => expr == null ? 'null' : _engine.eval(expr);
-}
-
 class _NameCardState extends State<NameCardJSPage> {
   late Future<List<String>> _future;
+  final _engine = JSEngine();
 
   void initState() {
     super.initState();
@@ -63,14 +57,13 @@ class _NameCardState extends State<NameCardJSPage> {
             at = t;
 
             final widget = assembler.fromSource(xml);
-            final engine = ScriptEngine(code: js);
 
             t = DateTime.now().microsecondsSinceEpoch;
             print("------- 222 ${t - at}us");
             at = t;
             return Material(
-              child: ExeEngineWidget(
-                engine: engine,
+              child: PageModelWidget(
+                model: ScriptModel(js, _engine),
                 child: widget,
               ),
             );
