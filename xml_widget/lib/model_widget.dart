@@ -31,7 +31,7 @@ class _ModelState extends State<PageModelWidget> {
 
   @override
   void didUpdateWidget(PageModelWidget oldWidget) {
-    if (widget.model != oldWidget.model) {
+    if (widget.model.engine != oldWidget.model.engine) {
       oldWidget.model.dispose();
     }
     super.didUpdateWidget(oldWidget);

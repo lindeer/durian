@@ -13,6 +13,7 @@ class JSEngine implements ScriptEngine {
     final engine = JSEngine._(runtime, prefix);
     engine._exprHandler[StatementType.expression] = engine._prefix;
     engine._exprHandler[StatementType.condition] = engine._parseField;
+    engine._exprHandler[StatementType.call] = engine._parseCall;
     return engine;
   }
 
@@ -24,11 +25,18 @@ class JSEngine implements ScriptEngine {
     return expr.replaceAllMapped(_reg, (m) => "$domain${m[0]}");
   }
 
+  String _parseCall(String expr) => "page.$expr();";
+
   @override
   String eval(String statement, {StatementType type = StatementType.expression}) {
     final fn = _exprHandler[type];
     final code = fn?.call(statement) ?? statement;
     final result = _rt.evaluate(code);
+    if (result.isError) {
+      final str = code.length > 1024 ? code.substring(0, 1024) : code;
+      print("eval error($type): '$str' -> '${result.stringResult}'");
+      return '';
+    }
     return result.stringResult;
   }
 

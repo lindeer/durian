@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:xml_widget/js_engine.dart';
+import 'package:xml_widget/script_engine.dart';
 import 'package:xml_widget/xml_widget.dart';
 import 'package:xml_widget/model_widget.dart';
 
@@ -24,7 +25,7 @@ class _NameCardState extends State<NameCardJSPage> {
   }
 
   void _onPressed(String uri) {
-    print("onPressed: $uri");
+    _engine.eval(uri, type: StatementType.call);
   }
 
   @override

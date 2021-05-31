@@ -32,6 +32,11 @@ let page = Page({
   data: model,
   onLoad: function () {
   },
+  onClickSend: function() {
+    this.setData({
+      self: !this.data.self,
+    })
+  },
   sendMsg: function(params) {
     this.setData({
       code: this.data.code + 1
