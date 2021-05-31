@@ -106,197 +106,40 @@
       </TextButton>
     </Padding>
 
-    <Padding
-      flutter:paddingLeft="20"
-      flutter:paddingRight="20"
-      flutter:paddingTop="15"
-      flutter:paddingBottom="0">
-
-      <Text
-        flutter:data="昵称"
-        flutter:style="=@flutter:theme/subtitle2"
-        flutter:style.color="#999"/>
-
-    </Padding>
-    <InkWell flutter:onTap="onClickNickname">
+    <Column
+      flutter:for="{{information}}"
+      flutter:crossAxisAlignment="stretch">
       <Padding
         flutter:paddingLeft="20"
         flutter:paddingRight="20"
         flutter:paddingTop="15"
-        flutter:paddingBottom="15">
+        flutter:paddingBottom="0">
+
         <Text
-            flutter:data="{{nickname}}"
+          flutter:data="{{item.label}}"
+          flutter:style="=@flutter:theme/subtitle2"
+          flutter:style.color="#999"/>
+
+      </Padding>
+      <InkWell flutter:onTap="item.onClick">
+        <Padding
+          flutter:paddingLeft="20"
+          flutter:paddingRight="20"
+          flutter:paddingTop="15"
+          flutter:paddingBottom="15">
+          <Text
+            flutter:data="{{item.name}}"
             flutter:style="@flutter:theme/subtitle2"
             flutter:style.color="#333"/>
-      </Padding>
-    </InkWell>
-    <Padding
-      flutter:paddingLeft="20">
-      <Divider
-        flutter:height="1"
-        flutter:color="#eee"/>
-    </Padding>
-
-
-    <Padding
-      flutter:paddingLeft="20"
-      flutter:paddingRight="20"
-      flutter:paddingTop="15"
-      flutter:paddingBottom="0">
-
-      <Text
-        flutter:data="工号"
-        flutter:style="=@flutter:theme/subtitle2"
-        flutter:style.color="#999"/>
-
-    </Padding>
-    <InkWell flutter:onTap="onClickEmpno">
+        </Padding>
+      </InkWell>
       <Padding
-        flutter:paddingLeft="20"
-        flutter:paddingRight="20"
-        flutter:paddingTop="15"
-        flutter:paddingBottom="15">
-        <Text
-          flutter:data="{{emp_num}}"
-          flutter:style="@flutter:theme/subtitle2"
-          flutter:style.color="#333"/>
+        flutter:paddingLeft="20">
+        <Divider
+          flutter:height="1"
+          flutter:color="#eee"/>
       </Padding>
-    </InkWell>
-    <Padding
-      flutter:paddingLeft="20">
-      <Divider
-        flutter:height="1"
-        flutter:color="#eee"/>
-    </Padding>
-
-
-    <Padding
-      flutter:paddingLeft="20"
-      flutter:paddingRight="20"
-      flutter:paddingTop="15"
-      flutter:paddingBottom="0">
-
-      <Text
-        flutter:data="邮箱"
-        flutter:style="=@flutter:theme/subtitle2"
-        flutter:style.color="#999"/>
-
-    </Padding>
-    <InkWell flutter:onTap="onClickEmail">
-      <Padding
-        flutter:paddingLeft="20"
-        flutter:paddingRight="20"
-        flutter:paddingTop="15"
-        flutter:paddingBottom="15">
-        <Text
-          flutter:data="{{email}}"
-          flutter:style="@flutter:theme/subtitle2"
-          flutter:style.color="#333"/>
-      </Padding>
-    </InkWell>
-    <Padding
-      flutter:paddingLeft="20">
-      <Divider
-        flutter:height="1"
-        flutter:color="#eee"/>
-    </Padding>
-
-
-    <Padding
-      flutter:paddingLeft="20"
-      flutter:paddingRight="20"
-      flutter:paddingTop="15"
-      flutter:paddingBottom="0">
-
-      <Text
-        flutter:data="城市"
-        flutter:style="=@flutter:theme/subtitle2"
-        flutter:style.color="#999"/>
-
-    </Padding>
-    <InkWell flutter:onTap="onClickCity">
-      <Padding
-        flutter:paddingLeft="20"
-        flutter:paddingRight="20"
-        flutter:paddingTop="15"
-        flutter:paddingBottom="15">
-        <Text
-          flutter:data="{{location.city}}"
-          flutter:style="@flutter:theme/subtitle2"
-          flutter:style.color="#333"/>
-      </Padding>
-    </InkWell>
-    <Padding
-      flutter:paddingLeft="20">
-      <Divider
-        flutter:height="1"
-        flutter:color="#eee"/>
-    </Padding>
-
-
-    <Padding
-      flutter:paddingLeft="20"
-      flutter:paddingRight="20"
-      flutter:paddingTop="15"
-      flutter:paddingBottom="0">
-
-      <Text
-        flutter:data="部门"
-        flutter:style="=@flutter:theme/subtitle2"
-        flutter:style.color="#999"/>
-
-    </Padding>
-    <InkWell flutter:onTap="onClickDepartment">
-      <Padding
-        flutter:paddingLeft="20"
-        flutter:paddingRight="20"
-        flutter:paddingTop="15"
-        flutter:paddingBottom="15">
-        <Text
-          flutter:data="{{department}}"
-          flutter:style="@flutter:theme/subtitle2"
-          flutter:style.color="#333"/>
-      </Padding>
-    </InkWell>
-    <Padding
-      flutter:paddingLeft="20">
-      <Divider
-        flutter:height="1"
-        flutter:color="#eee"/>
-    </Padding>
-
-
-    <Padding
-      flutter:paddingLeft="20"
-      flutter:paddingRight="20"
-      flutter:paddingTop="15"
-      flutter:paddingBottom="0">
-
-      <Text
-        flutter:data="上级"
-        flutter:style="=@flutter:theme/subtitle2"
-        flutter:style.color="#999"/>
-
-    </Padding>
-    <InkWell flutter:onTap="onClickSupervisor">
-      <Padding
-        flutter:paddingLeft="20"
-        flutter:paddingRight="20"
-        flutter:paddingTop="15"
-        flutter:paddingBottom="15">
-        <Text
-          flutter:data="{{manager_fullname}}"
-          flutter:style="@flutter:theme/subtitle2"
-          flutter:style.color="#333"/>
-      </Padding>
-    </InkWell>
-    <Padding
-      flutter:paddingLeft="20">
-      <Divider
-        flutter:height="1"
-        flutter:color="#eee"/>
-    </Padding>
-
+    </Column>
 
     <SizedBox flutter:height="80"/>
   </ListView>

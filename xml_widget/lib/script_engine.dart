@@ -1,5 +1,6 @@
 
 enum StatementType {
+  assign,
   call,
   condition,
   declaration,

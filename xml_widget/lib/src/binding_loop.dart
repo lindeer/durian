@@ -64,7 +64,7 @@ class _LoopState extends State<LoopWidget> {
           return headers![index].child;
         } else if (index < len) {
           int pos = index - head;
-          engine.eval("var item = ${widget.word}[$pos];", type: StatementType.declaration,);
+          engine.eval("var item = ${widget.word}[$pos];", type: StatementType.assign,);
           return _buildItem(engine, pos);
         } else {
           int pos = index - len;

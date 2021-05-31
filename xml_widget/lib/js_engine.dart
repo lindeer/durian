@@ -14,18 +14,34 @@ class JSEngine implements ScriptEngine {
     engine._exprHandler[StatementType.expression] = engine._prefix;
     engine._exprHandler[StatementType.condition] = engine._parseField;
     engine._exprHandler[StatementType.call] = engine._parseCall;
+    engine._exprHandler[StatementType.assign] = engine._parseAssign;
     return engine;
   }
 
   static final _reg = RegExp(r'[_a-zA-Z]\w*(\.\w+)*');
 
-  String _prefix(String expr) => "$domain$expr";
+  String _prefix(String expr) => expr.startsWith('item.') ? expr : "$domain$expr";
 
   String _parseField(String expr) {
-    return expr.replaceAllMapped(_reg, (m) => "$domain${m[0]}");
+    return expr.replaceAllMapped(_reg, (m) {
+      final name = m[0] ?? '';
+      return name == 'item' ? name : "$domain$name";
+    });
   }
 
-  String _parseCall(String expr) => "page.$expr();";
+  String _parseCall(String expr) => expr.startsWith('item.') ?  '$expr();' :  "page.$expr();";
+
+  String _parseAssign(String expr) {
+    int pos = expr.indexOf('=') + 1;
+
+    if (pos > 0) {
+      final r = _parseField(expr.substring(pos));
+      final ret = "${expr.substring(0, pos)}$r";
+      return ret;
+    } else {
+      return expr;
+    }
+  }
 
   @override
   String eval(String statement, {StatementType type = StatementType.expression}) {

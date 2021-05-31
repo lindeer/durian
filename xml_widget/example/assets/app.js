@@ -13,13 +13,6 @@ function Page(options) {
 
       sendMessage('_onDataChanged', JSON.stringify(obj));
     }
-
-    onClick() {
-      this.setData({
-        text: "在家办公" + count++,
-      });
-      console.log("avatar_url=",this.data.avatar_url);
-    }
   }
   sendMessage('_onPageCreated', JSON.stringify({id: 0}));
   return new _Page(options);
@@ -28,6 +21,7 @@ function Page(options) {
 model['department'] = model.department_info.map((e) => e.name).join('/');
 model['self'] = false;
 model['job'] = '工程师';
+model['information'] = [];
 let page = Page({
   data: model,
   onLoad: function () {
@@ -43,3 +37,47 @@ let page = Page({
     })
   }
 });
+
+setTimeout(() => {
+  let l = model['information'];
+  l.push({
+    label: '昵称',
+    name: model.nickname,
+    onClick: () => {
+      console.log("on click nickname");
+    },
+  }, {
+    label: '工号',
+    name: model.emp_num,
+    onClick: () => {
+      console.log("on click emp_num");
+    },
+  }, {
+    label: '邮箱',
+    name: model.email,
+    onClick: () => {
+      console.log("on click email");
+    },
+  }, {
+    label: '城市',
+    name: model.location.city,
+    onClick: () => {
+      console.log("on click city");
+    },
+  }, {
+    label: '部门',
+    name: model.department,
+    onClick: () => {
+      console.log("on click department");
+    },
+  }, {
+    label: '上级',
+    name: model.manager_fullname,
+    onClick: () => {
+      console.log("on click manager_fullname");
+    },
+  });
+  page.setData({
+    information: l,
+  });
+}, 3000)
