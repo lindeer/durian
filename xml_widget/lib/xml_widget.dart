@@ -52,6 +52,7 @@ class WidgetAssembler {
   factory WidgetAssembler({
     required BuildContext buildContext,
     void onPressed(String value)?,
+    void onPressed2(BuildContext context, String value)?,
     void onLongPressed(String value)?,
     List<XmlWidgetBuilder>? builders,
   }) {
@@ -65,6 +66,7 @@ class WidgetAssembler {
     }
     final _info = CallbackHolder();
     _info.onPressed = onPressed;
+    _info.onPressed2 = onPressed2;
     _info.onLongPressed = onLongPressed;
     final res = _ResImpl(buildContext);
     return WidgetAssembler._(xmlBuilders, _info, res);

@@ -78,8 +78,15 @@ class _LoopState extends State<LoopWidget> {
   }
 
   Widget _buildItem(BuildContext buildContext, int index) {
-    final item = widget.item;
     final at = DateTime.now().microsecondsSinceEpoch;
+    final itemContext = widget.item.context;
+    final holder = CallbackHolder();
+    holder.onPressed = (value) {
+      itemContext.onPressed2?.call(buildContext, value);
+    };
+    final newContext = AssembleContext(itemContext.resource, holder, itemContext.assemble);
+    final item = AssembleElement.attachContext(widget.item, newContext);
+
     try {
       return widget.element.context.assemble.call(item);
     } finally {

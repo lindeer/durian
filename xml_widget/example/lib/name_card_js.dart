@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:xml_widget/build_item_widget.dart';
 import 'package:xml_widget/js_engine.dart';
 import 'package:xml_widget/script_engine.dart';
 import 'package:xml_widget/xml_widget.dart';
@@ -24,9 +25,15 @@ class _NameCardState extends State<NameCardJSPage> {
     ]);
   }
 
-  // TODO: how to if items[index] clicked?
-  void _onPressed(String uri) {
-    _engine.eval(uri, type: StatementType.call);
+  void _onPressed(BuildContext context, String func) {
+    final item = BuildItemWidget.of(context);
+    if (func.startsWith('item.') && item != null) {
+      final ref = '${item.name}[${item.pos}]';
+      final uri = func.replaceAll('item', ref);
+      _engine.eval(uri, type: StatementType.itemCall);
+    } else {
+      _engine.eval(func, type: StatementType.call);
+    }
   }
 
   @override
@@ -52,7 +59,8 @@ class _NameCardState extends State<NameCardJSPage> {
             final js = data[1];
             final assembler = WidgetAssembler(
               buildContext: context,
-              onPressed: _onPressed,
+              onPressed: (v) => _onPressed(context, v),
+              onPressed2: _onPressed,
             );
             t = DateTime.now().microsecondsSinceEpoch;
             print("------- 111 ${t - at}us");

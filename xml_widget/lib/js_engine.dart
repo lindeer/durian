@@ -13,7 +13,8 @@ class JSEngine implements ScriptEngine {
     final engine = JSEngine._(runtime, prefix);
     engine._exprHandler[StatementType.expression] = engine._prefix;
     engine._exprHandler[StatementType.condition] = engine._parseField;
-    engine._exprHandler[StatementType.call] = engine._parseCall;
+    engine._exprHandler[StatementType.call] = (expr) => 'page.$expr();';
+    engine._exprHandler[StatementType.itemCall] = (expr) => '$prefix$expr();';
     engine._exprHandler[StatementType.assign] = engine._parseAssign;
     return engine;
   }
@@ -28,8 +29,6 @@ class JSEngine implements ScriptEngine {
       return name == 'item' ? name : "$domain$name";
     });
   }
-
-  String _parseCall(String expr) => expr.startsWith('item.') ?  '$expr();' :  "page.$expr();";
 
   String _parseAssign(String expr) {
     int pos = expr.indexOf('=') + 1;
