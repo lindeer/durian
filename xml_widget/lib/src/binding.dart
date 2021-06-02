@@ -1,6 +1,7 @@
 library durian.binding;
 
 import 'package:flutter/material.dart';
+import 'package:xml_widget/build_item_widget.dart';
 import 'package:xml_widget/model_widget.dart';
 import 'package:xml_widget/script_engine.dart';
 import 'package:xml_widget/xml_context.dart';

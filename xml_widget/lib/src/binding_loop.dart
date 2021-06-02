@@ -65,7 +65,10 @@ class _LoopState extends State<LoopWidget> {
         } else if (index < len) {
           int pos = index - head;
           engine.eval("var item = ${widget.word}[$pos];", type: StatementType.assign,);
-          return _buildItem(engine, pos);
+          return BuildItemWidget(
+            data: ItemMetaData(widget.word, pos),
+            builder: (BuildContext ctx) => _buildItem(ctx, pos),
+          );
         } else {
           int pos = index - len;
           return footers![pos].child;
@@ -74,14 +77,14 @@ class _LoopState extends State<LoopWidget> {
     );
   }
 
-  Widget _buildItem(ScriptEngine engine, int index) {
+  Widget _buildItem(BuildContext buildContext, int index) {
     final item = widget.item;
-    final at = DateTime.now().millisecondsSinceEpoch;
+    final at = DateTime.now().microsecondsSinceEpoch;
     try {
       return widget.element.context.assemble.call(item);
     } finally {
-      final cost = DateTime.now().millisecondsSinceEpoch - at;
-      print("_buildItem($index) cost $cost ms");
+      final cost = DateTime.now().microsecondsSinceEpoch - at;
+      print("_buildItem($index) cost $cost us");
     }
   }
 
