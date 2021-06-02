@@ -25,16 +25,13 @@ class _NameCardState extends State<NameCardJSPage> {
     ]);
   }
 
-  // TODO: how to if items[index] clicked?
-  void _onPressed(String uri) {
-    _engine.eval(uri, type: StatementType.call);
-  }
-
-  void _onTap(BuildContext context, String uri) {
-    final item = BuildItemWidget.of(context);
+  void _onPressed(BuildContext ctx, String uri) {
+    final item = BuildItemWidget.of(ctx);
     if (uri.contains('item.') && item != null) {
       final expr = uri.replaceAll('item', '$item');
       _engine.eval('$expr();');
+    } else {
+      _engine.eval(uri, type: StatementType.call);
     }
   }
 
@@ -62,7 +59,6 @@ class _NameCardState extends State<NameCardJSPage> {
             final assembler = WidgetAssembler(
               buildContext: context,
               onPressed: _onPressed,
-              onTap: _onTap,
             );
             t = DateTime.now().microsecondsSinceEpoch;
             print("------- 111 ${t - at}us");

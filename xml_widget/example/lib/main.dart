@@ -97,7 +97,7 @@ final _loading = Container(
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  void _onPressed(String uri) {
+  void _onPressed(BuildContext ctx, String uri) {
     print("onPressed: $uri");
     final engine = PageModelWidget.of(context).engine;
     engine.eval('$uri();');

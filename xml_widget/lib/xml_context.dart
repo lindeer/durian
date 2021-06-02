@@ -7,9 +7,8 @@ import 'xml_resource.dart';
 typedef void OnClickListener(BuildContext context, String value);
 
 class CallbackHolder {
-  void Function(String value)? onPressed;
-  OnClickListener? onTap;
-  void Function(String value)? onLongPressed;
+  OnClickListener? onPressed;
+  OnClickListener? onLongPressed;
 }
 
 typedef AssembleFn = Widget Function(AssembleElement element);
@@ -27,10 +26,9 @@ class AssembleContext {
 
   ThemeData get theme => resource.theme;
 
-  void Function(String value)? get onPressed => _info.onPressed;
-  OnClickListener? get onTap => _info.onTap;
+  OnClickListener? get onPressed => _info.onPressed;
 
-  void Function(String value)? get onLongPressed => _info.onLongPressed;
+  OnClickListener? get onLongPressed => _info.onLongPressed;
 }
 
 class AssembleElement {
