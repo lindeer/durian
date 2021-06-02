@@ -4,7 +4,7 @@ class _XmlListViewBuilder extends CommonWidgetBuilder {
   const _XmlListViewBuilder() : super('ListView');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final children = descendant.map((e) => e.child).toList(growable: false);
     final attrs = element.attrs;
     final res = element.context.resource;

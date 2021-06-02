@@ -81,7 +81,7 @@ class _LoopState extends State<LoopWidget> {
     final item = widget.item;
     final at = DateTime.now().microsecondsSinceEpoch;
     try {
-      return widget.element.context.assemble.call(item);
+      return widget.element.context.hatch.call(buildContext, item);
     } finally {
       final cost = DateTime.now().microsecondsSinceEpoch - at;
       print("_buildItem($index) cost $cost us");

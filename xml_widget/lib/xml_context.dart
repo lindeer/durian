@@ -4,24 +4,31 @@ import 'package:flutter/widgets.dart';
 import 'package:xml/xml.dart';
 import 'xml_resource.dart';
 
+typedef void OnClickListener(BuildContext context, String value);
+
 class CallbackHolder {
   void Function(String value)? onPressed;
+  OnClickListener? onTap;
   void Function(String value)? onLongPressed;
 }
 
 typedef AssembleFn = Widget Function(AssembleElement element);
-typedef AssembleWidgetBuilder = Widget Function(AssembleElement element, List<AssembleChildElement> descendant);
+typedef AssembleHatch = Widget Function(BuildContext context, AssembleElement element);
+typedef AssembleWidgetBuilder = Widget Function(BuildContext buildContext, AssembleElement element,
+    List<AssembleChildElement> descendant);
 
 class AssembleContext {
   final AssembleResource resource;
   final CallbackHolder _info;
   final AssembleFn assemble;
+  final AssembleHatch hatch;
 
-  const AssembleContext(this.resource, this._info, this.assemble);
+  const AssembleContext(this.resource, this._info, this.assemble, this.hatch);
 
   ThemeData get theme => resource.theme;
 
   void Function(String value)? get onPressed => _info.onPressed;
+  OnClickListener? get onTap => _info.onTap;
 
   void Function(String value)? get onLongPressed => _info.onLongPressed;
 }

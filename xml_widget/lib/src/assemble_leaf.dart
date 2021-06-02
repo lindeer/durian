@@ -8,7 +8,7 @@ class _XmlTextBuilder extends CommonWidgetBuilder {
   bool get childless => true;
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> children) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> children) {
     final attrs = element.attrs;
     final res = element.context.resource;
     final styleAttr = attrs['style'];
@@ -38,7 +38,7 @@ class _XmlIconBuilder extends CommonWidgetBuilder {
   bool get childless => true;
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> children) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> children) {
     final attrs = element.attrs;
     final res = element.context.resource;
     return Icon(
@@ -55,7 +55,7 @@ class _XmlImageBuilder extends CommonWidgetBuilder {
   const _XmlImageBuilder() : super('Image');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final resource = element.context.resource;
     final src = attrs['src'] ?? '';

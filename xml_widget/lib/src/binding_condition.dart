@@ -145,6 +145,6 @@ class _ConditionState extends State<ConditionWidget> {
       _children..clear()..addAll(children);
       rebuildChildren = REBUILD_REASON_NONE;
     }
-    return builder.call(element, _children);
+    return builder.call(context, element, _children);
   }
 }

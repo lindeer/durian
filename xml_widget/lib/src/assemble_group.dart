@@ -4,7 +4,7 @@ class _XmlColumnBuilder extends CommonWidgetBuilder {
   const _XmlColumnBuilder() : super('Column');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final children = descendant.map((e) => e.child).toList(growable: false);
     final attrs = element.attrs;
     return Column(
@@ -23,7 +23,7 @@ class _XmlRowBuilder extends CommonWidgetBuilder {
   const _XmlRowBuilder() : super('Row');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final children = descendant.map((e) => e.child).toList(growable: false);
     final attrs = element.attrs;
     return Row(
@@ -42,7 +42,7 @@ class _XmlWrapBuilder extends CommonWidgetBuilder {
   const _XmlWrapBuilder() : super('Wrap');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final children = descendant.map((e) => e.child).toList(growable: false);
     final attrs = element.attrs;
     return Wrap(
@@ -64,7 +64,7 @@ class _XmlStackBuilder extends CommonWidgetBuilder {
   const _XmlStackBuilder() : super('Stack');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final children = descendant.map((e) => e.child).toList(growable: false);
     final attrs = element.attrs;
     return Stack(
@@ -82,7 +82,7 @@ class _XmlFlexBuilder extends CommonWidgetBuilder {
   const _XmlFlexBuilder() : super('Flex');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final children = descendant.map((e) => e.child).toList(growable: false);
     final attrs = element.attrs;
     final direction = _axis[attrs['direction']];
@@ -107,7 +107,7 @@ class _XmlScaffoldBuilder extends CommonWidgetBuilder {
   const _XmlScaffoldBuilder() : super('Scaffold');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final res = element.context.resource;
     final components = <String, AssembleChildElement>{};
@@ -145,7 +145,7 @@ class _XmlAppBarBuilder extends CommonWidgetBuilder {
   const _XmlAppBarBuilder() : super('AppBar');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final res = element.context.resource;
     final components = <String, AssembleChildElement>{};

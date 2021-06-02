@@ -26,8 +26,8 @@ abstract class XmlWidgetBuilder {
 
   bool get childless;
 
-  // children would be empty if childless is false
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant);
+  /// build a widget given parent and children
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant);
 }
 
 abstract class CommonWidgetBuilder implements XmlWidgetBuilder {
@@ -42,17 +42,18 @@ abstract class CommonWidgetBuilder implements XmlWidgetBuilder {
 }
 
 class WidgetAssembler {
-
+  final BuildContext _flutterContext;
   final Map<String, XmlWidgetBuilder> _builders;
   final CallbackHolder _holder;
   final _ResImpl _res;
 
-  WidgetAssembler._(this._builders, this._holder, this._res);
+  WidgetAssembler._(this._flutterContext, this._builders, this._holder, this._res);
 
   factory WidgetAssembler({
     required BuildContext buildContext,
     void onPressed(String value)?,
     void onLongPressed(String value)?,
+    OnClickListener? onTap,
     List<XmlWidgetBuilder>? builders,
   }) {
     final xmlBuilders = {
@@ -66,11 +67,12 @@ class WidgetAssembler {
     final _info = CallbackHolder();
     _info.onPressed = onPressed;
     _info.onLongPressed = onLongPressed;
+    _info.onTap = onTap;
     final res = _ResImpl(buildContext);
-    return WidgetAssembler._(xmlBuilders, _info, res);
+    return WidgetAssembler._(buildContext, xmlBuilders, _info, res);
   }
 
-  AssembleContext get assembleContext => AssembleContext(_res, _holder, _assembleByElement);
+  AssembleContext get assembleContext => AssembleContext(_res, _holder, _assembleByElement, _hatchByElement);
 
   _ResImpl get resource => _res;
 
@@ -115,6 +117,10 @@ class WidgetAssembler {
   ];
 
   Widget _assembleByElement(AssembleElement element) {
+    return _hatchByElement(this._flutterContext, element);
+  }
+
+  Widget _hatchByElement(BuildContext buildContext, AssembleElement element) {
     final name = element.name;
     final builder = _builders[name] ?? const _XmlWrapBuilder();
 
@@ -126,7 +132,7 @@ class WidgetAssembler {
     }
 
     final childrenElements = builder.childless ? _noChild
-        : rawChildren.map((e) => AssembleChildElement(e, _assembleByElement(e))).toList(growable: false);
+        : rawChildren.map((e) => AssembleChildElement(e, _hatchByElement(buildContext, e))).toList(growable: false);
 
     bool containIf = _ElementUtils.containIf(rawChildren);
 
@@ -147,11 +153,11 @@ class WidgetAssembler {
           builder: (ctx) {
             final engine = PageModelWidget.of(ctx).engine;
             DataBinding.bind(element, engine.eval);
-            return fn.call(element, children);
+            return fn.call(ctx, element, children);
           },
         );
       } else {
-        w = fn.call(element, children);
+        w = fn.call(buildContext, element, children);
       }
     }
 

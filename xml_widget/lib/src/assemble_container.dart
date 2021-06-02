@@ -4,7 +4,7 @@ class _XmlContainerBuilder extends CommonWidgetBuilder {
   const _XmlContainerBuilder() : super('Container');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final res = element.context.resource;
     return Container(
@@ -27,7 +27,7 @@ class _XmlInkBuilder extends CommonWidgetBuilder {
   const _XmlInkBuilder() : super('Ink');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final res = element.context.resource;
     return Ink(
@@ -45,7 +45,7 @@ class _XmlMaterialButtonBuilder extends CommonWidgetBuilder {
   const _XmlMaterialButtonBuilder() : super('MaterialButton');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final res = element.context.resource;
     final pressFn = element.context.onPressed;
@@ -94,7 +94,7 @@ class _XmlDeprecatedWidgetBuilder extends CommonWidgetBuilder {
   const _XmlDeprecatedWidgetBuilder(String name, this.instead) : super(name);
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     return ErrorWidget.withDetails(
       message: '$name is deprecated, use $instead instead!',
     );
@@ -117,7 +117,7 @@ class _XmlElevatedButtonBuilder extends CommonWidgetBuilder {
   const _XmlElevatedButtonBuilder() : super('ElevatedButton');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final pressFn = element.context.onPressed;
     final pressUri = attrs["onPressed"];
@@ -140,7 +140,7 @@ class _XmlTextButtonBuilder extends CommonWidgetBuilder {
   const _XmlTextButtonBuilder() : super('TextButton');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final res = element.context.resource;
     final pressFn = element.context.onPressed;
@@ -173,7 +173,7 @@ class _XmlOutlinedButtonBuilder extends CommonWidgetBuilder {
   const _XmlOutlinedButtonBuilder() : super('OutlinedButton');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final pressFn = element.context.onPressed;
     final pressUri = attrs["onPressed"];
@@ -200,7 +200,7 @@ class _XmlPaddingBuilder extends CommonWidgetBuilder {
   const _XmlPaddingBuilder() : super('Padding');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final res = element.context.resource;
     final padding = _PropertyStruct.padding(res, attrs);
@@ -218,12 +218,12 @@ class _XmlInkWellBuilder extends CommonWidgetBuilder {
   const _XmlInkWellBuilder() : super('InkWell');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final res = element.context.resource;
-    final pressFn = element.context.onPressed;
+    final pressFn = element.context.onTap;
     final pressUri = attrs["onTap"];
-    final onPressed = pressFn != null && pressUri != null ? () => pressFn.call(pressUri) : null;
+    final onPressed = pressFn != null && pressUri != null ? () => pressFn.call(buildContext, pressUri) : null;
     final longPressUri = attrs["onLongPressed"];
     final longPressFn = element.context.onLongPressed;
     final onLongPressed = longPressFn != null && longPressUri != null ? () => longPressFn.call(longPressUri) : null;
@@ -250,7 +250,7 @@ class _XmlFloatingActionButtonBuilder extends CommonWidgetBuilder {
   const _XmlFloatingActionButtonBuilder() : super('FloatingActionButton');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final res = element.context.resource;
     final handler = element.context.onPressed;
@@ -283,7 +283,7 @@ class _XmlCenterBuilder extends CommonWidgetBuilder {
   const _XmlCenterBuilder() : super('Center');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     return Center(
       child: descendant.isEmpty ? null : descendant.first.child,
@@ -297,7 +297,7 @@ class _XmlIntrinsicWidthBuilder extends CommonWidgetBuilder {
   const _XmlIntrinsicWidthBuilder() : super('IntrinsicWidth');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     return IntrinsicWidth(
       child: descendant.isEmpty ? null : descendant.first.child,
@@ -311,7 +311,7 @@ class _XmlIntrinsicHeightBuilder extends CommonWidgetBuilder {
   const _XmlIntrinsicHeightBuilder() : super('IntrinsicHeight');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     return IntrinsicHeight(
       child: descendant.isEmpty ? null : descendant.first.child,
     );
@@ -322,7 +322,7 @@ class _XmlAlignBuilder extends CommonWidgetBuilder {
   const _XmlAlignBuilder() : super('Align');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     return Align(
       child: descendant.isEmpty ? null : descendant.first.child,
@@ -337,7 +337,7 @@ class _XmlAspectRatioBuilder extends CommonWidgetBuilder {
   const _XmlAspectRatioBuilder() : super('AspectRatio');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final ratio = attrs['aspectRatio']?.toDouble();
     if (ratio == null) {
@@ -354,7 +354,7 @@ class _XmlFittedBoxBuilder extends CommonWidgetBuilder {
   const _XmlFittedBoxBuilder() : super('FittedBox');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     return FittedBox(
       child: descendant.isEmpty ? null : descendant.first.child,
@@ -369,7 +369,7 @@ class _XmlBaselineBuilder extends CommonWidgetBuilder {
   const _XmlBaselineBuilder() : super('Baseline');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final baseline = attrs['baseline']?.toDouble();
     final type = _textBaseline[attrs['baselineType']];
@@ -388,7 +388,7 @@ class _XmlPositionedBuilder extends CommonWidgetBuilder {
   const _XmlPositionedBuilder() : super('Positioned');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final res = element.context.resource;
     if (descendant.isEmpty) {
@@ -410,7 +410,7 @@ class _XmlSizedBoxBuilder extends CommonWidgetBuilder {
   const _XmlSizedBoxBuilder() : super('SizedBox');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final res = element.context.resource;
 
@@ -426,7 +426,7 @@ class _XmlOpacityBuilder extends CommonWidgetBuilder {
   const _XmlOpacityBuilder() : super('Opacity');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final opacity = attrs['opacity']?.toDouble();
     if (opacity == null) {
@@ -444,7 +444,7 @@ class _XmlFlexibleBuilder extends CommonWidgetBuilder {
   const _XmlFlexibleBuilder() : super('Flexible');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     if (descendant.isEmpty) {
       return ErrorWidget.withDetails(message: "Flexible should contain one child!");
@@ -461,7 +461,7 @@ class _XmlExpandedBuilder extends CommonWidgetBuilder {
   const _XmlExpandedBuilder() : super('Expanded');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     if (descendant.isEmpty) {
       return ErrorWidget.withDetails(message: "Expanded should contain one child!");
@@ -477,7 +477,7 @@ class _XmlClipOvalBuilder extends CommonWidgetBuilder {
   const _XmlClipOvalBuilder() : super('ClipOval');
 
   @override
-  Widget build(AssembleElement element, List<AssembleChildElement> descendant) {
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
 
     return ClipOval(
