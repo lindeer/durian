@@ -231,6 +231,7 @@ class _NameCardState extends State<NameCardPage> {
   }
 
   void _showDialog() {
+    final style = TextButton.styleFrom(minimumSize: Size.fromHeight(56));
     final content = Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -242,11 +243,11 @@ class _NameCardState extends State<NameCardPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              TextButton(onPressed: () {}, child: Text("a"),),
+              TextButton(onPressed: () {}, child: Text("a"), style: style,),
               Divider(height: 1,),
-              TextButton(onPressed: () {}, child: Text("b"),),
+              TextButton(onPressed: () {}, child: Text("b"), style: style,),
               Divider(height: 1,),
-              TextButton(onPressed: () {}, child: Text("c"),),
+              TextButton(onPressed: () {}, child: Text("c"), style: style,),
             ],
           ),
         ),
@@ -254,13 +255,12 @@ class _NameCardState extends State<NameCardPage> {
           height: 10,
         ),
         Container(
-          width: double.infinity,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius:
             const BorderRadius.all(Radius.circular(10.0)),
           ),
-          child: TextButton(onPressed: () {}, child: Text("d"),),
+          child: TextButton(onPressed: () {}, child: Text("d"), style: style,),
         ),
         SizedBox(
           height: 40,
@@ -271,8 +271,8 @@ class _NameCardState extends State<NameCardPage> {
     showDialog(
       context: context,
       builder: (ctx) {
-        return FractionallySizedBox(
-          widthFactor: 0.9,
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
           child: Material(
             type: MaterialType.transparency,
             child: content,
