@@ -60,8 +60,7 @@ class _NameCardState extends State<NameCardPage> {
 
   @override
   Widget build(BuildContext context) {
-
-    return Stack(
+    final body = Stack(
       children: [
         ListView(
           children: [
@@ -183,7 +182,7 @@ class _NameCardState extends State<NameCardPage> {
               width: double.infinity,
               height: 40,
               child: TextButton(
-                onPressed: () {},
+                onPressed: _showDialog,
                 style: TextButton.styleFrom(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0),
@@ -202,9 +201,12 @@ class _NameCardState extends State<NameCardPage> {
         ),
       ],
     );
+    return Material(
+      child: body,
+    );
   }
 
-  static List<Widget> _buildItem(BuildContext context, String label, String? name) {
+  List<Widget> _buildItem(BuildContext context, String label, String? name) {
     return <Widget>[
       Padding(
         padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 0),
@@ -226,5 +228,57 @@ class _NameCardState extends State<NameCardPage> {
       ),
       divider,
     ];
+  }
+
+  void _showDialog() {
+    final content = Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextButton(onPressed: () {}, child: Text("a"),),
+              Divider(height: 1,),
+              TextButton(onPressed: () {}, child: Text("b"),),
+              Divider(height: 1,),
+              TextButton(onPressed: () {}, child: Text("c"),),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius:
+            const BorderRadius.all(Radius.circular(10.0)),
+          ),
+          child: TextButton(onPressed: () {}, child: Text("d"),),
+        ),
+        SizedBox(
+          height: 40,
+        ),
+      ],
+    );
+
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return FractionallySizedBox(
+          widthFactor: 0.9,
+          child: Material(
+            type: MaterialType.transparency,
+            child: content,
+          ),
+        );
+      }
+    );
   }
 }
