@@ -6,7 +6,6 @@ import 'xml_resource.dart';
 
 class CallbackHolder {
   void Function(String value)? onPressed;
-  void Function(BuildContext context, String value)? onPressed2;
   void Function(String value)? onLongPressed;
 }
 
@@ -23,8 +22,6 @@ class AssembleContext {
   ThemeData get theme => resource.theme;
 
   void Function(String value)? get onPressed => _info.onPressed;
-
-  void Function(BuildContext context, String value)? get onPressed2 => _info.onPressed2;
 
   void Function(String value)? get onLongPressed => _info.onLongPressed;
 }
@@ -53,11 +50,6 @@ class AssembleElement {
     final attrs = Map.fromEntries(map.map((entry) => MapEntry(entry.key.local, entry.value)));
     final name = e.name.qualified;
     return AssembleElement._(name, context, attrs, raw, children);
-  }
-
-  static AssembleElement attachContext(AssembleElement item, AssembleContext context) {
-    final children = item.children.map((e) => attachContext(e, context)).toList(growable: false);
-    return AssembleElement(item.name, context, item.raw, children);
   }
 }
 

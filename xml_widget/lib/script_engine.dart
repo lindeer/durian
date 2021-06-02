@@ -2,7 +2,6 @@
 enum StatementType {
   assign,
   call,
-  itemCall,
   condition,
   declaration,
   expression,
