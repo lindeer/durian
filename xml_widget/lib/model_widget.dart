@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:xml_widget/script_engine.dart';
 
 import 'model.dart';
 export 'model.dart';
@@ -19,6 +20,42 @@ class PageModelWidget extends StatefulWidget {
 }
 
 class _ModelState extends State<PageModelWidget> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    widget.model.engine.registerBridge('_showAlertDialog', _showAlertDialog);
+  }
+
+  void _showAlertDialog(Map<String, dynamic> data) async {
+    print("_showDialog: data=$data");
+    final items = data['items'] as List;
+    final ret = await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(data['title']),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: items.map((e) => Text(e.toString())).toList(growable: false),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(data['confirmText']),
+              onPressed: () {
+                Navigator.of(context).pop('success');
+              },
+            ),
+          ],
+        );
+      },
+    );
+    print("_showDialog: ret=$ret");
+    final action = ret ?? 'cancel';
+    widget.model.engine.eval("dismissDialog({action:'$action'});", type: StatementType.expression2);
+  }
 
   @override
   Widget build(BuildContext context) {

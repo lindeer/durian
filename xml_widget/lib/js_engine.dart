@@ -14,6 +14,7 @@ class JSEngine implements ScriptEngine {
     engine._exprHandler[StatementType.expression] = engine._prefix;
     engine._exprHandler[StatementType.condition] = engine._parseField;
     engine._exprHandler[StatementType.call] = engine._parseCall;
+    engine._exprHandler[StatementType.expression2] = engine._prefix2;
     engine._exprHandler[StatementType.assign] = engine._parseAssign;
     return engine;
   }
@@ -42,6 +43,8 @@ class JSEngine implements ScriptEngine {
       return expr;
     }
   }
+
+  String _prefix2(String expr) => "page.$expr";
 
   @override
   String eval(String statement, {StatementType type = StatementType.expression}) {

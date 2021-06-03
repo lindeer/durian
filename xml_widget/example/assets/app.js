@@ -13,6 +13,20 @@ function Page(options) {
 
       sendMessage('_onDataChanged', JSON.stringify(obj));
     }
+
+    showAlertDialog(obj) {
+      if (!this.dialogs) this.dialogs = [];
+      let dlg = this.dialogs;
+      obj.key = dlg.length.toString();
+      dlg.push(obj);
+      sendMessage('_showAlertDialog', JSON.stringify(obj));
+    }
+
+    dismissDialog(res) {
+      let dlg = this.dialogs.pop();
+      dlg.dismiss?.();
+      dlg[res.action]?.(res);
+    }
   }
   sendMessage('_onPageCreated', JSON.stringify({id: 0}));
   return new _Page(options);
@@ -56,7 +70,15 @@ setTimeout(() => {
     label: '邮箱',
     name: model.email,
     onClick: () => {
-      console.log("on click email");
+      let items = ['复制邮箱地址', '发邮件'];
+      page.showAlertDialog({
+        items:items,
+        title:'AlertDialog Title',
+        confirmText: 'OK',
+        success: (res) => {
+          console.log(`on click dialog success==${JSON.stringify(res)}`);
+        }
+     });
     },
   }, {
     label: '城市',

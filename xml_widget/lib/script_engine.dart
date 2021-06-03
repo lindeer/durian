@@ -5,6 +5,7 @@ enum StatementType {
   condition,
   declaration,
   expression,
+  expression2,
 }
 
 abstract class ScriptEngine {
