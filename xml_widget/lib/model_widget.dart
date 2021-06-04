@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:xml_widget/script_engine.dart';
 import 'package:xml_widget/xml_context.dart';
 import 'package:xml_widget/xml_widget.dart';
+import 'package:xml_widget/xml_resource.dart';
 
 import 'model.dart';
 export 'model.dart';
@@ -9,11 +10,12 @@ export 'model.dart';
 class PageModelWidget extends StatefulWidget {
   final PageModel model;
   final AssembleElement element;
+  final String path = 'assets';
 
   PageModelWidget({required this.model, required this.element, Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _ModelState();
+  State<StatefulWidget> createState() => _ModelState(AssembleReader(path));
 
   static PageModel of(BuildContext context) {
     final widget = context.getElementForInheritedWidgetOfExactType<_SharedModelWidget>()?.widget as _SharedModelWidget?;
@@ -24,6 +26,9 @@ class PageModelWidget extends StatefulWidget {
 class _ModelState extends State<PageModelWidget> {
   late AssembleElement root;
   final _dialogs = <String, AssembleElement>{};
+  final AssembleReader _reader;
+
+  _ModelState(this._reader);
 
   @override
   void initState() {
@@ -104,18 +109,51 @@ class _ModelState extends State<PageModelWidget> {
   void _onPressed(BuildContext ctx, String uri) {
   }
 
+  Widget _makeFutureWidget<T>(Future<T> future, Widget builder(BuildContext ctx, T data)) {
+    return FutureBuilder<T>(
+      future: future,
+      builder: (ctx, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError) {
+            return SingleChildScrollView(
+              child: Container(
+                color: Colors.white,
+                child: Text('error: ${snapshot.error}\n${snapshot.stackTrace}'),
+              ),
+            );
+          } else {
+            final data = snapshot.requireData;
+            return builder(ctx, data);
+          }
+        } else {
+          return _loading;
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final model = widget.model;
-    final assembler = WidgetAssembler(
-      buildContext: context,
-      onPressed: _onPressed,
-    );
     return _SharedModelWidget(
       model: model,
-      child: Builder(
-        builder: (ctx) => assembler.build(ctx, root),
-      ),
+      child: _makeFutureWidget<AssembleResource>(_reader.loadResource(), (c, res) {
+        final callbacks = CallbackHolder();
+        final assembleContext = AssembleContext(res, callbacks, (e)=>_loading, (ctx, e)=>_loading);
+        return _AssembleContextWidget(assembleContext, _makeFutureWidget<AssembleElement>(_reader.parseElement(), (ctx, element) {
+          final ac = ctx.assembleContext;
+          /*
+          ac.attach((e) => assembler.build(ctx, e), assembler.build);
+           */
+          return Center(
+            child: Container(
+              width: 120,
+              height: 120,
+              color: Colors.blueAccent,
+            ),
+          );
+        }));
+      }),
     );
   }
 
@@ -145,3 +183,45 @@ class _SharedModelWidget extends InheritedWidget {
     return oldWidget.model != model;
   }
 }
+
+class _AssembleContextWidget extends InheritedWidget {
+  final AssembleContext _context;
+
+  _AssembleContextWidget(this._context, Widget child) : super(child: child);
+
+  @override
+  bool updateShouldNotify(covariant _AssembleContextWidget oldWidget) {
+    return oldWidget._context != _context;
+  }
+
+  static Widget _build(AssembleElement e) {
+    return SizedBox.shrink();
+  }
+
+  static Widget _build2(BuildContext ctx, AssembleElement e) => _build(e);
+
+  static AssembleContext _createFake() {
+    return AssembleContext(AssembleResource.fake(), CallbackHolder(), _build, _build2);
+  }
+}
+
+extension BuildContextExt on BuildContext {
+  AssembleContext get assembleContext {
+    final w = getElementForInheritedWidgetOfExactType<_AssembleContextWidget>()?.widget as _AssembleContextWidget?;
+    return w?._context ?? _AssembleContextWidget._createFake();
+  }
+}
+
+final _loading = Container(
+  color: Colors.white,
+  constraints: const BoxConstraints.tightFor(
+    width: 128,
+    height: 128,
+  ),
+  alignment: Alignment.center,
+  child: const CircularProgressIndicator(
+    valueColor: AlwaysStoppedAnimation<Color>(
+      Colors.deepOrangeAccent,
+    ),
+  ),
+);

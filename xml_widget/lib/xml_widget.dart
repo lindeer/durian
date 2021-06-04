@@ -13,6 +13,7 @@ import 'xml_context.dart';
 import 'xml_resource.dart';
 import 'src/binding.dart';
 
+part 'assemble_reader.dart';
 part 'src/assemble_container.dart';
 part 'src/assemble_leaf.dart';
 part 'src/assemble_list.dart';
