@@ -152,10 +152,10 @@ class _XmlTextButtonBuilder extends CommonWidgetBuilder {
     final longPressFn = element.context.onLongPressed;
     final onLongPressed = longPressFn != null && longPressUri != null
         ? () => longPressFn.call(buildContext, longPressUri) : null;
-
-    if (descendant.isEmpty) {
-      return ErrorWidget.withDetails(message: '$name must have one child!');
-    }
+    final height = res.size(attrs['height']);
+    final width = res.size(attrs['width']);
+    final minSize = height == null && width == null ? null
+        : Size(width ?? double.infinity, height ?? double.infinity);
 
     return TextButton(
       child: descendant.first.child,
@@ -167,6 +167,7 @@ class _XmlTextButtonBuilder extends CommonWidgetBuilder {
         backgroundColor: res[attrs['backgroundColor']],
         shape: _PropertyStruct.shapeBorder(res, attrs) as OutlinedBorder?,
         alignment: _alignment[attrs['alignment']],
+        minimumSize: minSize,
       ),
     );
   }

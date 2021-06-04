@@ -163,4 +163,35 @@
     </Padding>
   </Align>
 
+  <Dialog flutter:name="name_card_select">
+    <Column flutter:mainAxisAlignment="end">
+      <Container
+        flutter:decoration.color="@flutter:color/white"
+        flutter:decoration.radius="10">
+        <Column flutter:crossAxisAlignment="stretch">
+          <TextButton
+            flutter:height="56"
+            flutter:onPressed="copyNickname">
+            <Text flutter:data="{{title}}"/>
+          </TextButton>
+        </Column>
+      </Container>
+
+      <SizedBox flutter:height="10"/>
+
+      <Container
+        flutter:decoration.color="@flutter:color/white"
+        flutter:decoration.radius="10">
+
+        <TextButton
+          flutter:height="56"
+          flutter:onPressed="copyNickname">
+          <Text flutter:data="取消"/>
+        </TextButton>
+      </Container>
+
+      <SizedBox flutter:height="40"/>
+    </Column>
+  </Dialog>
+
 </Stack>

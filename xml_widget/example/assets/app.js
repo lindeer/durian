@@ -27,6 +27,15 @@ function Page(options) {
       dlg.dismiss?.();
       dlg[res.action]?.(res);
     }
+
+    showDialog(name, obj) {
+      obj.name = name;
+      if (!this.dialogs) this.dialogs = [];
+      let dlg = this.dialogs;
+      obj.key = dlg.length.toString();
+      dlg.push(obj);
+      sendMessage('_showDialog', JSON.stringify(obj));
+    }
   }
   sendMessage('_onPageCreated', JSON.stringify({id: 0}));
   return new _Page(options);
@@ -58,7 +67,12 @@ setTimeout(() => {
     label: '昵称',
     name: model.nickname,
     onClick: () => {
-      console.log("on click nickname");
+      page.showDialog('name_card_select', {
+        title: '复制昵称',
+        copyNickname(res) {
+          console.log("click copyNickname: " + JSON.stringify(res));
+        }
+      });
     },
   }, {
     label: '工号',

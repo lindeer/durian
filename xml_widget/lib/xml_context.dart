@@ -46,6 +46,10 @@ class AssembleElement {
     return AssembleElement._(name, context, attrs, raw, children);
   }
 
+
+  @override
+  String toString() => '<$name $raw>';
+
   static AssembleElement fromXml(XmlElement e, AssembleContext context) {
     final children = e.children.where((child) => child.nodeType == XmlNodeType.ELEMENT)
         .map((child) => fromXml(child as XmlElement, context)).toList(growable: false);

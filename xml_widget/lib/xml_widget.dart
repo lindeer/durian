@@ -178,6 +178,14 @@ class WidgetAssembler {
     return _assembleByElement(element);
   }
 
+  AssembleElement elementFromSource(String source) {
+    final doc = XmlDocument.parse(source);
+    final root = doc.rootElement;
+    return AssembleElement.fromXml(root, assembleContext);
+  }
+
+  Widget build(BuildContext context, AssembleElement element) => _hatchByElement(context, element);
+
   Future<AssembleElement> _elementFromStream(Stream<List<int>> stream) async {
     final stack = <AssembleElement>[];
     final context = assembleContext;

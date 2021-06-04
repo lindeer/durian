@@ -108,3 +108,48 @@ function notifyChange(data) {
     return model;
   }
 }
+
+class _DataStore implements ScriptEngine {
+  final Map<String, String> _data;
+
+  _DataStore(this._data);
+
+  @override
+  String eval(String statement, {StatementType type = StatementType.expression}) {
+    return _data[statement] ?? '';
+  }
+
+  @override
+  void registerBridge(String name, void bridge(Map<String, dynamic> result)) {
+  }
+}
+
+class DialogModel implements PageModel {
+  final _DataStore _data;
+
+  DialogModel(this._data);
+
+  factory DialogModel.json(Map<String, dynamic> json) {
+    return DialogModel(_DataStore(json.cast()));
+  }
+
+  String operator[](String key) => _data._data[key] ?? '';
+
+  @override
+  void addListener(List<String> expressions, listener) {
+  }
+
+  @override
+  void dispose() {
+  }
+
+  @override
+  ScriptEngine get engine => _data;
+
+  @override
+  void removeListener(listener) {
+  }
+
+  @override
+  String toString() => _data._data.toString();
+}
