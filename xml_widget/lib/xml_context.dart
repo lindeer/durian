@@ -24,8 +24,6 @@ class AssembleContext {
 
   const AssembleContext(this.resource, this._info, this.assemble, this.hatch);
 
-  ThemeData get theme => resource.theme;
-
   OnClickListener? get onPressed => _info.onPressed;
 
   OnClickListener? get onLongPressed => _info.onLongPressed;

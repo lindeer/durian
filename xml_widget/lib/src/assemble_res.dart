@@ -9,21 +9,14 @@ class _StateColorItem {
 
 class _ResImpl implements AssembleResource {
   static final _digits = RegExp(r"\d+");
-  final ThemeData _theme;
   final _stateColors = <String, MaterialStateProperty<Color?>>{};
   final _colors = <String, Color>{};
-
-   _ResImpl(BuildContext context)
-       : _theme = Theme.of(context);
 
   @override
   Color? operator [](String? key) => key == null ? null : _saveColor(key);
 
   @override
   MaterialStateProperty<Color?>? state(String key) => _stateColors[key];
-
-  @override
-  ThemeData get theme => _theme;
 
   @override
   double? size(String? value) {

@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 
 abstract class AssembleResource {
-  ThemeData get theme;
 
   Color? operator[](String? key);
 

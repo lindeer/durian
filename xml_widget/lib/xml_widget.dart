@@ -66,7 +66,7 @@ class WidgetAssembler {
     final _info = CallbackHolder();
     _info.onPressed = onPressed;
     _info.onLongPressed = onLongPressed;
-    final res = _ResImpl(buildContext);
+    final res = _ResImpl();
     return WidgetAssembler._(buildContext, xmlBuilders, _info, res);
   }
 
