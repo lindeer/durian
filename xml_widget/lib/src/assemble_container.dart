@@ -6,7 +6,7 @@ class _XmlContainerBuilder extends CommonWidgetBuilder {
   @override
   Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
-    final res = element.context.resource;
+    final res = buildContext.resource;
     return Container(
       child: descendant.isEmpty ? null : descendant.first.child,
       alignment: _alignment[attrs['alignment']],
@@ -29,7 +29,7 @@ class _XmlInkBuilder extends CommonWidgetBuilder {
   @override
   Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
-    final res = element.context.resource;
+    final res = buildContext.resource;
     return Ink(
       child: descendant.isEmpty ? null : descendant.first.child,
       padding: _PropertyStruct.padding(res, attrs),
@@ -47,7 +47,7 @@ class _XmlMaterialButtonBuilder extends CommonWidgetBuilder {
   @override
   Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
-    final res = element.context.resource;
+    final res = buildContext.resource;
     final pressFn = element.context.onPressed;
     final pressUri = attrs["onPressed"];
     final onPressed = pressFn != null && pressUri != null ? () => pressFn.call(buildContext, pressUri) : null;
@@ -144,7 +144,7 @@ class _XmlTextButtonBuilder extends CommonWidgetBuilder {
   @override
   Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
-    final res = element.context.resource;
+    final res = buildContext.resource;
     final pressFn = element.context.onPressed;
     final pressUri = attrs["onPressed"];
     final onPressed = pressFn != null && pressUri != null ? () => pressFn.call(buildContext, pressUri) : null;
@@ -207,7 +207,7 @@ class _XmlPaddingBuilder extends CommonWidgetBuilder {
   @override
   Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
-    final res = element.context.resource;
+    final res = buildContext.resource;
     final padding = _PropertyStruct.padding(res, attrs);
     if (padding == null) {
       return ErrorWidget.withDetails(message: 'Padding must have valid value!');
@@ -225,7 +225,7 @@ class _XmlInkWellBuilder extends CommonWidgetBuilder {
   @override
   Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
-    final res = element.context.resource;
+    final res = buildContext.resource;
     final pressFn = element.context.onPressed;
     final pressUri = attrs["onTap"];
     final onPressed = pressFn != null && pressUri != null ? () => pressFn.call(buildContext, pressUri) : null;
@@ -258,7 +258,7 @@ class _XmlFloatingActionButtonBuilder extends CommonWidgetBuilder {
   @override
   Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
-    final res = element.context.resource;
+    final res = buildContext.resource;
     final handler = element.context.onPressed;
     final pressUri = attrs["onPressed"];
     final onPressed = handler != null && pressUri != null ? () => handler.call(buildContext, pressUri) : null;
@@ -396,7 +396,7 @@ class _XmlPositionedBuilder extends CommonWidgetBuilder {
   @override
   Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
-    final res = element.context.resource;
+    final res = buildContext.resource;
     if (descendant.isEmpty) {
       return ErrorWidget.withDetails(message: "Positioned should contain one child!");
     }
@@ -418,7 +418,7 @@ class _XmlSizedBoxBuilder extends CommonWidgetBuilder {
   @override
   Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
-    final res = element.context.resource;
+    final res = buildContext.resource;
 
     return SizedBox(
       child: descendant.isEmpty ? null : descendant.first.child,

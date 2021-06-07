@@ -7,7 +7,7 @@ class _XmlListViewBuilder extends CommonWidgetBuilder {
   Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final children = descendant.map((e) => e.child).toList(growable: false);
     final attrs = element.attrs;
-    final res = element.context.resource;
+    final res = buildContext.resource;
     return ListView(
       children: children,
       scrollDirection: _axis[attrs['scrollDirection']] ?? Axis.vertical,

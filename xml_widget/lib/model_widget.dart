@@ -2,6 +2,7 @@ import 'package:async/async.dart' show CancelableCompleter;
 import 'package:flutter/material.dart';
 import 'package:xml_widget/script_engine.dart';
 import 'package:xml_widget/xml_context.dart';
+import 'package:xml_widget/xml_resource.dart';
 import 'package:xml_widget/xml_widget.dart';
 
 import 'model.dart';
@@ -44,7 +45,8 @@ class _ModelState extends State<PageModelWidget> {
       _reader.loadResource(),
     ]);
     final js = requirement[0] as String;
-    final model = ScriptModel(js, engine, WidgetAssembler());
+    final res = requirement[1] as AssembleResource;
+    final model = ScriptModel(js, engine, res, WidgetAssembler());
     engine.registerBridge('_showAlertDialog', _showAlertDialog);
     engine.registerBridge('_showDialog', _showNormalDialog);
     _modelCompleter.complete(model);
@@ -214,6 +216,11 @@ extension BuildContextExt on BuildContext {
   WidgetAssembler get assemble {
     final model = PageModelWidget.of(this);
     return model.assemble;
+  }
+
+  AssembleResource get resource {
+    final model = PageModelWidget.of(this);
+    return model.resource;
   }
 }
 

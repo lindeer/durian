@@ -109,7 +109,7 @@ class _XmlScaffoldBuilder extends CommonWidgetBuilder {
   @override
   Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
-    final res = element.context.resource;
+    final res = buildContext.resource;
     final components = <String, AssembleChildElement>{};
     descendant.where((e) => e.attrs.keys.contains('scaffold')).forEach((e) {
       final key = e.attrs['scaffold'] ?? '';
@@ -147,7 +147,7 @@ class _XmlAppBarBuilder extends CommonWidgetBuilder {
   @override
   Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
-    final res = element.context.resource;
+    final res = buildContext.resource;
     final components = <String, AssembleChildElement>{};
     descendant.where((e) => e.attrs.keys.contains('appBar')).forEach((e) {
       final key = e.attrs['appBar'] ?? '';

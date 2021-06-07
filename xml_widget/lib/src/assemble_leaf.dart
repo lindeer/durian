@@ -10,7 +10,7 @@ class _XmlTextBuilder extends CommonWidgetBuilder {
   @override
   Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> children) {
     final attrs = element.attrs;
-    final res = element.context.resource;
+    final res = buildContext.resource;
     final styleAttr = attrs['style'];
     TextStyle? textStyle;
     if (styleAttr?.startsWith('@theme/') ?? false) {
@@ -40,7 +40,7 @@ class _XmlIconBuilder extends CommonWidgetBuilder {
   @override
   Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> children) {
     final attrs = element.attrs;
-    final res = element.context.resource;
+    final res = buildContext.resource;
     return Icon(
       res.icon(attrs['icon']),
       size: res.size(attrs['size']),
@@ -57,7 +57,7 @@ class _XmlImageBuilder extends CommonWidgetBuilder {
   @override
   Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
-    final resource = element.context.resource;
+    final resource = buildContext.resource;
     final src = attrs['src'] ?? '';
     File file;
     final scale = attrs['scale']?.toDouble();

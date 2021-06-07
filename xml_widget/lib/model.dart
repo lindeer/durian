@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart' show VoidCallback;
+import 'package:xml_widget/xml_resource.dart';
 import 'package:xml_widget/xml_widget.dart';
 import 'script_engine.dart';
 
@@ -8,6 +9,9 @@ abstract class PageModel {
 
   /// evaluate expression
   ScriptEngine get engine;
+
+  /// color, dimen...
+  AssembleResource get resource;
 
   /// build new widget by element
   WidgetAssembler get assemble;
@@ -25,6 +29,9 @@ class _FakeModel implements PageModel {
   static final _fake = _FakeModel();
   @override
   ScriptEngine get engine => throw UnimplementedError();
+
+  @override
+  AssembleResource get resource => AssembleResource.fake();
 
   @override
   WidgetAssembler get assemble => throw UnimplementedError();
@@ -95,18 +102,22 @@ abstract class NotifierModel implements PageModel {
 /// A model associated with an engine instance
 class ScriptModel extends NotifierModel {
   final ScriptEngine _engine;
+  final AssembleResource _resource;
   final WidgetAssembler _assembler;
 
-  ScriptModel._(this._engine, this._assembler);
+  ScriptModel._(this._engine, this._resource, this._assembler);
 
   @override
   ScriptEngine get engine => _engine;
 
   @override
+  AssembleResource get resource => _resource;
+
+  @override
   WidgetAssembler get assemble => _assembler;
 
-  factory ScriptModel(String code, ScriptEngine engine, WidgetAssembler assemble) {
-    final model = ScriptModel._(engine, assemble);
+  factory ScriptModel(String code, ScriptEngine engine, AssembleResource res, WidgetAssembler assemble) {
+    final model = ScriptModel._(engine, res, assemble);
     engine.registerBridge('_onPageCreated', model._onPageCreated);
     engine.eval(code, type: StatementType.declaration);
     engine.eval("""
@@ -160,6 +171,9 @@ class DialogModel implements PageModel {
 
   @override
   WidgetAssembler get assemble => throw UnimplementedError();
+
+  @override
+  AssembleResource get resource => throw UnimplementedError();
 
   @override
   void removeListener(listener) {
