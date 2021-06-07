@@ -11,6 +11,11 @@ class CallbackHolder {
   OnClickListener? onLongPressed;
 }
 
+class InterOperation {
+  OnClickListener? onPressed;
+  OnClickListener? onLongPressed;
+}
+
 typedef AssembleFn = Widget Function(AssembleElement element);
 typedef AssembleHatch = Widget Function(BuildContext context, AssembleElement element);
 typedef AssembleWidgetBuilder = Widget Function(BuildContext buildContext, AssembleElement element,

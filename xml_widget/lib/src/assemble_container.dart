@@ -48,11 +48,12 @@ class _XmlMaterialButtonBuilder extends CommonWidgetBuilder {
   Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final res = buildContext.resource;
-    final pressFn = element.context.onPressed;
+    final op = buildContext.interaction;
+    final pressFn = op.onPressed;
     final pressUri = attrs["onPressed"];
     final onPressed = pressFn != null && pressUri != null ? () => pressFn.call(buildContext, pressUri) : null;
     final longPressUri = attrs["onLongPressed"];
-    final longPressFn = element.context.onLongPressed;
+    final longPressFn = op.onLongPressed;
     final onLongPressed = longPressFn != null && longPressUri != null
         ? () => longPressFn.call(buildContext, longPressUri) : null;
 
@@ -120,11 +121,12 @@ class _XmlElevatedButtonBuilder extends CommonWidgetBuilder {
   @override
   Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
-    final pressFn = element.context.onPressed;
+    final op = buildContext.interaction;
+    final pressFn = op.onPressed;
     final pressUri = attrs["onPressed"];
     final onPressed = pressFn != null && pressUri != null ? () => pressFn.call(buildContext, pressUri) : null;
     final longPressUri = attrs["onLongPressed"];
-    final longPressFn = element.context.onLongPressed;
+    final longPressFn = op.onLongPressed;
     final onLongPressed = longPressFn != null && longPressUri != null
         ? () => longPressFn.call(buildContext, longPressUri) : null;
 
@@ -145,11 +147,12 @@ class _XmlTextButtonBuilder extends CommonWidgetBuilder {
   Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final res = buildContext.resource;
-    final pressFn = element.context.onPressed;
+    final op = buildContext.interaction;
+    final pressFn = op.onPressed;
     final pressUri = attrs["onPressed"];
     final onPressed = pressFn != null && pressUri != null ? () => pressFn.call(buildContext, pressUri) : null;
     final longPressUri = attrs["onLongPressed"];
-    final longPressFn = element.context.onLongPressed;
+    final longPressFn = op.onLongPressed;
     final onLongPressed = longPressFn != null && longPressUri != null
         ? () => longPressFn.call(buildContext, longPressUri) : null;
     final height = res.size(attrs['height']);
@@ -179,11 +182,12 @@ class _XmlOutlinedButtonBuilder extends CommonWidgetBuilder {
   @override
   Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
-    final pressFn = element.context.onPressed;
+    final op = buildContext.interaction;
+    final pressFn = op.onPressed;
     final pressUri = attrs["onPressed"];
     final onPressed = pressFn != null && pressUri != null ? () => pressFn.call(buildContext, pressUri) : null;
     final longPressUri = attrs["onLongPressed"];
-    final longPressFn = element.context.onLongPressed;
+    final longPressFn = op.onLongPressed;
     final onLongPressed = longPressFn != null && longPressUri != null
         ? () => longPressFn.call(buildContext, longPressUri) : null;
 
@@ -226,11 +230,12 @@ class _XmlInkWellBuilder extends CommonWidgetBuilder {
   Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final res = buildContext.resource;
-    final pressFn = element.context.onPressed;
+    final op = buildContext.interaction;
+    final pressFn = op.onPressed;
     final pressUri = attrs["onTap"];
     final onPressed = pressFn != null && pressUri != null ? () => pressFn.call(buildContext, pressUri) : null;
     final longPressUri = attrs["onLongPressed"];
-    final longPressFn = element.context.onLongPressed;
+    final longPressFn = op.onLongPressed;
     final onLongPressed = longPressFn != null && longPressUri != null
         ? () => longPressFn.call(buildContext, longPressUri) : null;
 
@@ -259,7 +264,8 @@ class _XmlFloatingActionButtonBuilder extends CommonWidgetBuilder {
   Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
     final attrs = element.attrs;
     final res = buildContext.resource;
-    final handler = element.context.onPressed;
+    final op = buildContext.interaction;
+    final handler = op.onPressed;
     final pressUri = attrs["onPressed"];
     final onPressed = handler != null && pressUri != null ? () => handler.call(buildContext, pressUri) : null;
     return FloatingActionButton(

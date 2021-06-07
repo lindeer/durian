@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart' show VoidCallback;
+import 'package:xml_widget/xml_context.dart';
 import 'package:xml_widget/xml_resource.dart';
 import 'package:xml_widget/xml_widget.dart';
 import 'script_engine.dart';
@@ -12,6 +13,9 @@ abstract class PageModel {
 
   /// color, dimen...
   AssembleResource get resource;
+
+  /// onPressed, onLongPressed, onScrolled...
+  InterOperation get interaction;
 
   /// build new widget by element
   WidgetAssembler get assemble;
@@ -32,6 +36,9 @@ class _FakeModel implements PageModel {
 
   @override
   AssembleResource get resource => AssembleResource.fake();
+
+  @override
+  InterOperation get interaction => throw UnimplementedError();
 
   @override
   WidgetAssembler get assemble => throw UnimplementedError();
@@ -103,9 +110,10 @@ abstract class NotifierModel implements PageModel {
 class ScriptModel extends NotifierModel {
   final ScriptEngine _engine;
   final AssembleResource _resource;
+  final InterOperation _operation;
   final WidgetAssembler _assembler;
 
-  ScriptModel._(this._engine, this._resource, this._assembler);
+  ScriptModel._(this._engine, this._resource, this._operation, this._assembler);
 
   @override
   ScriptEngine get engine => _engine;
@@ -114,10 +122,13 @@ class ScriptModel extends NotifierModel {
   AssembleResource get resource => _resource;
 
   @override
+  InterOperation get interaction => _operation;
+
+  @override
   WidgetAssembler get assemble => _assembler;
 
-  factory ScriptModel(String code, ScriptEngine engine, AssembleResource res, WidgetAssembler assemble) {
-    final model = ScriptModel._(engine, res, assemble);
+  factory ScriptModel(String code, ScriptEngine engine, AssembleResource res, InterOperation operation, WidgetAssembler assemble) {
+    final model = ScriptModel._(engine, res, operation, assemble);
     engine.registerBridge('_onPageCreated', model._onPageCreated);
     engine.eval(code, type: StatementType.declaration);
     engine.eval("""
@@ -149,11 +160,12 @@ class _DataStore implements ScriptEngine {
 
 class DialogModel implements PageModel {
   final _DataStore _data;
+  final PageModel _parent;
 
-  DialogModel(this._data);
+  DialogModel._(this._data, this._parent);
 
-  factory DialogModel.json(Map<String, dynamic> json) {
-    return DialogModel(_DataStore(json.cast()));
+  factory DialogModel(Map<String, dynamic> json, PageModel parent) {
+    return DialogModel._(_DataStore(json.cast()), parent);
   }
 
   String operator[](String key) => _data._data[key] ?? '';
@@ -170,10 +182,13 @@ class DialogModel implements PageModel {
   ScriptEngine get engine => _data;
 
   @override
-  WidgetAssembler get assemble => throw UnimplementedError();
+  WidgetAssembler get assemble => _parent.assemble;
 
   @override
-  AssembleResource get resource => throw UnimplementedError();
+  InterOperation get interaction => _parent.interaction;
+
+  @override
+  AssembleResource get resource => _parent.resource;
 
   @override
   void removeListener(listener) {

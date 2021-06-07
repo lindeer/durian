@@ -1,5 +1,6 @@
 import 'package:async/async.dart' show CancelableCompleter;
 import 'package:flutter/material.dart';
+import 'package:xml_widget/build_item_widget.dart';
 import 'package:xml_widget/script_engine.dart';
 import 'package:xml_widget/xml_context.dart';
 import 'package:xml_widget/xml_resource.dart';
@@ -46,9 +47,11 @@ class _ModelState extends State<PageModelWidget> {
     ]);
     final js = requirement[0] as String;
     final res = requirement[1] as AssembleResource;
-    final model = ScriptModel(js, engine, res, WidgetAssembler());
+    final op = InterOperation()
+      ..onPressed = _onPressed;
+    final model = ScriptModel(js, engine, res, op, WidgetAssembler());
     engine.registerBridge('_showAlertDialog', _showAlertDialog);
-    engine.registerBridge('_showDialog', _showNormalDialog);
+    engine.registerBridge('_showDialog', (data) => _showAssembleDialog(DialogModel(data, model)));
     _modelCompleter.complete(model);
   }
 
@@ -99,8 +102,6 @@ class _ModelState extends State<PageModelWidget> {
     widget.engine.eval("dismissDialog({action:'$action'});", type: StatementType.expression2);
   }
 
-  Future<String?> _showNormalDialog(Map<String, dynamic> data) => _showAssembleDialog(DialogModel.json(data));
-
   Future<String?> _showAssembleDialog(DialogModel model) async {
     final element = _dialogs[model["name"]];
     if (element == null) return null;
@@ -115,6 +116,17 @@ class _ModelState extends State<PageModelWidget> {
   }
 
   void _onPressed(BuildContext ctx, String uri) {
+    final item = BuildItemWidget.of(ctx);
+    final model = PageModelWidget.of(ctx);
+    final _engine = widget.engine;
+    if (uri.contains('item.') && item != null) {
+      final expr = uri.replaceAll('item', '$item');
+      _engine.eval('$expr();');
+    } else if (model is DialogModel) {
+      Navigator.of(context).pop(uri);
+    } else {
+      _engine.eval(uri, type: StatementType.call);
+    }
   }
 
   Widget _makeFutureWidget<T>(Future<T> future, Widget builder(BuildContext ctx, T data)) {
@@ -221,6 +233,11 @@ extension BuildContextExt on BuildContext {
   AssembleResource get resource {
     final model = PageModelWidget.of(this);
     return model.resource;
+  }
+
+  InterOperation get interaction {
+    final model = PageModelWidget.of(this);
+    return model.interaction;
   }
 }
 
