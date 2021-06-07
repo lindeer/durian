@@ -114,7 +114,8 @@ class _Assembler implements WidgetAssembler {
 
     int pos;
     if (name == 'ListView' && (pos = _ElementUtils.loopPosition(rawChildren)) != -1) {
-      return LoopWidget(element, pos);
+      final fn = (e) => buildContext.assemble.build(buildContext, e);
+      return LoopWidget(element, pos, fn);
     }
 
     final childrenElements = builder.childless ? _noChild

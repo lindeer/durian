@@ -71,7 +71,7 @@ class _ModelState extends State<PageModelWidget> {
       }
       return yes;
     });
-    return AssembleElement(element.name, element.context, element.raw, children);
+    return AssembleElement(element.name, element.attrs, element.raw, children);
   }
 
   void _showAlertDialog(Map<String, dynamic> data) async {

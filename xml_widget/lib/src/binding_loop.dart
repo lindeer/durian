@@ -9,10 +9,9 @@ class LoopWidget extends StatefulWidget {
 
   const LoopWidget._(this.element, this.item, this.word, this._headers, this._footers) : super();
 
-  factory LoopWidget(AssembleElement element, int pos) {
+  factory LoopWidget(AssembleElement element, int pos, AssembleFn assembleFn) {
     final children = element.children;
     final item = children[pos];
-    final assembleFn = element.context.assemble;
     final headers = pos > 0 ? _ChildMaker.merge(children.sublist(0, pos)
         .map((e) => AssembleChildElement(element, assembleFn.call(e)))
         .toList(growable: false))
@@ -81,7 +80,7 @@ class _LoopState extends State<LoopWidget> {
     final item = widget.item;
     final at = DateTime.now().microsecondsSinceEpoch;
     try {
-      return widget.element.context.hatch.call(buildContext, item);
+      return buildContext.assemble.build(buildContext, item);
     } finally {
       final cost = DateTime.now().microsecondsSinceEpoch - at;
       print("_buildItem($index) cost $cost us");
