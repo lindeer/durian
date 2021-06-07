@@ -1,18 +1,19 @@
+import 'package:async/async.dart' show CancelableCompleter;
+import 'dart:io' show File;
+
 import 'package:flutter/material.dart';
 import 'package:xml_widget/script_engine.dart';
 import 'package:xml_widget/xml_context.dart';
 import 'package:xml_widget/xml_widget.dart';
-import 'package:xml_widget/xml_resource.dart';
 
 import 'model.dart';
 export 'model.dart';
 
 class PageModelWidget extends StatefulWidget {
-  final PageModel model;
-  final AssembleElement element;
-  final String path = 'assets';
+  final ScriptEngine engine;
+  final String path;
 
-  PageModelWidget({required this.model, required this.element, Key? key}) : super(key: key);
+  PageModelWidget({required this.engine, required this.path, Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _ModelState(AssembleReader(path));
@@ -24,9 +25,10 @@ class PageModelWidget extends StatefulWidget {
 }
 
 class _ModelState extends State<PageModelWidget> {
-  late AssembleElement root;
   final _dialogs = <String, AssembleElement>{};
   final AssembleReader _reader;
+  final _modelCompleter = CancelableCompleter<ScriptModel>();
+  final _assembleCompleter = CancelableCompleter<String>();
 
   _ModelState(this._reader);
 
@@ -34,9 +36,25 @@ class _ModelState extends State<PageModelWidget> {
   void initState() {
     super.initState();
 
-    widget.model.engine.registerBridge('_showAlertDialog', _showAlertDialog);
-    widget.model.engine.registerBridge('_showDialog', _showNormalDialog);
-    root = _saveDialogElement(widget.element);
+    _makeModel(widget.engine);
+    _prepareAssemble();
+  }
+
+  void _makeModel(ScriptEngine engine) async {
+    final requirement = await Future.wait([
+      _reader.loadJS(),
+      _reader.loadResource(),
+    ]);
+    final js = requirement[0] as String;
+    final model = ScriptModel(js, engine);
+    engine.registerBridge('_showAlertDialog', _showAlertDialog);
+    engine.registerBridge('_showDialog', _showNormalDialog);
+    _modelCompleter.complete(model);
+  }
+
+  void _prepareAssemble() async {
+    final view = await File('${widget.path}/app.xml').readAsString();
+    _assembleCompleter.complete(view);
   }
 
   AssembleElement _saveDialogElement(AssembleElement element) {
@@ -77,7 +95,7 @@ class _ModelState extends State<PageModelWidget> {
       },
     );
     final action = ret ?? 'cancel';
-    widget.model.engine.eval("dismissDialog({action:'$action'});", type: StatementType.expression2);
+    widget.engine.eval("dismissDialog({action:'$action'});", type: StatementType.expression2);
   }
 
   Future<String?> _showNormalDialog(Map<String, dynamic> data) => _showAssembleDialog(DialogModel.json(data));
@@ -88,21 +106,10 @@ class _ModelState extends State<PageModelWidget> {
 
     final ret = await showDialog<String>(
         context: context,
-        builder: (ctx) {
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Material(
-              type: MaterialType.transparency,
-              child: PageModelWidget(
-                model: model,
-                element: element,
-              ),
-            ),
-          );
-        }
+        builder: (ctx) => _DialogWidget(model: model, element: element,),
     );
     final action = ret ?? 'cancel';
-    widget.model.engine.eval("dismissDialog({action:'$action'});", type: StatementType.expression2);
+    widget.engine.eval("dismissDialog({action:'$action'});", type: StatementType.expression2);
     return ret;
   }
 
@@ -134,33 +141,23 @@ class _ModelState extends State<PageModelWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final model = widget.model;
-    return _SharedModelWidget(
-      model: model,
-      child: _makeFutureWidget<AssembleResource>(_reader.loadResource(), (c, res) {
-        final callbacks = CallbackHolder();
-        final assembleContext = AssembleContext(res, callbacks, (e)=>_loading, (ctx, e)=>_loading);
-        return _AssembleContextWidget(assembleContext, _makeFutureWidget<AssembleElement>(_reader.parseElement(), (ctx, element) {
-          final ac = ctx.assembleContext;
-          /*
-          ac.attach((e) => assembler.build(ctx, e), assembler.build);
-           */
-          return Center(
-            child: Container(
-              width: 120,
-              height: 120,
-              color: Colors.blueAccent,
-            ),
-          );
-        }));
-      }),
-    );
+    return _makeFutureWidget<ScriptModel>(_modelCompleter.operation.value, (_, model) {
+      return _SharedModelWidget(
+        model: model,
+        child: _makeFutureWidget<String>(_assembleCompleter.operation.value, (ctx, data) {
+          final assembler = WidgetAssembler(buildContext: ctx);
+          final root = assembler.elementFromSource(data);
+          final e = _saveDialogElement(root);
+          return assembler.build(ctx, e);
+        }),
+      );
+    });
   }
 
   @override
   void didUpdateWidget(PageModelWidget oldWidget) {
-    if (widget.model.engine != oldWidget.model.engine) {
-      oldWidget.model.dispose();
+    if (widget.engine != oldWidget.engine) {
+      // oldWidget.model.dispose();
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -169,7 +166,13 @@ class _ModelState extends State<PageModelWidget> {
   void dispose() {
     super.dispose();
 
-    widget.model.dispose();
+    if (_modelCompleter.isCompleted) {
+      _modelCompleter.operation.value.then((model) {
+        model.dispose();
+      });
+    }
+    _modelCompleter.operation.cancel();
+    _assembleCompleter.operation.cancel();
   }
 }
 
@@ -184,32 +187,32 @@ class _SharedModelWidget extends InheritedWidget {
   }
 }
 
-class _AssembleContextWidget extends InheritedWidget {
-  final AssembleContext _context;
+class _DialogWidget extends StatelessWidget {
+  final DialogModel model;
+  final AssembleElement element;
 
-  _AssembleContextWidget(this._context, Widget child) : super(child: child);
+  const _DialogWidget({Key? key, required this.model, required this.element}) : super(key: key);
 
   @override
-  bool updateShouldNotify(covariant _AssembleContextWidget oldWidget) {
-    return oldWidget._context != _context;
-  }
-
-  static Widget _build(AssembleElement e) {
-    return SizedBox.shrink();
-  }
-
-  static Widget _build2(BuildContext ctx, AssembleElement e) => _build(e);
-
-  static AssembleContext _createFake() {
-    return AssembleContext(AssembleResource.fake(), CallbackHolder(), _build, _build2);
+  Widget build(BuildContext context) {
+    return _SharedModelWidget(
+      model: model,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: Material(
+          type: MaterialType.transparency,
+          child: Builder(
+            builder: (ctx) {
+              return _loading;
+            },
+          ),
+        ),
+      ),
+    );
   }
 }
 
 extension BuildContextExt on BuildContext {
-  AssembleContext get assembleContext {
-    final w = getElementForInheritedWidgetOfExactType<_AssembleContextWidget>()?.widget as _AssembleContextWidget?;
-    return w?._context ?? _AssembleContextWidget._createFake();
-  }
 }
 
 final _loading = Container(
