@@ -1,6 +1,5 @@
 library durian;
 
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/gestures.dart' show DragStartBehavior;
@@ -42,18 +41,12 @@ abstract class CommonWidgetBuilder implements XmlWidgetBuilder {
 
 }
 
-class WidgetAssembler {
-  final BuildContext _flutterContext;
-  final Map<String, XmlWidgetBuilder> _builders;
-  final CallbackHolder _holder;
-  final _ResImpl _res;
+const _builtinBuilders = _Assembler._builtinBuilders;
 
-  WidgetAssembler._(this._flutterContext, this._builders, this._holder, this._res);
+abstract class WidgetAssembler {
+  Widget build(BuildContext buildContext, AssembleElement element);
 
   factory WidgetAssembler({
-    required BuildContext buildContext,
-    OnClickListener? onPressed,
-    OnClickListener? onLongPressed,
     List<XmlWidgetBuilder>? builders,
   }) {
     final xmlBuilders = {
@@ -64,16 +57,14 @@ class WidgetAssembler {
         xmlBuilders[b.name] = b;
       });
     }
-    final _info = CallbackHolder();
-    _info.onPressed = onPressed;
-    _info.onLongPressed = onLongPressed;
-    final res = _ResImpl();
-    return WidgetAssembler._(buildContext, xmlBuilders, _info, res);
+    return _Assembler._(xmlBuilders);
   }
+}
 
-  AssembleContext get assembleContext => AssembleContext(_res, _holder, _assembleByElement, _hatchByElement);
+class _Assembler implements WidgetAssembler {
+  final Map<String, XmlWidgetBuilder> _builders;
 
-  _ResImpl get resource => _res;
+  const _Assembler._(this._builders);
 
   static const _noChild = const <AssembleChildElement>[];
   static const _builtinBuilders = <XmlWidgetBuilder>[
@@ -115,11 +106,7 @@ class WidgetAssembler {
     const _XmlClipOvalBuilder(),
   ];
 
-  Widget _assembleByElement(AssembleElement element) {
-    return _hatchByElement(this._flutterContext, element);
-  }
-
-  Widget _hatchByElement(BuildContext buildContext, AssembleElement element) {
+  Widget _assembleByElement(BuildContext buildContext, AssembleElement element) {
     final name = element.name;
     final builder = _builders[name] ?? const _XmlWrapBuilder();
 
@@ -131,7 +118,7 @@ class WidgetAssembler {
     }
 
     final childrenElements = builder.childless ? _noChild
-        : rawChildren.map((e) => AssembleChildElement(e, _hatchByElement(buildContext, e))).toList(growable: false);
+        : rawChildren.map((e) => AssembleChildElement(e, _assembleByElement(buildContext, e))).toList(growable: false);
 
     bool containIf = _ElementUtils.containIf(rawChildren);
 
@@ -163,65 +150,7 @@ class WidgetAssembler {
     return w;
   }
 
-  Widget fromFile(String path) {
-    final file = File('colors.xml');
-    if (file.existsSync()) {
-      _res.loadResource(file.readAsStringSync());
-    }
-    final f = File(path);
-    return fromSource(f.readAsStringSync());
-  }
-
-  Widget fromSource(String source) {
-    final doc = XmlDocument.parse(source);
-    final root = doc.rootElement;
-    final element = AssembleElement.fromXml(root, assembleContext);
-    return _assembleByElement(element);
-  }
-
-  AssembleElement elementFromSource(String source) {
-    final doc = XmlDocument.parse(source);
-    final root = doc.rootElement;
-    return AssembleElement.fromXml(root, assembleContext);
-  }
-
-  Widget build(BuildContext context, AssembleElement element) => _hatchByElement(context, element);
-
-  Future<AssembleElement> _elementFromStream(Stream<List<int>> stream) async {
-    final stack = <AssembleElement>[];
-    final context = assembleContext;
-    late AssembleElement root;
-    await stream
-        .transform(utf8.decoder)
-        .toXmlEvents()
-        .normalizeEvents()
-        .forEachEvent(
-      onStartElement: (event) {
-        final map = event.attributes.map(
-                (attr) => MapEntry(attr.name, attr.value));
-        final raw = Map.fromEntries(map.map((entry) => MapEntry(entry.key, entry.value)));
-        final element = AssembleElement(event.name, context, raw, []);
-        if (stack.isEmpty) {
-          root = element;
-        } else {
-          final parent = stack.last;
-          parent.children.add(element);
-        }
-        if (!event.isSelfClosing) {
-          stack.add(element);
-        }
-      },
-      onEndElement: (event) {
-        stack.removeLast();
-      },
-    );
-    return root;
-  }
-
-  Future<Widget> fromStream(Stream<List<int>> stream) async {
-    final element = await _elementFromStream(stream);
-    return _assembleByElement(element);
-  }
+  Widget build(BuildContext context, AssembleElement element) => _assembleByElement(context, element);
 }
 
 class _ElementUtils {

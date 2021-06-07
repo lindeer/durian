@@ -28,6 +28,13 @@ class AssembleReader {
     return AssembleElement.fromXml(root, c);
   }
 
+  static AssembleElement fromSource(String source) {
+    final doc = XmlDocument.parse(source);
+    final root = doc.rootElement;
+    final c = AssembleContext(_ResImpl(), CallbackHolder(), (e)=>SizedBox.shrink(), (c,e)=>SizedBox.shrink());
+    return AssembleElement.fromXml(root, c);
+  }
+
   Future<String> loadJS() async {
     final f = File('${_dir.path}/app.js');
     final source = await f.readAsString();

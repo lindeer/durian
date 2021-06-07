@@ -1,11 +1,16 @@
 
 import 'package:flutter/material.dart' show VoidCallback;
+import 'package:xml_widget/xml_widget.dart';
 import 'script_engine.dart';
 
 /// ViewModel for PageModelWidget
 abstract class PageModel {
 
+  /// evaluate expression
   ScriptEngine get engine;
+
+  /// build new widget by element
+  WidgetAssembler get assemble;
 
   void addListener(List<String> expressions, VoidCallback listener);
 
@@ -20,6 +25,9 @@ class _FakeModel implements PageModel {
   static final _fake = _FakeModel();
   @override
   ScriptEngine get engine => throw UnimplementedError();
+
+  @override
+  WidgetAssembler get assemble => throw UnimplementedError();
 
   @override
   void addListener(List<String> expressions, VoidCallback listener) {
@@ -87,14 +95,18 @@ abstract class NotifierModel implements PageModel {
 /// A model associated with an engine instance
 class ScriptModel extends NotifierModel {
   final ScriptEngine _engine;
+  final WidgetAssembler _assembler;
 
-  ScriptModel._(this._engine);
+  ScriptModel._(this._engine, this._assembler);
 
   @override
   ScriptEngine get engine => _engine;
 
-  factory ScriptModel(String code, ScriptEngine engine) {
-    final model = ScriptModel._(engine);
+  @override
+  WidgetAssembler get assemble => _assembler;
+
+  factory ScriptModel(String code, ScriptEngine engine, WidgetAssembler assemble) {
+    final model = ScriptModel._(engine, assemble);
     engine.registerBridge('_onPageCreated', model._onPageCreated);
     engine.eval(code, type: StatementType.declaration);
     engine.eval("""
@@ -145,6 +157,9 @@ class DialogModel implements PageModel {
 
   @override
   ScriptEngine get engine => _data;
+
+  @override
+  WidgetAssembler get assemble => throw UnimplementedError();
 
   @override
   void removeListener(listener) {

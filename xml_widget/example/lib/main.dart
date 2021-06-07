@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:xml_widget/model_widget.dart';
+import 'package:xml_widget/xml_context.dart';
 import 'package:xml_widget/xml_widget.dart';
 import 'name_card_js.dart';
 
@@ -106,14 +107,10 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final assembler = WidgetAssembler(
-      buildContext: context,
-      onPressed: _onPressed,
     );
-
-    return FutureBuilder(
-      future: rootBundle.loadString('assets/app.xml').then((s) => assembler.fromSource(s)),
-      initialData: _loading,
-      builder: (ctx, AsyncSnapshot<Widget> snapshot) {
+    return FutureBuilder<AssembleElement>(
+      future: rootBundle.loadString('assets/app.xml').then((s) => AssembleReader.fromSource(s)),
+      builder: (ctx, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
             return SingleChildScrollView(
@@ -123,8 +120,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             );
           } else {
+            final element = snapshot.requireData;
             return Material(
-              child: snapshot.requireData,
+              child: assembler.build(ctx, element),
             );
           }
         } else {

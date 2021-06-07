@@ -1,6 +1,4 @@
 import 'package:async/async.dart' show CancelableCompleter;
-import 'dart:io' show File;
-
 import 'package:flutter/material.dart';
 import 'package:xml_widget/script_engine.dart';
 import 'package:xml_widget/xml_context.dart';
@@ -28,7 +26,7 @@ class _ModelState extends State<PageModelWidget> {
   final _dialogs = <String, AssembleElement>{};
   final AssembleReader _reader;
   final _modelCompleter = CancelableCompleter<ScriptModel>();
-  final _assembleCompleter = CancelableCompleter<String>();
+  final _assembleCompleter = CancelableCompleter<AssembleElement>();
 
   _ModelState(this._reader);
 
@@ -46,14 +44,15 @@ class _ModelState extends State<PageModelWidget> {
       _reader.loadResource(),
     ]);
     final js = requirement[0] as String;
-    final model = ScriptModel(js, engine);
+    final model = ScriptModel(js, engine, WidgetAssembler());
     engine.registerBridge('_showAlertDialog', _showAlertDialog);
     engine.registerBridge('_showDialog', _showNormalDialog);
     _modelCompleter.complete(model);
   }
 
   void _prepareAssemble() async {
-    final view = await File('${widget.path}/app.xml').readAsString();
+    final element = await _reader.parseElement();
+    final view = _saveDialogElement(element);
     _assembleCompleter.complete(view);
   }
 
@@ -144,10 +143,8 @@ class _ModelState extends State<PageModelWidget> {
     return _makeFutureWidget<ScriptModel>(_modelCompleter.operation.value, (_, model) {
       return _SharedModelWidget(
         model: model,
-        child: _makeFutureWidget<String>(_assembleCompleter.operation.value, (ctx, data) {
-          final assembler = WidgetAssembler(buildContext: ctx);
-          final root = assembler.elementFromSource(data);
-          final e = _saveDialogElement(root);
+        child: _makeFutureWidget<AssembleElement>(_assembleCompleter.operation.value, (ctx, e) {
+          final assembler = ctx.assemble;
           return assembler.build(ctx, e);
         }),
       );
@@ -203,7 +200,8 @@ class _DialogWidget extends StatelessWidget {
           type: MaterialType.transparency,
           child: Builder(
             builder: (ctx) {
-              return _loading;
+              final assemble = ctx.assemble;
+              return assemble.build(ctx, element);
             },
           ),
         ),
@@ -213,6 +211,10 @@ class _DialogWidget extends StatelessWidget {
 }
 
 extension BuildContextExt on BuildContext {
+  WidgetAssembler get assemble {
+    final model = PageModelWidget.of(this);
+    return model.assemble;
+  }
 }
 
 final _loading = Container(
