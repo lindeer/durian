@@ -12,11 +12,23 @@ export 'model.dart';
 class PageModelWidget extends StatefulWidget {
   final ScriptEngine engine;
   final String path;
+  final bool? assets;
+  final AssembleResource? resource;
+  final InterOperation? operation;
+  final WidgetAssembler? assembler;
 
-  PageModelWidget({required this.engine, required this.path, Key? key}) : super(key: key);
+  PageModelWidget({
+    required this.engine,
+    required this.path,
+    this.assets,
+    this.resource,
+    this.operation,
+    this.assembler,
+    Key? key,
+  }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _ModelState(AssembleReader(path));
+  State<StatefulWidget> createState() => _ModelState(AssembleReader(path: path, assets: assets));
 
   static PageModel of(BuildContext context) {
     final widget = context.getElementForInheritedWidgetOfExactType<_SharedModelWidget>()?.widget as _SharedModelWidget?;
@@ -49,14 +61,15 @@ class _ModelState extends State<PageModelWidget> {
     final res = requirement[1] as AssembleResource;
     final op = InterOperation()
       ..onPressed = _onPressed;
-    final model = ScriptModel(js, engine, res, op, WidgetAssembler());
+    final assembler = widget.assembler ?? WidgetAssembler();
+    final model = ScriptModel(js, engine, res, op, assembler);
     engine.registerBridge('_showAlertDialog', _showAlertDialog);
     engine.registerBridge('_showDialog', (data) => _showAssembleDialog(DialogModel(data, model)));
     _modelCompleter.complete(model);
   }
 
   void _prepareAssemble() async {
-    final element = await _reader.parseElement();
+    final element = await _reader.loadElement();
     final view = _saveDialogElement(element);
     _assembleCompleter.complete(view);
   }

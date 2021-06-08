@@ -17,6 +17,7 @@ class _NameCardState extends State<NameCardJSPage> {
       child: PageModelWidget(
         engine: _engine,
         path: 'assets',
+        assets: true,
       ),
     );
   }

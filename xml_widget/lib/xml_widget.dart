@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/gestures.dart' show DragStartBehavior;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:xml/xml.dart';
 import 'package:xml/xml_events.dart';
 import 'model_widget.dart';

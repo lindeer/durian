@@ -1,28 +1,20 @@
 part of durian;
 
-class AssembleReader {
-  final Directory _dir;
+abstract class AssembleReader {
+  Future<AssembleResource> loadResource();
 
-  AssembleReader._(this._dir);
+  Future<AssembleElement> loadElement();
 
-  factory AssembleReader(String path) {
-    return AssembleReader._(Directory(path));
+  Future<String> loadJS();
+
+  factory AssembleReader({required String path, bool? assets}) {
+    return (assets ?? false) ? _AssetReader(path) : _FileReader(path);
   }
 
   static AssembleResource fromRaw(String source) {
     final res = _ResImpl();
     res.loadResource(source);
     return res;
-  }
-
-  Future<AssembleResource> loadResource() async {
-    final f = File('${_dir.path}/colors.xml');
-    if (f.existsSync()) {
-      final str = await f.readAsString();
-      return fromRaw(str);
-    } else {
-      return _ResImpl();
-    }
   }
 
   static AssembleElement _fromXml(XmlElement e) {
@@ -36,23 +28,65 @@ class AssembleReader {
     return AssembleElement(name, attrs, raw, children);
   }
 
-  Future<AssembleElement> parseElement() async {
-    final f = File('${_dir.path}/app.xml');
-    final source = await f.readAsString();
-    final doc = XmlDocument.parse(source);
-    final root = doc.rootElement;
-    return _fromXml(root);
-  }
-
   static AssembleElement fromSource(String source) {
     final doc = XmlDocument.parse(source);
     final root = doc.rootElement;
     return _fromXml(root);
   }
+}
 
+class _FileReader implements AssembleReader {
+  final String path;
+
+  const _FileReader(this.path);
+
+  @override
+  Future<AssembleResource> loadResource() async {
+    final f = File('$path/colors.xml');
+    if (f.existsSync()) {
+      final str = await f.readAsString();
+      return AssembleReader.fromRaw(str);
+    } else {
+      return _ResImpl();
+    }
+  }
+
+  @override
+  Future<AssembleElement> loadElement() async {
+    final f = File('$path/app.xml');
+    final source = await f.readAsString();
+    return AssembleReader.fromSource(source);
+  }
+
+  @override
   Future<String> loadJS() async {
-    final f = File('${_dir.path}/app.js');
+    final f = File('$path/app.js');
     final source = await f.readAsString();
     return source;
   }
+}
+
+class _AssetReader implements AssembleReader {
+  final String path;
+
+  const _AssetReader(this.path);
+
+  @override
+  Future<AssembleResource> loadResource() async {
+    try {
+      final str = await rootBundle.loadString('$path/colors.xml');
+      return AssembleReader.fromRaw(str);
+    } catch (_) {
+      return _ResImpl();
+    }
+  }
+
+  @override
+  Future<AssembleElement> loadElement() async {
+    final source = await rootBundle.loadString('$path/app.xml');
+    return AssembleReader.fromSource(source);
+  }
+
+  @override
+  Future<String> loadJS() => rootBundle.loadString('$path/app.js');
 }
