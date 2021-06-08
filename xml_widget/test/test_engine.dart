@@ -4,6 +4,8 @@ import 'package:xml_widget/js_engine.dart';
 import 'package:xml_widget/model_widget.dart';
 import 'package:xml_widget/script_engine.dart';
 import 'package:xml_widget/src/binding.dart';
+import 'package:xml_widget/xml_context.dart';
+import 'package:xml_widget/xml_resource.dart';
 import 'package:xml_widget/xml_widget.dart';
 
 void main() {
@@ -36,18 +38,18 @@ void main() {
 let size = 0;
       """,
       JSEngine(prefix: ''),
+      AssembleResource.fake(),
+      InterOperation(),
+      WidgetAssembler(),
     );
     await tester.pumpWidget(MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: PageModelWidget(
-        model: model,
-        child: Builder(builder: (ctx) {
-          final assembler = WidgetAssembler(buildContext: ctx);
-          return assembler.fromSource(xml);
-        },),
+      home: TestModelWidget(
+        model,
+        AssembleReader.fromSource(xml),
       ),
     ));
     await tester.pumpAndSettle();

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:xml_widget/model_widget.dart';
 import 'package:xml_widget/script_engine.dart';
+import 'package:xml_widget/xml_context.dart';
+import 'package:xml_widget/xml_resource.dart';
 import 'package:xml_widget/xml_widget.dart';
 import 'package:xml_widget/src/binding.dart';
 
@@ -22,7 +24,9 @@ class _TestEngine implements ScriptEngine {
 
 class _TestMode extends NotifierModel {
   final _TestEngine _engine;
-  _TestMode(this._engine);
+  final WidgetAssembler _assembler;
+  final _res = AssembleResource.fake();
+  _TestMode(this._engine, this._assembler);
 
   @override
   ScriptEngine get engine => _engine;
@@ -34,9 +38,19 @@ class _TestMode extends NotifierModel {
       notifyDataChanged({key: value});
     }
   }
+
+  @override
+  WidgetAssembler get assemble => _assembler;
+
+  @override
+  InterOperation get interaction => throw UnimplementedError();
+
+  @override
+  AssembleResource get resource => _res;
 }
 
 void main() {
+  final assembler = WidgetAssembler();
   testWidgets('test template-if', (WidgetTester tester) async {
     const xml = """
     <Column>
@@ -53,19 +67,16 @@ void main() {
       "condition == 1" : "false",
       "condition == 2" : "true",
     });
-    final engine = _TestMode(e);
+    final engine = _TestMode(e, assembler);
 
     await tester.pumpWidget(MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: PageModelWidget(
-        model: engine,
-        child: Builder(builder: (ctx) {
-          final assembler = WidgetAssembler(buildContext: ctx);
-          return assembler.fromSource(xml);
-        },),
+      home: TestModelWidget(
+        engine,
+        AssembleReader.fromSource(xml),
       ),
     ));
     await tester.pumpAndSettle();
@@ -98,18 +109,15 @@ void main() {
     final e = _TestEngine({
       "condition == 1" : "false",
     });
-    final engine = _TestMode(e);
+    final engine = _TestMode(e, assembler);
     await tester.pumpWidget(MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: PageModelWidget(
-        model: engine,
-        child: Builder(builder: (ctx) {
-          final assembler = WidgetAssembler(buildContext: ctx);
-          return assembler.fromSource(xml);
-        },),
+      home: TestModelWidget(
+        engine,
+        AssembleReader.fromSource(xml),
       ),
     ));
     await tester.pumpAndSettle();
@@ -143,18 +151,15 @@ void main() {
       "condition == 1" : "false",
       "condition == 2" : "true",
     });
-    final engine = _TestMode(e);
+    final engine = _TestMode(e, assembler);
     await tester.pumpWidget(MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: PageModelWidget(
-        model: engine,
-        child: Builder(builder: (ctx) {
-          final assembler = WidgetAssembler(buildContext: ctx);
-          return assembler.fromSource(xml);
-        },),
+      home: TestModelWidget(
+        engine,
+        AssembleReader.fromSource(xml),
       ),
     ));
     await tester.pumpAndSettle();
@@ -191,18 +196,15 @@ void main() {
       "condition == 2" : "true",
       "condition == 3" : "true",
     });
-    final engine = _TestMode(e);
+    final engine = _TestMode(e, assembler);
     await tester.pumpWidget(MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: PageModelWidget(
-        model: engine,
-        child: Builder(builder: (ctx) {
-          final assembler = WidgetAssembler(buildContext: ctx);
-          return assembler.fromSource(xml);
-        },),
+      home: TestModelWidget(
+        engine,
+        AssembleReader.fromSource(xml),
       ),
     ));
     await tester.pumpAndSettle();
@@ -251,18 +253,15 @@ void main() {
       "condition == 1" : "true",
       "condition == 2" : "false",
     });
-    final engine = _TestMode(e);
+    final engine = _TestMode(e, assembler);
     await tester.pumpWidget(MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: PageModelWidget(
-        model: engine,
-        child: Builder(builder: (ctx) {
-          final assembler = WidgetAssembler(buildContext: ctx);
-          return assembler.fromSource(xml);
-        },),
+      home: TestModelWidget(
+        engine,
+        AssembleReader.fromSource(xml),
       ),
     ));
     await tester.pumpAndSettle();
@@ -305,18 +304,15 @@ void main() {
       "condition == 1" : "true",
       "condition == 2" : "true",
     });
-    final engine = _TestMode(e);
+    final engine = _TestMode(e, assembler);
     await tester.pumpWidget(MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: PageModelWidget(
-        model: engine,
-        child: Builder(builder: (ctx) {
-          final assembler = WidgetAssembler(buildContext: ctx);
-          return assembler.fromSource(xml);
-        },),
+      home: TestModelWidget(
+        engine,
+        AssembleReader.fromSource(xml),
       ),
     ));
     await tester.pumpAndSettle();

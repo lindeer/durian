@@ -198,11 +198,11 @@ class _SharedModelWidget extends InheritedWidget {
   }
 }
 
-class _DialogWidget extends StatelessWidget {
-  final DialogModel model;
+class _AssemblePage extends StatelessWidget {
+  final PageModel model;
   final AssembleElement element;
 
-  const _DialogWidget({Key? key, required this.model, required this.element}) : super(key: key);
+  const _AssemblePage(this.model, this.element, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -222,6 +222,15 @@ class _DialogWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+class _DialogWidget extends _AssemblePage {
+  const _DialogWidget({required DialogModel model, required AssembleElement element}) : super(model, element);
+}
+
+@visibleForTesting
+class TestModelWidget extends _AssemblePage {
+  const TestModelWidget(PageModel model, AssembleElement element) : super(model, element);
 }
 
 extension BuildContextExt on BuildContext {

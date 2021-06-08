@@ -7,13 +7,14 @@ import 'package:mockito/mockito.dart';
 class _MockBuildContext extends Mock implements BuildContext {}
 
 void main() {
-  final assembler = WidgetAssembler(buildContext: _MockBuildContext());
+  final assembler = WidgetAssembler();
 
   test('test text widget - plain text', () {
     const xml = """
 <Text flutter:data="widget from xml"></Text>
 """;
-    final widget = assembler.fromSource(xml);
+    final element = AssembleReader.fromSource(xml);
+    final widget = assembler.build(_MockBuildContext(), element);
     expect(widget is Text, true);
     final w = widget as Text;
     expect(w.data, 'widget from xml');
@@ -27,7 +28,8 @@ void main() {
   flutter:softWrap="true"
   flutter:textDirection="rtl"/>
 """;
-    final widget = assembler.fromSource(xml);
+    final element = AssembleReader.fromSource(xml);
+    final widget = assembler.build(_MockBuildContext(), element);
     expect(widget is Text, true);
     final w = widget as Text;
     expect(w.data, 'widget from xml');
@@ -35,20 +37,6 @@ void main() {
     expect(w.softWrap, true);
     expect(w.textDirection, TextDirection.rtl);
     expect(w.textAlign, null);
-  });
-
-  test('test text style', () {
-    const xml = """
-<Text
-  flutter:data="widget from xml"
-  flutter:style.color="#777"
-  flutter:style.fontSize="14sp"/>
-""";
-    final widget = assembler.fromSource(xml);
-    expect(widget is Text, true);
-    final w = widget as Text;
-    final style = w.style;
-    expect(style?.fontSize, 14);
   });
 
   test('test color resource', () {
@@ -66,8 +54,7 @@ void main() {
 
 </resources>
 """;
-    final res = assembler.resource;
-    res.loadResource(xml);
+    final res = AssembleReader.fromRaw(xml);
     expect(res['colorPrimary'], Color(0xffffffff));
     expect(res['orange']?.value, testColors['orange']?.value);
     final state = res.state('color_state_text');
@@ -96,8 +83,7 @@ void main() {
 
 </resources>
 """;
-    final res = assembler.resource;
-    res.loadResource(xml);
+    final res = AssembleReader.fromRaw(xml);
 
     final state = res.state('color_state_text');
     final c1 = state?.resolve({MaterialState.hovered, MaterialState.disabled, MaterialState.focused});

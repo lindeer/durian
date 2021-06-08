@@ -9,14 +9,20 @@ class AssembleReader {
     return AssembleReader._(Directory(path));
   }
 
+  static AssembleResource fromRaw(String source) {
+    final res = _ResImpl();
+    res.loadResource(source);
+    return res;
+  }
+
   Future<AssembleResource> loadResource() async {
     final f = File('${_dir.path}/colors.xml');
-    final res = _ResImpl();
     if (f.existsSync()) {
-      final source = await f.readAsString();
-      res.loadResource(source);
+      final str = await f.readAsString();
+      return fromRaw(str);
+    } else {
+      return _ResImpl();
     }
-    return res;
   }
 
   static AssembleElement _fromXml(XmlElement e) {
