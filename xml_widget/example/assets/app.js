@@ -29,7 +29,7 @@ function Page(options) {
     }
 
     showDialog(name, obj) {
-      obj.name = name;
+      obj._name_ = name;
       if (!this.dialogs) this.dialogs = [];
       let dlg = this.dialogs;
       obj.key = dlg.length.toString();

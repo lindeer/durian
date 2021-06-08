@@ -137,6 +137,7 @@ class _DataStore implements ScriptEngine {
 }
 
 class DialogModel implements PageModel {
+  static const KEY_IDENTIFIER = '_name_';
   final _DataStore _data;
   final PageModel _parent;
 

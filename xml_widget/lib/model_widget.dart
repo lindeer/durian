@@ -143,7 +143,7 @@ function notifyChange(data) {
   }
 
   Future<String?> _showAssembleDialog(DialogModel model) async {
-    final element = _dialogs[model["name"]];
+    final element = _dialogs[model[DialogModel.KEY_IDENTIFIER]];
     if (element == null) return null;
 
     final ret = await showDialog<String>(
