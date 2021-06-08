@@ -85,10 +85,7 @@ abstract class NotifierModel implements PageModel {
     _listeners.clear();
   }
 
-  void _onPageCreated(Map<String, dynamic> result) {
-  }
-
-  void _onDataChanged(Map<String, dynamic> result) {
+  void notifyDataChanged(Map<String, dynamic> result) {
     final callbacks = <VoidCallback>{};
     for (final key in result.keys) {
       _listeners.keys
@@ -100,10 +97,6 @@ abstract class NotifierModel implements PageModel {
     }
     callbacks.forEach((cb) => cb());
   }
-
-  void notifyDataChanged(Map<String, dynamic> data) {
-    _onDataChanged(data);
-  }
 }
 
 /// A model associated with an engine instance
@@ -113,7 +106,7 @@ class ScriptModel extends NotifierModel {
   final InterOperation _operation;
   final WidgetAssembler _assembler;
 
-  ScriptModel._(this._engine, this._resource, this._operation, this._assembler);
+  ScriptModel(this._engine, this._resource, this._operation, this._assembler);
 
   @override
   ScriptEngine get engine => _engine;
@@ -126,21 +119,6 @@ class ScriptModel extends NotifierModel {
 
   @override
   WidgetAssembler get assemble => _assembler;
-
-  factory ScriptModel(String code, ScriptEngine engine, AssembleResource res, InterOperation operation, WidgetAssembler assemble) {
-    final model = ScriptModel._(engine, res, operation, assemble);
-    engine.registerBridge('_onPageCreated', model._onPageCreated);
-    engine.eval(code, type: StatementType.declaration);
-    engine.eval("""
-function notifyChange(data) {
-  sendMessage('_onDataChanged', JSON.stringify(data));
-}
-    """,
-      type: StatementType.declaration,
-    );
-    engine.registerBridge('_onDataChanged', model._onDataChanged);
-    return model;
-  }
 }
 
 class _DataStore implements ScriptEngine {

@@ -48,21 +48,48 @@ class _ModelState extends State<PageModelWidget> {
   void initState() {
     super.initState();
 
-    _makeModel(widget.engine);
+    _makeModel();
     _prepareAssemble();
   }
 
-  void _makeModel(ScriptEngine engine) async {
+  void _onPageCreated(Map<String, dynamic> result) {
+  }
+
+  void _onPageBuilt() {
+  }
+
+  Future<ScriptEngine> _prepareEngine() async {
+    final t1 = DateTime.now().microsecondsSinceEpoch;
+    final js = await _reader.loadJS();
+    final t2 = DateTime.now().microsecondsSinceEpoch;
+    final engine = widget.engine;
+    engine.registerBridge('_onPageCreated', _onPageCreated);
+    engine.eval(js, type: StatementType.declaration);
+    engine.eval("""
+function notifyChange(data) {
+  sendMessage('_onDataChanged', JSON.stringify(data));
+}
+    """,
+      type: StatementType.declaration,
+    );
+    final t3 = DateTime.now().microsecondsSinceEpoch;
+    print("_prepareEngine: js=${t2 - t1} us, eval=${t3 - t2} us");
+    return engine;
+  }
+
+  void _makeModel() async {
     final requirement = await Future.wait([
-      _reader.loadJS(),
+      _prepareEngine(),
       _reader.loadResource(),
     ]);
-    final js = requirement[0] as String;
+    final engine = requirement[0] as ScriptEngine;
     final res = requirement[1] as AssembleResource;
     final op = InterOperation()
       ..onPressed = _onPressed;
     final assembler = widget.assembler ?? WidgetAssembler();
-    final model = ScriptModel(js, engine, res, op, assembler);
+
+    final model = ScriptModel(engine, res, op, assembler);
+    engine.registerBridge('_onDataChanged', (data) => model.notifyDataChanged(data));
     engine.registerBridge('_showAlertDialog', _showAlertDialog);
     engine.registerBridge('_showDialog', (data) => _showAssembleDialog(DialogModel(data, model)));
     _modelCompleter.complete(model);
