@@ -20,6 +20,9 @@ abstract class PageModel {
   /// build new widget by element
   WidgetAssembler get assemble;
 
+  /// separate interface to get list size of given key
+  int sizeOf(String key);
+
   void addListener(List<String> expressions, VoidCallback listener);
 
   void removeListener(VoidCallback listener);
@@ -42,6 +45,9 @@ class _FakeModel implements PageModel {
 
   @override
   WidgetAssembler get assemble => throw UnimplementedError();
+
+  @override
+  int sizeOf(String key) => 0;
 
   @override
   void addListener(List<String> expressions, VoidCallback listener) {
@@ -119,12 +125,17 @@ class ScriptModel extends NotifierModel {
 
   @override
   WidgetAssembler get assemble => _assembler;
+
+  @override
+  int sizeOf(String key) => int.tryParse(engine.eval('$key.length')) ?? 0;
 }
 
 class _DataStore implements ScriptEngine {
-  final Map<String, String> _data;
+  final Map<String, dynamic> _data;
 
   _DataStore(this._data);
+
+  static const _null = 'null';
 
   @override
   String eval(String statement, {StatementType type = StatementType.expression}) {
@@ -144,10 +155,10 @@ class DialogModel implements PageModel {
   DialogModel._(this._data, this._parent);
 
   factory DialogModel(Map<String, dynamic> json, PageModel parent) {
-    return DialogModel._(_DataStore(json.cast()), parent);
+    return DialogModel._(_DataStore(json), parent);
   }
 
-  String operator[](String key) => _data._data[key] ?? '';
+  String operator[](String key) => _data._data[key] as String? ?? _DataStore._null;
 
   @override
   void addListener(List<String> expressions, listener) {
@@ -168,6 +179,12 @@ class DialogModel implements PageModel {
 
   @override
   AssembleResource get resource => _parent.resource;
+
+  @override
+  int sizeOf(String key) {
+    final l = _data._data[key] as List?;
+    return l?.length ?? 0;
+  }
 
   @override
   void removeListener(listener) {

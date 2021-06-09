@@ -47,6 +47,9 @@ class _TestMode extends NotifierModel {
 
   @override
   AssembleResource get resource => _res;
+
+  @override
+  int sizeOf(String key) => (_engine.map[key] as List?)?.length ?? 0;
 }
 
 void main() {

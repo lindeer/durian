@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:xml/xml.dart';
 import 'package:xml/xml_events.dart';
+import 'build_item_widget.dart' show ItemMetaData;
 import 'model_widget.dart';
 import 'src/_icons.dart';
 import 'xml_context.dart';
@@ -68,6 +69,13 @@ class _Assembler implements WidgetAssembler {
   const _Assembler._(this._builders);
 
   static const _noChild = const <AssembleChildElement>[];
+  static const _supportFor = const [
+    'Column',
+    'Row',
+    'Wrap',
+    'ListView',
+    'ListBody',
+  ];
   static const _builtinBuilders = <XmlWidgetBuilder>[
     const _XmlTextBuilder(),
     const _XmlColumnBuilder(),
@@ -112,15 +120,43 @@ class _Assembler implements WidgetAssembler {
     final builder = _builders[name] ?? const _XmlWrapBuilder();
 
     final rawChildren = element.children;
+    List<AssembleChildElement> childrenElements;
 
     int pos;
-    if (name == 'ListView' && (pos = _ElementUtils.loopPosition(rawChildren)) != -1) {
-      final fn = (e) => buildContext.assemble.build(buildContext, e);
-      return LoopWidget(element, pos, fn);
-    }
+    if (_supportFor.contains(name) && (pos = _ElementUtils.loopPosition(rawChildren)) != -1) {
+      final model = PageModelWidget.of(buildContext);
+      final assemble = model.assemble;
+      final children = element.children;
+      final headers = pos > 0 ? children.sublist(0, pos)
+          .map((e) => AssembleChildElement(e, assemble.build(buildContext, e)))
+          .toList(growable: false)
+          : null;
+      final footers = pos < children.length - 1  ? children.sublist(pos + 1)
+          .map((e) => AssembleChildElement(e, assemble.build(buildContext, e)))
+          .toList(growable: false)
+          : null;
+      final item = children[pos];
+      final key = DataBinding.matchKey(item.raw['flutter:for']) ?? '';
+      if (name == 'ListView') {
+        return LoopWidget(
+          item,
+          key,
+          headers: headers,
+          footers: footers,
+        );
+      }
 
-    final childrenElements = builder.childless ? _noChild
-        : rawChildren.map((e) => AssembleChildElement(e, _assembleByElement(buildContext, e))).toList(growable: false);
+      final size = model.sizeOf(key);
+      childrenElements = [
+        ...?headers,
+        for (int i = 0; i < size; i++)
+          AssembleChildElement(item, LoopWidget.makeItemWidget(buildContext, item, ItemMetaData(key, i))),
+        ...?footers,
+      ];
+    } else {
+      childrenElements = builder.childless ? _noChild
+          : rawChildren.map((e) => AssembleChildElement(e, _assembleByElement(buildContext, e))).toList(growable: false);
+    }
 
     bool containIf = _ElementUtils.containIf(rawChildren);
 

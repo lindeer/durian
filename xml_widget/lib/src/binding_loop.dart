@@ -1,32 +1,32 @@
 part of durian.binding;
 
 class LoopWidget extends StatefulWidget {
-  final AssembleElement element;
   final AssembleElement item;
-  final List<_ChildMaker>? _headers;
-  final List<_ChildMaker>? _footers;
+  final List<AssembleChildElement>? headers;
+  final List<AssembleChildElement>? footers;
   final String word;
 
-  const LoopWidget._(this.element, this.item, this.word, this._headers, this._footers) : super();
+  const LoopWidget(this.item, this.word, {Key? key, this.headers, this.footers}) : super(key: key);
 
-  factory LoopWidget(AssembleElement element, int pos, AssembleFn assembleFn) {
-    final children = element.children;
-    final item = children[pos];
-    final headers = pos > 0 ? _ChildMaker.merge(children.sublist(0, pos)
-        .map((e) => AssembleChildElement(element, assembleFn.call(e)))
-        .toList(growable: false))
-        : null;
-    final footers = pos < children.length - 1 ? _ChildMaker.merge(children.sublist(pos + 1)
-        .map((e) => AssembleChildElement(element, assembleFn.call(e)))
-        .toList(growable: false))
-        : null;
-    final key = item.raw['flutter:for'] ?? '';
-    final word = DataBinding.matchKey(key) ?? key;
-    return LoopWidget._(element, item, word, headers, footers);
+  static Widget makeItemWidget(BuildContext context, AssembleElement item, ItemMetaData data) {
+    return BuildItemWidget(
+      data: data,
+      builder: (ctx) {
+        final at = DateTime.now().microsecondsSinceEpoch;
+        try {
+          final engine = PageModelWidget.of(ctx).engine;
+          engine.eval("var item = ${data.name}[${data.pos}];", type: StatementType.assign,);
+          return ctx.assemble.build(ctx, item);
+        } finally {
+          final cost = DateTime.now().microsecondsSinceEpoch - at;
+          print("_buildItem(${data.pos}) cost $cost us");
+        }
+      },
+    );
   }
 
   @override
-  _LoopState createState() => _LoopState();
+  State<StatefulWidget> createState() => _LoopState();
 }
 
 class _LoopState extends State<LoopWidget> {
@@ -45,17 +45,16 @@ class _LoopState extends State<LoopWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final headers = widget._headers?.map((e) => e.make(context)).toList(growable: false);
-    final footers = widget._footers?.map((e) => e.make(context)).toList(growable: false);
+    final headers = widget.headers;
+    final footers = widget.footers;
     final head = headers?.length ?? 0;
 
-    final engine = PageModelWidget.of(context).engine;
-    final size = int.tryParse(engine.eval('${widget.word}.length')) ?? 0;
-
+    final model = PageModelWidget.of(context);
+    final size = model.sizeOf(widget.word);
     final len = head + size;
     final tail = footers?.length ?? 0;
 
-    print("LoopState build from $_from");
+    print("LoopState(${widget.word}) build from $_from");
     return ListView.builder(
       itemCount: len + tail,
       itemBuilder: (BuildContext ctx, int index) {
@@ -63,28 +62,13 @@ class _LoopState extends State<LoopWidget> {
           return headers![index].child;
         } else if (index < len) {
           int pos = index - head;
-          engine.eval("var item = ${widget.word}[$pos];", type: StatementType.assign,);
-          return BuildItemWidget(
-            data: ItemMetaData(widget.word, pos),
-            builder: (BuildContext ctx) => _buildItem(ctx, pos),
-          );
+          return LoopWidget.makeItemWidget(ctx, widget.item, ItemMetaData(widget.word, pos));
         } else {
           int pos = index - len;
           return footers![pos].child;
         }
       },
     );
-  }
-
-  Widget _buildItem(BuildContext buildContext, int index) {
-    final item = widget.item;
-    final at = DateTime.now().microsecondsSinceEpoch;
-    try {
-      return buildContext.assemble.build(buildContext, item);
-    } finally {
-      final cost = DateTime.now().microsecondsSinceEpoch - at;
-      print("_buildItem($index) cost $cost us");
-    }
   }
 
   void _update() {
