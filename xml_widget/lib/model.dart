@@ -137,9 +137,42 @@ class _DataStore implements ScriptEngine {
 
   static const _null = 'null';
 
+  void _assignValue(String expr) {
+    int pos = expr.indexOf('=');
+
+    if (pos > 0) {
+      final left = expr.substring(0, pos);
+      final right = expr.substring(pos + 1);
+      final key = left.contains('item') ? 'item' : left.replaceFirst('var ', '').trim();
+      final indexLeft = right.lastIndexOf('[');
+      final indexRight = right.lastIndexOf(']');
+
+      if (indexLeft < indexRight) {
+        final index = int.tryParse(right.substring(indexLeft + 1, indexRight)) ?? -1;
+        final name = right.substring(0, indexLeft).trim();
+        final list = _data[name] as List?;
+        _data[key] = list?[index];
+      }
+    }
+  }
+
+  String? _getValue(String key) {
+    Map<String, dynamic> data = _data;
+    final keys = key.split('.');
+    final k = keys.last;
+    for (int i = 0; i < keys.length - 1; i++) {
+      data = data[keys[i]] as Map<String, dynamic>;
+    }
+    return data[k];
+  }
+
   @override
   String eval(String statement, {StatementType type = StatementType.expression}) {
-    return _data[statement] ?? '';
+    if (type == StatementType.assign) {
+      _assignValue(statement);
+      return _null;
+    }
+    return _getValue(statement) ?? _null;
   }
 
   @override

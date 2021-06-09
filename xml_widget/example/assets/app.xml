@@ -171,8 +171,9 @@
         <Column flutter:crossAxisAlignment="stretch">
           <TextButton
             flutter:height="56"
-            flutter:onPressed="copyNickname">
-            <Text flutter:data="{{title}}"/>
+            flutter:for="{{options}}"
+            flutter:onPressed="item.onClick">
+            <Text flutter:data="{{item.text}}"/>
           </TextButton>
         </Column>
       </Container>

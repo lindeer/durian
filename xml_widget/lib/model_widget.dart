@@ -139,7 +139,7 @@ function notifyChange(data) {
       },
     );
     final action = ret ?? 'cancel';
-    widget.engine.eval("dismissDialog({action:'$action'});", type: StatementType.expression2);
+    widget.engine.eval("dismissDialog((dlg) => { dlg.$action?.(); });", type: StatementType.expression2);
   }
 
   Future<String?> _showAssembleDialog(DialogModel model) async {
@@ -151,7 +151,7 @@ function notifyChange(data) {
         builder: (ctx) => _DialogWidget(model: model, element: element,),
     );
     final action = ret ?? 'cancel';
-    widget.engine.eval("dismissDialog({action:'$action'});", type: StatementType.expression2);
+    widget.engine.eval("dismissDialog((dlg) => { dlg.$action?.(); });", type: StatementType.expression2);
     return ret;
   }
 
@@ -159,13 +159,18 @@ function notifyChange(data) {
     final item = BuildItemWidget.of(ctx);
     final model = PageModelWidget.of(ctx);
     final _engine = widget.engine;
-    if (uri.contains('item.') && item != null) {
-      final expr = uri.replaceAll('item', '$item');
-      _engine.eval('$expr();');
-    } else if (model is DialogModel) {
+    if (model is DialogModel) {
+      if (uri.contains('item.') && item != null) {
+        uri = uri.replaceAll('item', '$item');
+      }
       Navigator.of(context).pop(uri);
     } else {
-      _engine.eval(uri, type: StatementType.call);
+      if (uri.contains('item.') && item != null) {
+        final expr = uri.replaceAll('item', '$item');
+        _engine.eval('$expr();');
+      } else {
+        _engine.eval(uri, type: StatementType.call);
+      }
     }
   }
 

@@ -22,10 +22,10 @@ function Page(options) {
       sendMessage('_showAlertDialog', JSON.stringify(obj));
     }
 
-    dismissDialog(res) {
+    dismissDialog(cb) {
       let dlg = this.dialogs.pop();
+      cb(dlg);
       dlg.dismiss?.();
-      dlg[res.action]?.(res);
     }
 
     showDialog(name, obj) {
@@ -67,7 +67,19 @@ setTimeout(() => {
     label: '昵称',
     name: model.nickname,
     onClick: () => {
+      let items = [{
+        text: '复制邮箱地址',
+        onClick() {
+          console.log("click copy");
+        },
+      }, {
+        text: '发邮件',
+        onClick() {
+          console.log("click send");
+        },
+      }];
       page.showDialog('name_card_select', {
+        options: items,
         title: '复制昵称',
         copyNickname(res) {
           console.log("click copyNickname: " + JSON.stringify(res));
