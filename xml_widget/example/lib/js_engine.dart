@@ -8,7 +8,7 @@ class JSEngine implements ScriptEngine {
 
   JSEngine._(this._rt, this.domain);
 
-  factory JSEngine({String prefix = 'page.data.'}) {
+  factory JSEngine({String prefix = 'page'}) {
     final runtime = js.getJavascriptRuntime(xhr: false);
     final engine = JSEngine._(runtime, prefix);
     engine._exprHandler[StatementType.expression] = engine._prefix;
@@ -21,22 +21,22 @@ class JSEngine implements ScriptEngine {
 
   static final _reg = RegExp(r'[_a-zA-Z]\w*(\.\w+)*');
 
-  String _prefix(String expr) => expr.startsWith('item.') ? expr : "$domain$expr";
+  String _prefix(String expr) => expr.startsWith('item.') ? expr : "$domain.data.$expr";
 
   String _parseField(String expr) {
     return expr.replaceAllMapped(_reg, (m) {
       final name = m[0] ?? '';
-      return name == 'item' ? name : "$domain$name";
+      return name == 'item' ? name : "$domain.data.$name";
     });
   }
 
-  String _parseCall(String expr) => expr.startsWith('item.') ?  '$expr();' :  "page.$expr();";
+  String _parseCall(String expr) => expr.startsWith('item.') ?  '$expr();' :  "$domain.$expr();";
 
   String _parseAssign(String expr) {
     int pos = expr.indexOf('=') + 1;
 
     if (pos > 0) {
-      final r = _parseField(expr.substring(pos));
+      final r = '$domain.data.${expr.substring(pos).trim()}';
       final ret = "${expr.substring(0, pos)}$r";
       return ret;
     } else {
@@ -44,7 +44,7 @@ class JSEngine implements ScriptEngine {
     }
   }
 
-  String _prefix2(String expr) => "page.$expr";
+  String _prefix2(String expr) => "$domain.$expr";
 
   @override
   String eval(String statement, {StatementType type = StatementType.expression}) {
