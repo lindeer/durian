@@ -12,13 +12,15 @@ class _TestEngine implements ScriptEngine {
   _TestEngine(this.map);
 
   @override
-  String eval(String statement, {StatementType type = StatementType.expression}) {
+  String eval(
+    String statement, {
+    StatementType type = StatementType.expression,
+  }) {
     return map[statement] ?? "{{$statement}}";
   }
 
   @override
-  void registerBridge(String name, void Function(Map<String, dynamic> result) bridge) {
-  }
+  void registerBridge(String name, void bridge(Map<String, dynamic> result)) {}
 }
 
 class _TestMode extends NotifierModel {
@@ -99,9 +101,9 @@ void main() {
 """;
 
     final e = _TestEngine({
-      "condition == 1" : "false",
-      "condition == 2" : "true",
-      "condition == 3" : "true",
+      "condition == 1": "false",
+      "condition == 2": "true",
+      "condition == 3": "true",
     });
     final engine = _TestMode(e, assembler);
 

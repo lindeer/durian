@@ -8,8 +8,7 @@ class ItemMetaData {
 
   @override
   bool operator ==(Object other) {
-    if (other.runtimeType != runtimeType)
-      return false;
+    if (other.runtimeType != runtimeType) return false;
     return other is ItemMetaData && other.name == name && other.pos == pos;
   }
 

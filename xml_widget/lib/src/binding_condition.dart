@@ -64,14 +64,13 @@ class ConditionWidget extends StatefulWidget {
   final List<String> expressions;
 
   const ConditionWidget._(
-      this.element,
-      this.makers,
-      this.builder,
-      this.conditions,
-      this.expressions,
-      {
-        Key? key,
-      }) : super(key: key);
+    this.element,
+    this.makers,
+    this.builder,
+    this.conditions,
+    this.expressions, {
+    Key? key,
+  }) : super(key: key);
 
   factory ConditionWidget({
     required AssembleElement element,
@@ -142,7 +141,9 @@ class _ConditionState extends State<ConditionWidget> {
     if (rebuildChildren != REBUILD_REASON_NONE) {
       final makers = widget.makers;
       final children = makers.map((e) => e.make(context)).toList(growable: false);
-      _children..clear()..addAll(children);
+      _children
+        ..clear()
+        ..addAll(children);
       rebuildChildren = REBUILD_REASON_NONE;
     }
     return builder.call(context, element, _children);

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 typedef void OnClickListener(BuildContext context, String value);
@@ -9,8 +8,8 @@ class InterOperation {
 }
 
 typedef AssembleFn = Widget Function(AssembleElement element);
-typedef AssembleWidgetBuilder = Widget Function(BuildContext buildContext, AssembleElement element,
-    List<AssembleChildElement> descendant);
+typedef AssembleWidgetBuilder = Widget Function(
+    BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant);
 
 class AssembleElement {
   final String name;

@@ -30,7 +30,7 @@ class JSEngine implements ScriptEngine {
     });
   }
 
-  String _parseCall(String expr) => expr.startsWith('item.') ?  '$expr();' :  "$domain.$expr();";
+  String _parseCall(String expr) => expr.startsWith('item.') ? '$expr();' : "$domain.$expr();";
 
   String _parseAssign(String expr) {
     int pos = expr.indexOf('=') + 1;

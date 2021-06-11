@@ -22,8 +22,8 @@ class _XmlListViewBuilder extends CommonWidgetBuilder {
       cacheExtent: attrs['cacheExtent']?.toDouble(),
       semanticChildCount: attrs['semanticChildCount']?.toInt(),
       dragStartBehavior: _drawerDragStartBehavior[attrs['dragStartBehavior']] ?? DragStartBehavior.start,
-      keyboardDismissBehavior: _scrollViewKeyboardDismissBehavior[attrs['keyboardDismissBehavior']]
-          ?? ScrollViewKeyboardDismissBehavior.manual,
+      keyboardDismissBehavior: _scrollViewKeyboardDismissBehavior[attrs['keyboardDismissBehavior']] ??
+          ScrollViewKeyboardDismissBehavior.manual,
       restorationId: attrs['restorationId'],
       clipBehavior: _clip[attrs['clipBehavior']] ?? Clip.hardEdge,
     );

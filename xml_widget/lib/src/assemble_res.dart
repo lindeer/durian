@@ -83,8 +83,8 @@ class _ResImpl implements AssembleResource {
     if (first == _poundSign) {
       final text = str.substring(1);
       final value = text.length == 3 ? text.split('').map((e) => '$e$e').join('') : text;
-      final color = int.tryParse(value, radix: 16)?.let((color) =>
-      color <= 0xffffff ? Color(color).withAlpha(255) : Color(color));
+      final color = int.tryParse(value, radix: 16)
+          ?.let((color) => color <= 0xffffff ? Color(color).withAlpha(255) : Color(color));
       return color;
     }
     return null;
@@ -167,13 +167,15 @@ class _ResImpl implements AssembleResource {
       }
     });
 
-    return colors.isEmpty ? null : MaterialStateProperty.resolveWith((Set<MaterialState> states) {
-      for (final c in colors) {
-        if (states.containsAll(c.states!)) {
-          return c.color;
-        }
-      }
-      return defColor;
-    });
+    return colors.isEmpty
+        ? null
+        : MaterialStateProperty.resolveWith((Set<MaterialState> states) {
+            for (final c in colors) {
+              if (states.containsAll(c.states!)) {
+                return c.color;
+              }
+            }
+            return defColor;
+          });
   }
 }

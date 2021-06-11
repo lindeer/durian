@@ -4,7 +4,8 @@ class BindingWidget extends StatefulWidget {
   final WidgetBuilder builder;
   final List<String> words;
 
-  const BindingWidget({Key? key,
+  const BindingWidget({
+    Key? key,
     required this.builder,
     required this.words,
   }) : super(key: key);

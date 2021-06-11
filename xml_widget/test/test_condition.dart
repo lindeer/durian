@@ -18,8 +18,7 @@ class _TestEngine implements ScriptEngine {
   }
 
   @override
-  void registerBridge(String name, void Function(Map<String, dynamic> result) bridge) {
-  }
+  void registerBridge(String name, void bridge(Map<String, dynamic> result)) {}
 }
 
 class _TestMode extends NotifierModel {
@@ -67,8 +66,8 @@ void main() {
     </Column>
 """;
     final e = _TestEngine({
-      "condition == 1" : "false",
-      "condition == 2" : "true",
+      "condition == 1": "false",
+      "condition == 2": "true",
     });
     final engine = _TestMode(e, assembler);
 
@@ -110,7 +109,7 @@ void main() {
     </Column>
 """;
     final e = _TestEngine({
-      "condition == 1" : "false",
+      "condition == 1": "false",
     });
     final engine = _TestMode(e, assembler);
     await tester.pumpWidget(MaterialApp(
@@ -151,8 +150,8 @@ void main() {
     </Column>
 """;
     final e = _TestEngine({
-      "condition == 1" : "false",
-      "condition == 2" : "true",
+      "condition == 1": "false",
+      "condition == 2": "true",
     });
     final engine = _TestMode(e, assembler);
     await tester.pumpWidget(MaterialApp(
@@ -195,9 +194,9 @@ void main() {
     </Column>
 """;
     final e = _TestEngine({
-      "condition == 1" : "false",
-      "condition == 2" : "true",
-      "condition == 3" : "true",
+      "condition == 1": "false",
+      "condition == 2": "true",
+      "condition == 3": "true",
     });
     final engine = _TestMode(e, assembler);
     await tester.pumpWidget(MaterialApp(
@@ -253,8 +252,8 @@ void main() {
     </Column>
 """;
     final e = _TestEngine({
-      "condition == 1" : "true",
-      "condition == 2" : "false",
+      "condition == 1": "true",
+      "condition == 2": "false",
     });
     final engine = _TestMode(e, assembler);
     await tester.pumpWidget(MaterialApp(
@@ -304,8 +303,8 @@ void main() {
     </Column>
 """;
     final e = _TestEngine({
-      "condition == 1" : "true",
-      "condition == 2" : "true",
+      "condition == 1": "true",
+      "condition == 2": "true",
     });
     final engine = _TestMode(e, assembler);
     await tester.pumpWidget(MaterialApp(

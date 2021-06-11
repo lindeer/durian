@@ -40,7 +40,6 @@ abstract class CommonWidgetBuilder implements XmlWidgetBuilder {
   String get name => _name;
 
   bool get childless => false;
-
 }
 
 const _builtinBuilders = _Assembler._builtinBuilders;
@@ -51,9 +50,7 @@ abstract class WidgetAssembler {
   factory WidgetAssembler({
     List<XmlWidgetBuilder>? builders,
   }) {
-    final xmlBuilders = {
-      for (final builder in _builtinBuilders) builder.name: builder
-    };
+    final xmlBuilders = {for (final builder in _builtinBuilders) builder.name: builder};
     if (builders != null && builders.isNotEmpty) {
       builders.forEach((b) {
         xmlBuilders[b.name] = b;
@@ -127,13 +124,17 @@ class _Assembler implements WidgetAssembler {
       final model = PageModelWidget.of(buildContext);
       final assemble = model.assemble;
       final children = element.children;
-      final headers = pos > 0 ? children.sublist(0, pos)
-          .map((e) => AssembleChildElement(e, assemble.build(buildContext, e)))
-          .toList(growable: false)
+      final headers = pos > 0
+          ? children
+              .sublist(0, pos)
+              .map((e) => AssembleChildElement(e, assemble.build(buildContext, e)))
+              .toList(growable: false)
           : null;
-      final footers = pos < children.length - 1  ? children.sublist(pos + 1)
-          .map((e) => AssembleChildElement(e, assemble.build(buildContext, e)))
-          .toList(growable: false)
+      final footers = pos < children.length - 1
+          ? children
+              .sublist(pos + 1)
+              .map((e) => AssembleChildElement(e, assemble.build(buildContext, e)))
+              .toList(growable: false)
           : null;
       final item = children[pos];
       final key = DataBinding.matchKey(item.raw['flutter:for']) ?? '';
@@ -154,8 +155,11 @@ class _Assembler implements WidgetAssembler {
         ...?footers,
       ];
     } else {
-      childrenElements = builder.childless ? _noChild
-          : rawChildren.map((e) => AssembleChildElement(e, _assembleByElement(buildContext, e))).toList(growable: false);
+      childrenElements = builder.childless
+          ? _noChild
+          : rawChildren
+              .map((e) => AssembleChildElement(e, _assembleByElement(buildContext, e)))
+              .toList(growable: false);
     }
 
     bool containIf = _ElementUtils.containIf(rawChildren);
@@ -164,7 +168,8 @@ class _Assembler implements WidgetAssembler {
     final fn = builder.build;
     Widget w;
     if (containIf) {
-      w = ConditionWidget(element: element,
+      w = ConditionWidget(
+        element: element,
         children: childrenElements,
         builder: fn,
         bindingWords: words,

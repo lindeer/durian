@@ -29,8 +29,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: NameCardJSPage(
-      ),
+      home: NameCardJSPage(),
     );
   }
 }
@@ -97,7 +96,6 @@ final _loading = Container(
 );
 
 class _MyHomePageState extends State<MyHomePage> {
-
   void _onPressed(BuildContext ctx, String uri) {
     print("onPressed: $uri");
     final engine = PageModelWidget.of(context).engine;
@@ -106,8 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final assembler = WidgetAssembler(
-    );
+    final assembler = WidgetAssembler();
     return FutureBuilder<AssembleElement>(
       future: rootBundle.loadString('assets/app.xml').then((s) => AssembleReader.fromSource(s)),
       builder: (ctx, snapshot) {

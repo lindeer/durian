@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart' show VoidCallback;
 import 'package:xml_widget/xml_context.dart';
 import 'package:xml_widget/xml_resource.dart';
@@ -7,7 +6,6 @@ import 'script_engine.dart';
 
 /// ViewModel for PageModelWidget
 abstract class PageModel {
-
   /// evaluate expression
   ScriptEngine get engine;
 
@@ -51,14 +49,17 @@ class _FakeModel implements PageModel {
 
   @override
   void addListener(List<String> expressions, VoidCallback listener) {
+    //
   }
 
   @override
   void removeListener(VoidCallback listener) {
+    //
   }
 
   @override
   void dispose() {
+    //
   }
 }
 
@@ -97,7 +98,8 @@ abstract class NotifierModel implements PageModel {
       _listeners.keys
           .where((expr) => expr.contains(key))
           .map((expr) => _listeners[expr])
-          .whereType<Set<VoidCallback>>().forEach((set) {
+          .whereType<Set<VoidCallback>>()
+          .forEach((set) {
         callbacks.addAll(set);
       });
     }
@@ -177,6 +179,7 @@ class _DataStore implements ScriptEngine {
 
   @override
   void registerBridge(String name, void bridge(Map<String, dynamic> result)) {
+    //
   }
 }
 
@@ -191,14 +194,16 @@ class DialogModel implements PageModel {
     return DialogModel._(_DataStore(json), parent);
   }
 
-  String operator[](String key) => _data._data[key] as String? ?? _DataStore._null;
+  String operator [](String key) => _data._data[key] as String? ?? _DataStore._null;
 
   @override
   void addListener(List<String> expressions, listener) {
+    //
   }
 
   @override
   void dispose() {
+    //
   }
 
   @override
@@ -221,6 +226,7 @@ class DialogModel implements PageModel {
 
   @override
   void removeListener(listener) {
+    //
   }
 
   @override

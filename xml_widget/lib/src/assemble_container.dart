@@ -54,8 +54,8 @@ class _XmlMaterialButtonBuilder extends CommonWidgetBuilder {
     final onPressed = pressFn != null && pressUri != null ? () => pressFn.call(buildContext, pressUri) : null;
     final longPressUri = attrs["onLongPressed"];
     final longPressFn = op.onLongPressed;
-    final onLongPressed = longPressFn != null && longPressUri != null
-        ? () => longPressFn.call(buildContext, longPressUri) : null;
+    final onLongPressed =
+        longPressFn != null && longPressUri != null ? () => longPressFn.call(buildContext, longPressUri) : null;
 
     return MaterialButton(
       child: descendant.isEmpty ? null : descendant.first.child,
@@ -127,8 +127,8 @@ class _XmlElevatedButtonBuilder extends CommonWidgetBuilder {
     final onPressed = pressFn != null && pressUri != null ? () => pressFn.call(buildContext, pressUri) : null;
     final longPressUri = attrs["onLongPressed"];
     final longPressFn = op.onLongPressed;
-    final onLongPressed = longPressFn != null && longPressUri != null
-        ? () => longPressFn.call(buildContext, longPressUri) : null;
+    final onLongPressed =
+        longPressFn != null && longPressUri != null ? () => longPressFn.call(buildContext, longPressUri) : null;
 
     return ElevatedButton(
       child: descendant.isEmpty ? null : descendant.first.child,
@@ -153,12 +153,11 @@ class _XmlTextButtonBuilder extends CommonWidgetBuilder {
     final onPressed = pressFn != null && pressUri != null ? () => pressFn.call(buildContext, pressUri) : null;
     final longPressUri = attrs["onLongPressed"];
     final longPressFn = op.onLongPressed;
-    final onLongPressed = longPressFn != null && longPressUri != null
-        ? () => longPressFn.call(buildContext, longPressUri) : null;
+    final onLongPressed =
+        longPressFn != null && longPressUri != null ? () => longPressFn.call(buildContext, longPressUri) : null;
     final height = res.size(attrs['height']);
     final width = res.size(attrs['width']);
-    final minSize = height == null && width == null ? null
-        : Size(width ?? double.infinity, height ?? double.infinity);
+    final minSize = height == null && width == null ? null : Size(width ?? double.infinity, height ?? double.infinity);
 
     return TextButton(
       child: descendant.first.child,
@@ -188,8 +187,8 @@ class _XmlOutlinedButtonBuilder extends CommonWidgetBuilder {
     final onPressed = pressFn != null && pressUri != null ? () => pressFn.call(buildContext, pressUri) : null;
     final longPressUri = attrs["onLongPressed"];
     final longPressFn = op.onLongPressed;
-    final onLongPressed = longPressFn != null && longPressUri != null
-        ? () => longPressFn.call(buildContext, longPressUri) : null;
+    final onLongPressed =
+        longPressFn != null && longPressUri != null ? () => longPressFn.call(buildContext, longPressUri) : null;
 
     if (descendant.isEmpty) {
       return ErrorWidget.withDetails(message: '$name must have one child!');
@@ -236,8 +235,8 @@ class _XmlInkWellBuilder extends CommonWidgetBuilder {
     final onPressed = pressFn != null && pressUri != null ? () => pressFn.call(buildContext, pressUri) : null;
     final longPressUri = attrs["onLongPressed"];
     final longPressFn = op.onLongPressed;
-    final onLongPressed = longPressFn != null && longPressUri != null
-        ? () => longPressFn.call(buildContext, longPressUri) : null;
+    final onLongPressed =
+        longPressFn != null && longPressUri != null ? () => longPressFn.call(buildContext, longPressUri) : null;
 
     return InkWell(
       child: descendant.isEmpty ? null : descendant.first.child,

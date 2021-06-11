@@ -77,7 +77,6 @@ class _XmlStackBuilder extends CommonWidgetBuilder {
   }
 }
 
-
 class _XmlFlexBuilder extends CommonWidgetBuilder {
   const _XmlFlexBuilder() : super('Flex');
 
@@ -87,7 +86,9 @@ class _XmlFlexBuilder extends CommonWidgetBuilder {
     final attrs = element.attrs;
     final direction = _axis[attrs['direction']];
     if (direction == null) {
-      return ErrorWidget.withDetails(message: "'direction' is required!",);
+      return ErrorWidget.withDetails(
+        message: "'direction' is required!",
+      );
     }
     return Flex(
       children: children,
@@ -121,7 +122,8 @@ class _XmlScaffoldBuilder extends CommonWidgetBuilder {
       appBar: components['appBar']?.child as PreferredSizeWidget?,
       body: components['body']?.child,
       floatingActionButton: floatingButton?.child,
-      floatingActionButtonLocation: _floatingActionButtonLocation[floatingButton?.attrs['floatingActionButtonLocation']],
+      floatingActionButtonLocation:
+          _floatingActionButtonLocation[floatingButton?.attrs['floatingActionButtonLocation']],
       drawer: components['drawer']?.child,
       endDrawer: components['endDrawer']?.child,
       bottomNavigationBar: components['bottomNavigationBar']?.child,

@@ -18,10 +18,14 @@ class _PropertyStruct {
 
   static TextTheme? _textTheme(ThemeData theme, String name) {
     switch (name) {
-      case 'textTheme': return theme.textTheme;
-      case 'primaryTextTheme': return theme.primaryTextTheme;
-      case 'accentTextTheme': return theme.accentTextTheme;
-      default: return null;
+      case 'textTheme':
+        return theme.textTheme;
+      case 'primaryTextTheme':
+        return theme.primaryTextTheme;
+      case 'accentTextTheme':
+        return theme.accentTextTheme;
+      default:
+        return null;
     }
   }
 
@@ -89,13 +93,14 @@ class _PropertyStruct {
     final bottomKeys = keys.where((k) => k.startsWith(keyBottom));
     final bottom = bottomKeys.isEmpty ? side : _side(res, keyBottom, attr);
 
-    return left == null && top == null && right == null && bottom == null ? null :
-    Border(
-      left: left ?? BorderSide.none,
-      top: top ?? BorderSide.none,
-      right: right ?? BorderSide.none,
-      bottom: bottom ?? BorderSide.none,
-    );
+    return left == null && top == null && right == null && bottom == null
+        ? null
+        : Border(
+            left: left ?? BorderSide.none,
+            top: top ?? BorderSide.none,
+            right: right ?? BorderSide.none,
+            bottom: bottom ?? BorderSide.none,
+          );
   }
 
   static BorderRadius? _borderRadius(AssembleResource res, Map<String, String> attr) {
@@ -113,6 +118,7 @@ class _PropertyStruct {
       final r = res.size(s);
       return r == null ? Radius.zero : Radius.circular(r);
     }
+
     return BorderRadius.only(
       topLeft: _radius(topLeft),
       topRight: _radius(topRight),

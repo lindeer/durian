@@ -58,10 +58,18 @@ void main() {
     expect(res['colorPrimary'], Color(0xffffffff));
     expect(res['orange']?.value, testColors['orange']?.value);
     final state = res.state('color_state_text');
-    final c1 = state?.resolve({MaterialState.hovered, MaterialState.disabled, MaterialState.focused});
+    final c1 = state?.resolve({
+      MaterialState.hovered,
+      MaterialState.disabled,
+      MaterialState.focused,
+    });
     expect(c1?.value, testColors['green']?.value);
 
-    final c2 = state?.resolve({MaterialState.hovered, MaterialState.disabled, MaterialState.pressed});
+    final c2 = state?.resolve({
+      MaterialState.hovered,
+      MaterialState.disabled,
+      MaterialState.pressed,
+    });
     expect(c2?.value, 0xffff00ff);
 
     final c3 = state?.resolve({MaterialState.dragged});
@@ -86,11 +94,14 @@ void main() {
     final res = AssembleReader.fromRaw(xml);
 
     final state = res.state('color_state_text');
-    final c1 = state?.resolve({MaterialState.hovered, MaterialState.disabled, MaterialState.focused});
+    final c1 = state?.resolve({
+      MaterialState.hovered,
+      MaterialState.disabled,
+      MaterialState.focused,
+    });
     expect(c1?.value, res['orange']?.value);
 
     final c2 = state?.resolve({MaterialState.dragged});
     expect(c2?.value, res['colorAccent']?.value);
-
   });
 }

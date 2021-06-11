@@ -25,7 +25,6 @@ const _builtinColors = <String, Color>{
   "white24": Colors.white24,
   "white12": Colors.white12,
   "white10": Colors.white10,
-
   "red": Colors.red,
   "pink": Colors.pink,
   "purple": Colors.purple,
@@ -45,7 +44,6 @@ const _builtinColors = <String, Color>{
   "brown": Colors.brown,
   "grey": Colors.grey,
   "blueGrey": Colors.blueGrey,
-
   "redAccent": Colors.redAccent,
   "pinkAccent": Colors.pinkAccent,
   "purpleAccent": Colors.purpleAccent,
@@ -301,8 +299,8 @@ const _flexFit = const {
 };
 
 const _borderShape = const {
-  "circle" : const CircleBorder(),
-  "rectangle" : const RoundedRectangleBorder(),
+  "circle": const CircleBorder(),
+  "rectangle": const RoundedRectangleBorder(),
 };
 
 const _flutterColorPrefix = '@flutter:color/';
@@ -311,7 +309,6 @@ const _resColorPrefix = '@color/';
 const _resColorPrefixLength = _resColorPrefix.length;
 
 extension _StringExt on String {
-
   int? toInt() => int.tryParse(this);
 
   int optInt({defVal = 0.0}) => int.tryParse(this) ?? defVal;

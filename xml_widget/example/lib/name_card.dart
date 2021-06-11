@@ -1,9 +1,7 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NameCardPage extends StatefulWidget {
-
   @override
   _NameCardState createState() => _NameCardState();
 }
@@ -38,7 +36,11 @@ class _NameCardState extends State<NameCardPage> {
   void initState() {
     super.initState();
 
-    _nameCard = _NameCardModel(name: "test9", empno: "test9_dichatv_p", email: "test9_dichatv_p@didichuxing.com",)
+    _nameCard = _NameCardModel(
+      name: "test9",
+      empno: "test9_dichatv_p",
+      email: "test9_dichatv_p@didichuxing.com",
+    )
       ..avatar = "https://s3-gz01.didistatic.com/dchat-gz/cPs9U6UXizhaNq39hIFXti7Rdyz9yKmSexVpJr8Ju0BJ2s3yIu"
       ..job = "工程师"
       ..status = "在家办公"
@@ -51,7 +53,9 @@ class _NameCardState extends State<NameCardPage> {
   }
 
   static const divider = const Padding(
-    padding: EdgeInsets.only(left: 20,),
+    padding: EdgeInsets.only(
+      left: 20,
+    ),
     child: Divider(
       height: 1,
       color: Color(0xFFEEEEEE),
@@ -76,10 +80,10 @@ class _NameCardState extends State<NameCardPage> {
                     child: _nameCard.avatar == null
                         ? defaultAvatar
                         : Image.network(
-                      _nameCard.avatar!,
-                      width: 80,
-                      height: 80,
-                    ),
+                            _nameCard.avatar!,
+                            width: 80,
+                            height: 80,
+                          ),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 10),
@@ -88,10 +92,11 @@ class _NameCardState extends State<NameCardPage> {
                       style: Theme.of(context).textTheme.headline6?.copyWith(color: Color(0xFF111111)),
                     ),
                   ),
-                  if (_nameCard.job?.isNotEmpty ?? false) Text(
-                    _nameCard.job ?? '',
-                    style: Theme.of(context).textTheme.caption?.copyWith(color: Color(0xFF666666)),
-                  ),
+                  if (_nameCard.job?.isNotEmpty ?? false)
+                    Text(
+                      _nameCard.job ?? '',
+                      style: Theme.of(context).textTheme.caption?.copyWith(color: Color(0xFF666666)),
+                    ),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 16),
                     child: Row(
@@ -125,7 +130,6 @@ class _NameCardState extends State<NameCardPage> {
                 ],
               ),
             ),
-
             Padding(
               padding: EdgeInsets.all(20).copyWith(bottom: 0),
               child: TextButton(
@@ -134,7 +138,11 @@ class _NameCardState extends State<NameCardPage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                     side: _nameCard.self
-                        ? const BorderSide(width: 1.0, style: BorderStyle.solid, color: Color(0xFFEEEEEE),)
+                        ? const BorderSide(
+                            width: 1.0,
+                            style: BorderStyle.solid,
+                            color: Color(0xFFEEEEEE),
+                          )
                         : BorderSide.none,
                   ),
                   backgroundColor: _nameCard.self ? null : Colors.grey[200],
@@ -148,27 +156,26 @@ class _NameCardState extends State<NameCardPage> {
                         child: Text(
                           _nameCard.status ?? '',
                           style: Theme.of(context).textTheme.caption?.copyWith(
-                            fontSize: 16,
-                          ),
+                                fontSize: 16,
+                              ),
                         ),
                       ),
-                      if (_nameCard.self) Icon(
-                        Icons.edit,
-                        color: Color(0xFF9E9E9E),
-                      ),
+                      if (_nameCard.self)
+                        Icon(
+                          Icons.edit,
+                          color: Color(0xFF9E9E9E),
+                        ),
                     ],
                   ),
                 ),
               ),
             ),
-
             ..._buildItem(context, '昵称', _nameCard.nickname),
             ..._buildItem(context, '工号', _nameCard.empno),
             ..._buildItem(context, '邮箱', _nameCard.email),
             ..._buildItem(context, '城市', _nameCard.city),
             ..._buildItem(context, '部门', _nameCard.department),
             ..._buildItem(context, '上级', _nameCard.superior),
-
             SizedBox(
               height: 80,
             ),
@@ -185,15 +192,15 @@ class _NameCardState extends State<NameCardPage> {
                 onPressed: _showDialog,
                 style: TextButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
                   backgroundColor: Color(0xFF3D3D3D),
                 ),
                 child: Text(
                   '发消息',
                   style: Theme.of(context).textTheme.button?.copyWith(
-                    color: Colors.white,
-                  ),
+                        color: Colors.white,
+                      ),
                 ),
               ),
             ),
@@ -216,8 +223,7 @@ class _NameCardState extends State<NameCardPage> {
         ),
       ),
       InkWell(
-        onTap: () {
-        },
+        onTap: () {},
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           child: Text(
@@ -243,11 +249,27 @@ class _NameCardState extends State<NameCardPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              TextButton(onPressed: () {}, child: Text("a"), style: style,),
-              Divider(height: 1,),
-              TextButton(onPressed: () {}, child: Text("b"), style: style,),
-              Divider(height: 1,),
-              TextButton(onPressed: () {}, child: Text("c"), style: style,),
+              TextButton(
+                onPressed: () {},
+                child: Text("a"),
+                style: style,
+              ),
+              Divider(
+                height: 1,
+              ),
+              TextButton(
+                onPressed: () {},
+                child: Text("b"),
+                style: style,
+              ),
+              Divider(
+                height: 1,
+              ),
+              TextButton(
+                onPressed: () {},
+                child: Text("c"),
+                style: style,
+              ),
             ],
           ),
         ),
@@ -257,10 +279,13 @@ class _NameCardState extends State<NameCardPage> {
         Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius:
-            const BorderRadius.all(Radius.circular(10.0)),
+            borderRadius: const BorderRadius.all(Radius.circular(10.0)),
           ),
-          child: TextButton(onPressed: () {}, child: Text("d"), style: style,),
+          child: TextButton(
+            onPressed: () {},
+            child: Text("d"),
+            style: style,
+          ),
         ),
         SizedBox(
           height: 40,
@@ -278,7 +303,7 @@ class _NameCardState extends State<NameCardPage> {
             child: content,
           ),
         );
-      }
+      },
     );
   }
 }

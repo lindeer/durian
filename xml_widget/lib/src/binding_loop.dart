@@ -15,7 +15,10 @@ class LoopWidget extends StatefulWidget {
         final at = DateTime.now().microsecondsSinceEpoch;
         try {
           final engine = PageModelWidget.of(ctx).engine;
-          engine.eval("var item = ${data.name}[${data.pos}];", type: StatementType.assign,);
+          engine.eval(
+            "var item = ${data.name}[${data.pos}];",
+            type: StatementType.assign,
+          );
           return ctx.assemble.build(ctx, item);
         } finally {
           final cost = DateTime.now().microsecondsSinceEpoch - at;

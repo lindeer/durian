@@ -53,9 +53,11 @@ class _ModelState extends State<PageModelWidget> {
   }
 
   void _onPageCreated(Map<String, dynamic> result) {
+    //
   }
 
   void _onPageBuilt() {
+    //
   }
 
   Future<ScriptEngine> _prepareEngine() async {
@@ -65,7 +67,8 @@ class _ModelState extends State<PageModelWidget> {
     final engine = widget.engine;
     engine.registerBridge('_onPageCreated', _onPageCreated);
     engine.eval(js, type: StatementType.declaration);
-    engine.eval("""
+    engine.eval(
+      """
 function notifyChange(data) {
   sendMessage('_onDataChanged', JSON.stringify(data));
 }
@@ -84,8 +87,7 @@ function notifyChange(data) {
     ]);
     final engine = requirement[0] as ScriptEngine;
     final res = requirement[1] as AssembleResource;
-    final op = InterOperation()
-      ..onPressed = _onPressed;
+    final op = InterOperation()..onPressed = _onPressed;
     final assembler = widget.assembler ?? WidgetAssembler();
 
     final model = ScriptModel(engine, res, op, assembler);
@@ -147,8 +149,11 @@ function notifyChange(data) {
     if (element == null) return null;
 
     final ret = await showDialog<String>(
-        context: context,
-        builder: (ctx) => _DialogWidget(model: model, element: element,),
+      context: context,
+      builder: (ctx) => _DialogWidget(
+        model: model,
+        element: element,
+      ),
     );
     final action = ret ?? 'cancel';
     widget.engine.eval("dismissDialog((dlg) => { dlg.$action?.(); });", type: StatementType.expression2);

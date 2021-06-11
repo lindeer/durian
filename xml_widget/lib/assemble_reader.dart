@@ -18,10 +18,11 @@ abstract class AssembleReader {
   }
 
   static AssembleElement _fromXml(XmlElement e) {
-    final children = e.children.where((child) => child.nodeType == XmlNodeType.ELEMENT)
-        .map((child) => _fromXml(child as XmlElement)).toList(growable: false);
-    final map = e.attributes.map(
-            (attr) => MapEntry(attr.name, attr.value));
+    final children = e.children
+        .where((child) => child.nodeType == XmlNodeType.ELEMENT)
+        .map((child) => _fromXml(child as XmlElement))
+        .toList(growable: false);
+    final map = e.attributes.map((attr) => MapEntry(attr.name, attr.value));
     final raw = Map.fromEntries(map.map((entry) => MapEntry(entry.key.qualified, entry.value)));
     final attrs = Map.fromEntries(map.map((entry) => MapEntry(entry.key.local, entry.value)));
     final name = e.name.qualified;

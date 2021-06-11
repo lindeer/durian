@@ -10,7 +10,6 @@ part 'binding_data.dart';
 part 'binding_loop.dart';
 
 class DataBinding {
-
   static final _reg = RegExp(r'{{(.+?)}}');
 
   static bool hasMatch(AssembleElement element) {
