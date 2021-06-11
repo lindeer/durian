@@ -2,7 +2,7 @@ name: xml_widget
 description:
   A library that could parse xml file to flutter widgets, supporting color,style and theme,
   and dynamically change by script.
-version: 0.0.1+1
+version: 0.1.0
 homepage: https://github.com/lindeer/durian
 
 environment:
@@ -12,6 +12,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  async: ^2.5.0
   xml: ^5.1.0
 
 dev_dependencies:
