@@ -1,0 +1,33 @@
+
+<view class="container" style="height: 100%; display: flex; flex-direction: column; padding: 30rpx; box-sizing: border-box;">
+  <view class="topic-detail">
+    <view class="topic-owner" style="display: flex; align-items: center; margin-bottom: 30rpx;">
+        <image class="owner-avatar" src="{{detail.member.avatar_normal}}" id="{{detail.member.id}}" bindtap="showUserInfo" style="width: 128rpx; height: 128rpx; margin-right: 30rpx; border-radius: 100%;"/>
+        <view class="topic-tit" style="flex: 1; box-sizing: border-box; padding-right: 10rpx; line-height: 1.4; font-size: 14px; color: #333;">{{detail.title}}</view>
+    </view>
+    <view class="topic-info" style="flex: 1; font-size: 24rpx; margin-bottom: 40rpx; color: #777;">
+        <text>{{detail.member.username}}</text>
+        <text class="topic-created" style="margin-left: 30rpx; font-size: 14px; color: #999;">{{detail.created}}</text>
+    </view>
+    <view class="topic-desc" style="margin-bottom: 20rpx; line-height: 1.4; word-wrap: break-word; word-break: normal; font-size: 14px; color: #333;">
+        <text>{{detail.content}}</text>
+    </view>
+  </view>
+  <view class="replies" style="margin-top: 30rpx; border-top: 1px solid #ddd;">
+    <block wx:for="{{replies}}">
+        <view class="replies-item" id="{{item.id}}" style="padding: 40rpx 0; border-bottom: 1px solid #eee;">
+            <view class="reply-owner" style="display: flex; align-items: center; margin-bottom: 40rpx;">
+                <image class="reply-avatar" src="{{item.member.avatar_normal}}" style="width: 100rpx; height: 100rpx; border-radius: 100%; margin-right: 30rpx;"/>
+                <text class="reply-name" style="font-size: 14px; color: #999;">{{item.member.username}}</text>
+                <text class="reply-time" style="font-size: 14px; color: #ccc; margin-left: 30rpx;">{{item.created}}</text>
+            </view>
+            <view class="reply-content" style="font-size: 14px; color: #999; padding: 0 20rpx; line-height: 1.4; word-wrap: break-word; word-break: normal;">
+                {{item.content}}
+            </view>
+        </view>
+    </block>
+  </view>
+  <loading hidden="{{hidden}}">
+    加载中...
+  </loading>
+</view>
