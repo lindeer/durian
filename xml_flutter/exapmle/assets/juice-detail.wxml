@@ -1,27 +1,24 @@
-
-
-
 <!--answer.wxml-->
-<view class="container" style="padding: 0; font-size: 14rpx; background: #F0F4F3; color: #000;">
-    <view class="question" bindtap="toQuestion" style="position: relative; width: 650rpx; padding: 40rpx 50rpx 30rpx; background: #298DE5; color: #fff; font-size: 38rpx; line-height: 48rpx;">
-        <text class="question-title">选择 Kindle 而不是纸质书的原因是什么？</text>
-    </view>
-    <view class="answerer-wrp" style="position: relative; width: 750rpx; height: 150rpx; background: #fff;">
-        <view class="answerer flex-wrp" style="position: relative; margin: 0 auto; width: 630rpx; height: 90rpx; padding: 30rpx; background: #fff; border: solid 1px #ebebeb; border-radius: 3px; box-shadow: 0 1px 2px #bebebe;">
-            <view class="avatar flex-item" style="flex: 0; width: 90rpx; height: 90rpx;">
-                <image src="../../images/icon1.jpeg" style="display: inline-block; width: 90rpx; height: 90rpx; border-radius: 90rpx;"/>
-            </view>
-            <view class="answerer-info flex-item" style="flex: 5; text-align: left; padding: 0rpx 20rpx; line-height: 38rpx;">
-                <text class="answerer-name" style="display: block; font-size: 32rpx;">Rebecca</text>
-                <text class="answerer-des" style="display: block; font-size: 22rpx; color: #808080; line-height: 28rpx;">WEB前端*不靠谱天气预报员*想做代码小仙女</text>
-            </view>
-            <view class="follow flex-item" style="flex: 0; font-size: 22rpx;">
-                <text style="display: inline-block; padding: 15rpx 20rpx; color: #40bcd0; border: solid 2px #40bcd0; border-radius: 6rpx;">十 关注</text>
-            </view>
-        </view>
-    </view>
-    <view class="answer-content" style="padding: 30rpx 40rpx; background: #ffffff;">
-        <text style="font-size: 32rpx; color: #454545; line-height: 44rpx;">难道不明白纸质书更贵啊！！！
+<div class="container" style="padding: 0; font-size: 14px; background: #F0F4F3; color: #000;">
+    <div class="question" bindtap="toQuestion" style="position: relative; width: 650px; padding: 40px 50px 30px; background: #298DE5; color: #fff; font-size: 38px; line-height: 48px;">
+        <pre class="question-title">选择 Kindle 而不是纸质书的原因是什么？</pre>
+    </div>
+    <div class="answerer-wrp" style="position: relative; width: 750px; height: 150px; background: #fff;">
+        <div class="answerer flex-wrp" style="position: relative; margin: 0 auto; width: 630px; height: 90px; padding: 30px; background: #fff; border: solid 1px #ebebeb; border-radius: 3px; box-shadow: 0 1px 2px #bebebe;">
+            <div class="avatar flex-item" style="flex: 0; width: 90px; height: 90px;">
+                <img src="../../images/icon1.jpeg" style="display: inline-block; width: 90px; height: 90px; border-radius: 90px;"/>
+            </div>
+            <div class="answerer-info flex-item" style="flex: 5; text-align: left; padding: 0px 20px; line-height: 38px;">
+                <pre class="answerer-name" style="font-size: 32px;">Rebecca</pre>
+                <pre class="answerer-des" style="font-size: 22px; color: #808080; line-height: 28px;">WEB前端*不靠谱天气预报员*想做代码小仙女</pre>
+            </div>
+            <div class="follow flex-item" style="flex: 0; font-size: 22px;">
+                <pre style="display: inline-block; padding: 15px 20px; color: #40bcd0; border: solid 2px #40bcd0; border-radius: 6px;">十 关注</pre>
+            </div>
+        </div>
+    </div>
+    <div class="answer-content" style="padding: 30px 40px; background: #ffffff;">
+        <p style="font-size: 32px; color: #454545; line-height: 44px;">难道不明白纸质书更贵啊！！！
 
             若觉得kindle更贵，我觉得要么阅读量太少，那确实没有买kindle的必要。要么买的都是盗版的纸质书？我不清楚不加以评论。。。
 
@@ -33,9 +30,9 @@
 
             看到描述最后一段，感觉有骗答案的嫌疑
 
-        </text>
-        <image src="../../images/1444983318907-_DSC1826.jpg" style="width: 100%; margin: 20rpx 0;"/>
-        <text style="font-size: 32rpx; color: #454545; line-height: 44rpx;">
+        </p>
+        <img src="../../images/1444983318907-_DSC1826.jpg" style="width: 100%; margin: 20px 0;"/>
+        <p style="font-size: 32px; color: #454545; line-height: 44px;">
             难道不明白纸质书更贵啊！！！
 
             若觉得kindle更贵，我觉得要么阅读量太少，那确实没有买kindle的必要。要么买的都是盗版的纸质书？我不清楚不加以评论。。。
@@ -48,37 +45,37 @@
 
             看到描述最后一段，感觉有骗答案的嫌疑
 
-        </text>
-        <image src="../../images/1444983318907-_DSC1826.jpg" style="width: 100%; margin: 20rpx 0;"/>
-    </view>
+        </p>
+        <img src="../../images/1444983318907-_DSC1826.jpg" style="width: 100%; margin: 20px 0;"/>
+    </div>
 
-    <view class="answer-footer flex-wrp" style="position: fixed; bottom: 0; height: 80rpx; border-top: solid 1px #ebebeb; background: #ffffff; width: 670rpx; padding: 20rpx 40rpx;">
-        <view class="good flex-item" style="flex: 1; height: 40rpx; border: solid 1px #d1d1d1; border-radius: 3px; padding: 10rpx 8rpx; margin: 10rpx 0;">
-            <view class="good-bad" style="display: inline-block;">
-                <image src="../../images/good-bad.png" style="display: inline-block; width: 38rpx; height: 38rpx; vertical-align: middle;"/>
-            </view>
-            <view class="good-num" style="display: inline-block; padding: 10rpx 4rpx;">2.1k</view>
-        </view>
-        <view class="operation-wrp flex-item" style="flex: 5;">
-            <view class="operation flex-wrp flex-tab" style="justify-content: space-between; padding: 0 0 0 60rpx;">
-                <view class="operation-btn flex-item" style="flex: 1; text-align: center;">
-                    <image src="../../images/flag.png" style="display: block; margin: 0 auto; width: 50rpx; height: 50rpx;"/>
-                    <text style="display: block; font-size: 14rpx; color: #bebebe;">没有帮助</text>
-                </view>
-                <view class="operation-btn flex-item" style="flex: 1; text-align: center;">
-                    <image src="../../images/heart2.png" style="display: block; margin: 0 auto; width: 50rpx; height: 50rpx;"/>
-                    <text style="display: block; font-size: 14rpx; color: #bebebe;">感谢</text>
-                </view>
-                <view class="operation-btn flex-item" style="flex: 1; text-align: center;">
-                    <image src="../../images/star2.png" style="display: block; margin: 0 auto; width: 50rpx; height: 50rpx;"/>
-                    <text style="display: block; font-size: 14rpx; color: #bebebe;">收藏</text>
-                </view>
-                <view class="operation-btn flex-item" style="flex: 1; text-align: center;">
-                    <image src="../../images/comment.png" style="display: block; margin: 0 auto; width: 50rpx; height: 50rpx;"/>
-                    <text style="display: block; font-size: 14rpx; color: #bebebe;">302</text>
-                </view>
+    <div class="answer-footer flex-wrp" style="position: fixed; bottom: 0; height: 80px; border-top: solid 1px #ebebeb; background: #ffffff; width: 670px; padding: 20px 40px;">
+        <div class="good flex-item" style="flex: 1; height: 40px; border: solid 1px #d1d1d1; border-radius: 3px; padding: 10px 8px; margin: 10px 0;">
+            <div class="good-bad" style="display: inline-block;">
+                <img src="../../images/good-bad.png" style="display: inline-block; width: 38px; height: 38px; vertical-align: middle;"/>
+            </div>
+            <div class="good-num" style="display: inline-block; padding: 10px 4px;">2.1k</div>
+        </div>
+        <div class="operation-wrp flex-item" style="flex: 5;">
+            <div class="operation flex-wrp flex-tab" style="justify-content: space-between; padding: 0 0 0 60px;">
+                <div class="operation-btn flex-item" style="flex: 1; text-align: center;">
+                    <img src="../../images/flag.png" style="display: block; margin: 0 auto; width: 50px; height: 50px;"/>
+                    <pre  font-size: 14px; color: #bebebe;">没有帮助</pre>
+                </div>
+                <div class="operation-btn flex-item" style="flex: 1; text-align: center;">
+                    <img src="../../images/heart2.png" style="display: block; margin: 0 auto; width: 50px; height: 50px;"/>
+                    <pre  font-size: 14px; color: #bebebe;">感谢</pre>
+                </div>
+                <div class="operation-btn flex-item" style="flex: 1; text-align: center;">
+                    <img src="../../images/star2.png" style="display: block; margin: 0 auto; width: 50px; height: 50px;"/>
+                    <pre font-size: 14px; color: #bebebe;">收藏</pre>
+                </div>
+                <div class="operation-btn flex-item" style="flex: 1; text-align: center;">
+                    <img src="../../images/comment.png" style="display: block; margin: 0 auto; width: 50px; height: 50px;"/>
+                    <pre  font-size: 14px; color: #bebebe;">302</pre>
+                </div>
 
-            </view>
-        </view>
-    </view>
-</view>
+            </div>
+        </div>
+    </div>
+</div>
