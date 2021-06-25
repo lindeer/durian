@@ -25,9 +25,7 @@ dependencies:
     sdk: flutter
   xml_flutter:
     path: ..
-  simple_html_css: 3.0.1
   flutter_html: 2.0.0
-  html_widgets: 0.0.1+1
   flutter_widget_from_html_core: 0.6.1+3
 
   # The following adds the Cupertino Icons font to your application.
