@@ -1,0 +1,2 @@
+library xml_flutter;
+
