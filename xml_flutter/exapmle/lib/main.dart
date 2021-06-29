@@ -92,11 +92,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildView(BuildContext context, String html) {
-    return SingleChildScrollView(
-      child: Text(
-        html,
-      ),
-    );
+    final root = AssembleReader.fromSource(html);
+    final tank = AssembleTank();
+    return tank.build(context, root);
   }
 }
 

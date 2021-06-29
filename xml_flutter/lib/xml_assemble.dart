@@ -68,6 +68,15 @@ class AssembleTank {
     Widget w = depth == 0 && name == 'view'
         ? ListView(children: children,)
         : builder.build(element, children);
+
+    final css = element.style;
+    final padding = css.padding;
+    if (padding != null) {
+      w = Padding(
+        padding: padding,
+        child: w,
+      );
+    }
     return w;
   }
 
