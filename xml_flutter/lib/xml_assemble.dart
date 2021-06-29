@@ -27,19 +27,27 @@ class ImageAssembleBuilder implements AssembleBuilder {
     final style = e.style;
     final extra = e.extra;
     final src = extra?['src'] ?? '';
+    final width = style.width;
+    final height = style.height;
     if (src.startsWith('http')) {
       return Image.network(
         src,
+        width: width,
+        height: height,
       );
     }
     if (src.startsWith('@image/')) {
       final name = 'assets/images/${src.substring(7)}';
       return Image.asset(
         name,
+        width: width,
+        height: height,
       );
     }
     return Image.file(
       File(src),
+      width: width,
+      height: height,
     );
   }
 }
@@ -86,6 +94,13 @@ class AssembleTank {
     if (padding != null) {
       w = Padding(
         padding: padding,
+        child: w,
+      );
+    }
+    final borderRadius = css.borderRadius;
+    if (borderRadius != null) {
+      w = ClipRRect(
+        borderRadius: borderRadius,
         child: w,
       );
     }
