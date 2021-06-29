@@ -11,3 +11,22 @@ part 'xml_assemble.dart';
 extension _TExt<T> on T {
   R let<R>(R Function(T it) op) => op(this);
 }
+
+class PreProcessor {
+  final double _width;
+
+  PreProcessor(this._width);
+
+  String preprocess(BuildContext context, String source) {
+    String result = processSize(context, source);
+    return result;
+  }
+
+  String processSize(BuildContext context, String source) {
+    final reg = RegExp(r'(\d+(\.\d+)?)rpx');
+    return source.replaceAllMapped(reg, (match) {
+      final value = double.tryParse(match[1]!) ?? 0;
+      return (value * _width / 750).toStringAsFixed(2);
+    });
+  }
+}

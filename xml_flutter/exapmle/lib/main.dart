@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_html/flutter_html.dart';
+import 'package:xml_flutter/xml_flutter.dart';
 
 void main() {
   runApp(MyApp());
@@ -59,12 +60,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    final media = MediaQuery.of(context);
+    final processor = PreProcessor(media.size.width);
+    print("width = ${media.size.width}");
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -85,7 +83,8 @@ class _MyHomePageState extends State<MyHomePage> {
             );
           } else {
             final data = snapshot.requireData;
-            return _buildView(ctx, data);
+            final text = processor.preprocess(ctx, data);
+            return _buildView(ctx, text);
           }
         },
       ), // This trailing comma makes auto-formatting nicer for build methods.
@@ -94,8 +93,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildView(BuildContext context, String html) {
     return SingleChildScrollView(
-      child: Html(
-        data: html,
+      child: Text(
+        html,
       ),
     );
   }
