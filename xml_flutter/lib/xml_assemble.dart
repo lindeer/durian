@@ -68,6 +68,7 @@ class AssembleTank {
   static final _defaultBuilders = const {
     'text': const TextAssembleBuilder(),
     'image': const ImageAssembleBuilder(),
+    'view': const ViewAssembleBuilder(),
   };
 
   final Map<String, AssembleBuilder> builders;
@@ -97,6 +98,20 @@ class AssembleTank {
         child: w,
       );
     }
+    final flex = _canFlex(css);
+    final width = css.width;
+    final height = css.height;
+    if (width != null || height != null) {
+      final borderBox = (css['box-sizing'] ?? 'content-box') == 'border-box';
+      final horizontal = padding?.horizontal ?? 0;
+      final vertical = padding?.vertical ?? 0;
+
+      w = SizedBox(
+        width: borderBox ? width : width?.let((it) => it + horizontal),
+        height: borderBox ? height : height?.let((it) => it + vertical),
+        child: w,
+      );
+    }
     final borderRadius = css.borderRadius;
     if (borderRadius != null) {
       w = ClipRRect(
@@ -104,7 +119,21 @@ class AssembleTank {
         child: w,
       );
     }
+
+    // flexible should be contained directly inside Column/Row
+    if (flex > 0) {
+      w = Flexible(
+        flex: flex,
+        fit: FlexFit.tight,
+        child: w,
+      );
+    }
     return w;
+  }
+
+  int _canFlex(CSSStyle style) {
+    final flex = style.optInt('flex', 0);
+    return flex;
   }
 
   Widget build(BuildContext context, _AssembleElement root) {

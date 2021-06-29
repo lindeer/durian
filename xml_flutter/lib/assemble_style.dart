@@ -8,6 +8,12 @@ class CSSStyle {
   @override
   String toString() => _attrs.toString();
 
+  bool get isEmpty => _attrs.isEmpty;
+
+  String? operator[](String key) => _attrs[key];
+
+  int optInt(String key, [int defVal = 0]) => _attrs[key]?.let((it) => int.tryParse(it)) ?? defVal;
+
   double _optDouble(String key, [double defVal = 0.0]) => (_attrs[key] as num?)?.toDouble() ?? defVal;
 
   double? _getDouble(String key) => _attrs[key]?.let((it) => double.tryParse(it));
