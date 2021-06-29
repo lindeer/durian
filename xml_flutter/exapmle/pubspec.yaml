@@ -51,6 +51,12 @@ flutter:
     - assets/detail.wxss
     - assets/detail.wxml
     - assets/juice-detail.wxml
+    - assets/images/comment.png
+    - assets/images/flag.png
+    - assets/images/heart2.png
+    - assets/images/star2.png
+    - assets/images/icon1.jpeg
+    - assets/images/good-bad.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

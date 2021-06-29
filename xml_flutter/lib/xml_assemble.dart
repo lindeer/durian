@@ -26,8 +26,20 @@ class ImageAssembleBuilder implements AssembleBuilder {
   Widget build(_AssembleElement e, List<Widget> children) {
     final style = e.style;
     final extra = e.extra;
-    return Image.network(
-      extra?['src'] ?? '',
+    final src = extra?['src'] ?? '';
+    if (src.startsWith('http')) {
+      return Image.network(
+        src,
+      );
+    }
+    if (src.startsWith('@image/')) {
+      final name = 'assets/images/${src.substring(7)}';
+      return Image.asset(
+        name,
+      );
+    }
+    return Image.file(
+      File(src),
     );
   }
 }

@@ -9,7 +9,7 @@
     <view class="answerer-wrp" style="position: relative; width: 750rpx; height: 150rpx; background: #fff;">
         <view class="answerer flex-wrp" style="position: relative; margin: 0 auto; width: 630rpx; height: 90rpx; padding: 30rpx; background: #fff; border: solid 1px #ebebeb; border-radius: 3px; box-shadow: 0 1px 2px #bebebe;">
             <view class="avatar flex-item" style="flex: 0; width: 90rpx; height: 90rpx;">
-                <image src="../../images/icon1.jpeg" style="display: inline-block; width: 90rpx; height: 90rpx; border-radius: 90rpx;"/>
+                <image src="@image/icon1.jpeg" style="display: inline-block; width: 90rpx; height: 90rpx; border-radius: 90rpx;"/>
             </view>
             <view class="answerer-info flex-item" style="flex: 5; text-align: left; padding: 0rpx 20rpx; line-height: 38rpx;">
                 <text class="answerer-name" style="display: block; font-size: 32rpx;">Rebecca</text>
@@ -34,7 +34,7 @@
             看到描述最后一段，感觉有骗答案的嫌疑
 
         </text>
-        <image src="../../images/1444983318907-_DSC1826.jpg" style="width: 100%; margin: 20rpx 0;"/>
+        <image src="https://ww3.sinaimg.cn/large/6d2a6003jw1dxh9c9685vj.jpg" style="width: 100%; margin: 20rpx 0;"/>
         <text style="font-size: 32rpx; color: #454545; line-height: 44rpx;">
             难道不明白纸质书更贵啊！！！
 
@@ -49,32 +49,32 @@
             看到描述最后一段，感觉有骗答案的嫌疑
 
         </text>
-        <image src="../../images/1444983318907-_DSC1826.jpg" style="width: 100%; margin: 20rpx 0;"/>
+        <image src="https://ww3.sinaimg.cn/large/6d2a6003jw1dxh9c9685vj.jpg" style="width: 100%; margin: 20rpx 0;"/>
     </view>
 
     <view class="answer-footer flex-wrp" style="position: fixed; bottom: 0; height: 80rpx; border-top: solid 1px #ebebeb; background: #ffffff; width: 670rpx; padding: 20rpx 40rpx;">
         <view class="good flex-item" style="flex: 1; height: 40rpx; border: solid 1px #d1d1d1; border-radius: 3px; padding: 10rpx 8rpx; margin: 10rpx 0;">
             <view class="good-bad" style="display: inline-block;">
-                <image src="../../images/good-bad.png" style="display: inline-block; width: 38rpx; height: 38rpx; vertical-align: middle;"/>
+                <image src="@image/good-bad.png" style="display: inline-block; width: 38rpx; height: 38rpx; vertical-align: middle;"/>
             </view>
             <view class="good-num" style="display: inline-block; padding: 10rpx 4rpx;">2.1k</view>
         </view>
         <view class="operation-wrp flex-item" style="flex: 5;">
             <view class="operation flex-wrp flex-tab" style="justify-content: space-between; padding: 0 0 0 60rpx;">
                 <view class="operation-btn flex-item" style="flex: 1; text-align: center;">
-                    <image src="../../images/flag.png" style="display: block; margin: 0 auto; width: 50rpx; height: 50rpx;"/>
+                    <image src="@image/flag.png" style="display: block; margin: 0 auto; width: 50rpx; height: 50rpx;"/>
                     <text style="display: block; font-size: 14rpx; color: #bebebe;">没有帮助</text>
                 </view>
                 <view class="operation-btn flex-item" style="flex: 1; text-align: center;">
-                    <image src="../../images/heart2.png" style="display: block; margin: 0 auto; width: 50rpx; height: 50rpx;"/>
+                    <image src="@image/heart2.png" style="display: block; margin: 0 auto; width: 50rpx; height: 50rpx;"/>
                     <text style="display: block; font-size: 14rpx; color: #bebebe;">感谢</text>
                 </view>
                 <view class="operation-btn flex-item" style="flex: 1; text-align: center;">
-                    <image src="../../images/star2.png" style="display: block; margin: 0 auto; width: 50rpx; height: 50rpx;"/>
+                    <image src="@image/star2.png" style="display: block; margin: 0 auto; width: 50rpx; height: 50rpx;"/>
                     <text style="display: block; font-size: 14rpx; color: #bebebe;">收藏</text>
                 </view>
                 <view class="operation-btn flex-item" style="flex: 1; text-align: center;">
-                    <image src="../../images/comment.png" style="display: block; margin: 0 auto; width: 50rpx; height: 50rpx;"/>
+                        <image src="@image/comment.png" style="display: block; margin: 0 auto; width: 50rpx; height: 50rpx;"/>
                     <text style="display: block; font-size: 14rpx; color: #bebebe;">302</text>
                 </view>
 
