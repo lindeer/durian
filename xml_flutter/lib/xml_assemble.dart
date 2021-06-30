@@ -119,6 +119,15 @@ class AssembleTank {
         child: w,
       );
     }
+
+    final color = css.color('background-color') ?? css.color('background');
+    if (color != null) {
+      w = ColoredBox(
+        color: color,
+        child: w,
+      );
+    }
+
     final borderRadius = css.borderRadius;
     if (borderRadius != null) {
       w = ClipRRect(
