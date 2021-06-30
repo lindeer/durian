@@ -2,20 +2,20 @@
 
 
 <!--answer.wxml-->
-<view class="container" style="padding: 0; font-size: 14rpx; background: #F0F4F3; color: #000;">
+<view class="container" style="height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-between; box-sizing: border-box; background: #F0F4F3; padding: 0; font-size: 14rpx; color: #000;">
     <view class="question" bindtap="toQuestion" style="position: relative; width: 650rpx; padding: 40rpx 50rpx 30rpx; background: #298DE5; color: #fff; font-size: 38rpx; line-height: 48rpx;">
         <text class="question-title">选择 Kindle 而不是纸质书的原因是什么？</text>
     </view>
     <view class="answerer-wrp" style="position: relative; width: 750rpx; height: 150rpx; background: #fff;">
         <view class="answerer flex-wrp" style="display: flex; position: relative; margin: 0 auto; width: 630rpx; height: 90rpx; padding: 30rpx; background: #fff; border: solid 1px #ebebeb; border-radius: 3px; box-shadow: 0 1px 2px #bebebe;">
-            <view class="avatar flex-item" style="flex: 0; width: 90rpx; height: 90rpx;">
+            <view class="avatar flex-item" style="flex-grow: 1; text-align: center; flex: 1; width: 90rpx; height: 90rpx;">
                 <image src="@image/icon1.jpeg" style="display: inline-block; width: 90rpx; height: 90rpx; border-radius: 90rpx;"/>
             </view>
-            <view class="answerer-info flex-item" style="flex: 5; text-align: left; padding: 0rpx 20rpx; line-height: 38rpx;">
+            <view class="answerer-info flex-item" style="flex-grow: 1; text-align: left; flex: 5; padding: 10rpx 20rpx; line-height: 38rpx;">
                 <text class="answerer-name" style="display: block; font-size: 32rpx;">Rebecca</text>
                 <text class="answerer-des" style="display: block; font-size: 22rpx; color: #808080; line-height: 28rpx;">WEB前端*不靠谱天气预报员*想做代码小仙女</text>
             </view>
-            <view class="follow flex-item" style="flex: 0; font-size: 22rpx;">
+            <view class="follow flex-item" style="flex-grow: 1; text-align: center; flex: 2; padding: 15rpx 0; font-size: 22rpx;">
                 <text style="display: inline-block; padding: 15rpx 20rpx; color: #40bcd0; border: solid 2px #40bcd0; border-radius: 6rpx;">十 关注</text>
             </view>
         </view>

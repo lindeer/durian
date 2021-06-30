@@ -13,8 +13,14 @@ class TextAssembleBuilder implements AssembleBuilder {
   Widget build(_AssembleElement e, List<Widget> children) {
     final style = e.style;
     final extra = e.extra;
+    final color = style.color('color');
+    final size = style._getDouble('font-size');
     return Text(
       extra?['data'] ?? '',
+      style: TextStyle(
+        color: color,
+        fontSize: size,
+      ),
     );
   }
 }

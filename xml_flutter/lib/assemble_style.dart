@@ -90,4 +90,18 @@ class CSSStyle {
       bottomLeft: (bottomLeft ?? l[3])?.let((it) => Radius.circular(it)) ?? Radius.zero,
     );
   }
+
+  static const _poundSign = 0x23;
+  Color? color(String key) {
+    final str = _attrs[key];
+    if (str == null || str.isEmpty) return null;
+    final first = str.codeUnitAt(0);
+    if (first == _poundSign) {
+      final text = str.substring(1);
+      final value = text.length == 3 ? text.split('').map((e) => '$e$e').join('') : text;
+      final color = int.tryParse(value, radix: 16)
+          ?.let((color) => color <= 0xffffff ? Color(color).withAlpha(255) : Color(color));
+      return color;
+    }
+  }
 }
