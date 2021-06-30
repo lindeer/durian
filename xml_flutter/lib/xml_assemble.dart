@@ -20,6 +20,7 @@ class TextAssembleBuilder implements AssembleBuilder {
       style: TextStyle(
         color: color,
         fontSize: size,
+        height: 1,
       ),
     );
   }
@@ -124,6 +125,23 @@ class AssembleTank {
         borderRadius: borderRadius,
         child: w,
       );
+    }
+
+    final marginCSS = css['margin'];
+    if (marginCSS != null) {
+      if (marginCSS.contains('auto')) {
+        w = Center(
+          child: w,
+        );
+      } else {
+        final margin = css.margin;
+        if (margin != null) {
+          w = Padding(
+            padding: margin,
+            child: w,
+          );
+        }
+      }
     }
 
     // flexible should be contained directly inside Column/Row

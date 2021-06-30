@@ -13,6 +13,7 @@ class ViewAssembleBuilder implements AssembleBuilder {
       );
     }
 
+    final align = style['text-align'];
     final display = style['display'];
     final flex = style['flex-direction'];
     final useRow = display == 'flex' && flex != 'column';
@@ -24,6 +25,10 @@ class ViewAssembleBuilder implements AssembleBuilder {
     }
 
     return Column(
+      crossAxisAlignment: align == 'center'
+          ? CrossAxisAlignment.center
+          : align == 'right' ? CrossAxisAlignment.end
+          : CrossAxisAlignment.start,
       children: children,
     );
   }
