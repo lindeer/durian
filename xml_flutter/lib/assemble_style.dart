@@ -168,6 +168,43 @@ class CSSStyle {
       );
     }
   }
+
+  static bool _startsDigit(String? v) => v != null && v.isNotEmpty && (v.codeUnitAt(0) ^ 0x30) <= 9;
+
+  List<BoxShadow>? get boxShadow {
+    final shadowStr = _attrs['box-shadow']?.replaceAll('px', '');
+    if (shadowStr == null) return null;
+
+    final shadows = shadowStr.split(',').map((v) {
+      final values = v.split(' ');
+      if (values.length < 2) {
+        return null;
+      }
+      final offset = Offset(
+        values[0].let((it) => double.tryParse(it)) ?? 0,
+        values[1].let((it) => double.tryParse(it)) ?? 0,
+      );
+      if (values.length == 2) {
+        return BoxShadow(offset: offset);
+      }
+      final last = values.last;
+      final endWithColor = !_startsDigit(last);
+      final color = _toColor(last);
+      final list = endWithColor ? values.sublist(0, values.length - 1) : values;
+
+      final blur = list.length > 2 ? list[2].let((it) => double.tryParse(it)) : null;
+      final spread = list.length > 3 ? list[3].let((it) => double.tryParse(it)) : null;
+
+      return BoxShadow(
+        offset: offset,
+        blurRadius: blur ?? 0,
+        spreadRadius: spread ?? 0,
+        color: color ?? Colors.black,
+      );
+    }).whereType<BoxShadow>();
+
+    return shadows.isEmpty ? null : shadows.toList(growable: false);
+  }
 }
 
 /// style inherited from ancestor, e.g. text color

@@ -108,12 +108,15 @@ class AssembleTank {
     final color = css.color('background-color') ?? css.color('background');
     final borderRadius = css.borderRadius;
     final border = css.border;
+    final shadows = css.boxShadow;
+
     BoxDecoration? decoration;
-    if (color != null || borderRadius != null || border != null) {
+    if (color != null || borderRadius != null || border != null || shadows != null) {
       decoration = BoxDecoration(
         color: color,
         borderRadius: borderRadius,
         border: border,
+        boxShadow: shadows,
       );
     }
 
