@@ -77,7 +77,7 @@ class CSSStyle {
     final keys = _attrs.keys.where((k) => k.contains(RegExp(r'border*-radius')));
     if (keys.isEmpty) return null;
 
-    final values = _attrs['border-radius']?.split(' ').map((e) => double.tryParse(e));
+    final values = _attrs['border-radius']?.replaceAll('px', '').split(' ').map((e) => double.tryParse(e));
     if (values == null) return null;
 
     final l = _sizeList(values);
