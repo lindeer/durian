@@ -23,6 +23,12 @@ class ViewAssembleBuilder implements AssembleBuilder {
         children: children,
       );
     }
+    final inlineChildren = e.children.where((e) => e.style['display']?.startsWith('inline') ?? false);
+    if (inlineChildren.length > 0) {
+      return Wrap(
+        children: children,
+      );
+    }
 
     return Column(
       crossAxisAlignment: align == 'center'
