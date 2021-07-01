@@ -7,6 +7,7 @@
         <text class="question-title">选择 Kindle 而不是纸质书的原因是什么？</text>
     </view>
     <view class="answerer-wrp" style="position: relative; width: 750rpx; height: 150rpx; background: #fff;">
+        <view class="bg-half" style="position: absolute; top: 0; width: 750rpx; height: 75rpx; background: #298DE5;"/>
         <view class="answerer flex-wrp" style="display: flex; position: relative; margin: 0 auto; width: 630rpx; height: 90rpx; padding: 30rpx; background: #fff; border: solid 1px #ebebeb; border-radius: 3px; box-shadow: 0 1px 2px #bebebe;">
             <view class="avatar flex-item" style="flex-grow: 1; text-align: center; flex: 1; width: 90rpx; height: 90rpx;">
                 <image src="@image/icon1.jpeg" style="display: inline-block; width: 90rpx; height: 90rpx; border-radius: 90rpx;"/>

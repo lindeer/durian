@@ -29,6 +29,12 @@ class ViewAssembleBuilder implements AssembleBuilder {
         children: children,
       );
     }
+    final alignChildren = e.children.where((e) => e.style['position'] == 'absolute');
+    if (alignChildren.length > 0) {
+      return Stack(
+        children: children,
+      );
+    }
 
     return Column(
       crossAxisAlignment: align == 'center'

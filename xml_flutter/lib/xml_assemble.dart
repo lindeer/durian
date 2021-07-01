@@ -101,6 +101,7 @@ class AssembleTank {
     final padding = css.padding;
 
     final flex = _canFlex(css);
+    final positionCSS = css['position'];
     final width = css.width;
     final height = css.height;
 
@@ -175,6 +176,34 @@ class AssembleTank {
         fit: FlexFit.tight,
         child: w,
       );
+    } else if (positionCSS == 'absolute') {
+      final left = css._getDouble('left');
+      final top = css._getDouble('top');
+      final right = css._getDouble('right');
+      final bottom = css._getDouble('bottom');
+      w = Positioned(
+        left: left,
+        top: top,
+        right: right,
+        bottom: bottom,
+        child: w,
+      );
+    } else if (positionCSS == 'relative') {
+      final left = css._getDouble('left');
+      final top = css._getDouble('top');
+      final right = css._getDouble('right');
+      final bottom = css._getDouble('bottom');
+      final dx = left ?? right?.let((it) => -right);
+      final dy = top ?? bottom?.let((it) => -bottom);
+      if (dx != null || dy != null) {
+        w = Transform.translate(
+          offset: Offset(
+            dx ?? 0,
+            dy ?? 0,
+          ),
+          child: w,
+        );
+      }
     }
     return w;
   }
