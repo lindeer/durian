@@ -12,11 +12,11 @@
                 <image src="@image/icon1.jpeg" style="display: inline-block; width: 90rpx; height: 90rpx; border-radius: 90rpx;"/>
             </view>
             <view class="answerer-info flex-item" style="flex-grow: 1; text-align: left; flex: 5; padding: 10rpx 20rpx; line-height: 38rpx;">
-                <text class="answerer-name" style="display: block; font-size: 26rpx;">Rebecca</text>
+                <text class="answerer-name" style="display: block; font-size: 22rpx;">Rebecca</text>
                 <text class="answerer-des" style="display: block; font-size: 22rpx; color: #808080; line-height: 28rpx;">WEB前端*不靠谱天气预报员*想做代码小仙女</text>
             </view>
             <view class="follow flex-item" style="flex-grow: 1; text-align: center; flex: 2; padding: 15rpx 0; font-size: 22rpx;">
-                <text style="display: inline-block; padding: 15rpx 20rpx; color: #40bcd0; border: solid 2px #40bcd0; border-radius: 6rpx;">十 关注</text>
+                <text bindtap="follow" style="display: inline-block; padding: 15rpx 20rpx; color: #40bcd0; border: solid 2px #40bcd0; border-radius: 6rpx;">十 关注</text>
             </view>
         </view>
     </view>

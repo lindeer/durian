@@ -99,40 +99,51 @@ class AssembleTank {
 
     final css = element.style;
     final padding = css.padding;
-    if (padding != null) {
-      w = Padding(
-        padding: padding,
-        child: w,
-      );
-    }
+
     final flex = _canFlex(css);
     final width = css.width;
     final height = css.height;
-    if (width != null || height != null) {
-      final borderBox = (css['box-sizing'] ?? 'content-box') == 'border-box';
-      final horizontal = padding?.horizontal ?? 0;
-      final vertical = padding?.vertical ?? 0;
-
-      w = SizedBox(
-        width: borderBox ? width : width?.let((it) => it + horizontal),
-        height: borderBox ? height : height?.let((it) => it + vertical),
-        child: w,
-      );
-    }
 
     final color = css.color('background-color') ?? css.color('background');
     final borderRadius = css.borderRadius;
     final border = css.border;
+    BoxDecoration? decoration;
     if (color != null || borderRadius != null || border != null) {
-      w = DecoratedBox(
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: borderRadius,
-          border: border,
-        ),
+      decoration = BoxDecoration(
+        color: color,
+        borderRadius: borderRadius,
+        border: border,
+      );
+    }
+
+    final borderBox = (css['box-sizing'] ?? 'content-box') == 'border-box';
+    double? _width = width, _height = height;
+    if (!borderBox) {
+      final horizon = (padding?.horizontal ?? 0); // + (border?.let((it) => it.left.width + it.right.width) ?? 0);
+      final vertical = (padding?.vertical ?? 0); // + (border?.let((it) => it.top.width + it.bottom.width) ?? 0);
+      _width = width?.let((it) => it + horizon);
+      _height = height?.let((it) => it + vertical);
+    }
+    final validSize = _width != null || _height != null;
+    if (padding != null || decoration != null || validSize) {
+      w = Ink(
+        padding: padding,
+        decoration: decoration,
+        width: _width,
+        height: _height,
         child: w,
       );
     }
+
+    final tap = element.extra?['bindtap'];
+    if (tap != null) {
+      w = InkWell(
+        onTap: () {
+        },
+        child: w,
+      );
+    }
+
     if (borderRadius != null) {
       w = ClipRRect(
         borderRadius: borderRadius,
