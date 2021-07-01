@@ -108,3 +108,15 @@ class CSSStyle {
     }
   }
 }
+
+/// style inherited from ancestor, e.g. text color
+class AncestorStyle {
+  final Color textColor;
+
+  AncestorStyle._(this.textColor);
+
+  static AncestorStyle? from(CSSStyle style, AncestorStyle? parent) {
+    final color = style.color('color');
+    return color?.let((it) => AncestorStyle._(it)) ?? parent;
+  }
+}

@@ -5,8 +5,9 @@ class _AssembleElement {
   final CSSStyle style;
   final Map<String, String>? extra;
   final List<_AssembleElement> children;
+  final AncestorStyle? inheritStyle;
 
-  _AssembleElement(this.name, Map<String, String> s, this.extra, this.children) : style = CSSStyle(s);
+  _AssembleElement(this.name, this.style, this.extra, this.children, this.inheritStyle);
 
   @override
   String toString() {
