@@ -95,8 +95,9 @@ class CSSStyle {
   }
 
   static const _poundSign = 0x23;
-  Color? color(String key) {
-    final str = _attrs[key];
+  Color? color(String key) => _toColor(_attrs[key]);
+
+  static Color? _toColor(String? str) {
     if (str == null || str.isEmpty) return null;
     final first = str.codeUnitAt(0);
     if (first == _poundSign) {
@@ -105,6 +106,66 @@ class CSSStyle {
       final color = int.tryParse(value, radix: 16)
           ?.let((color) => color <= 0xffffff ? Color(color).withAlpha(255) : Color(color));
       return color;
+    }
+  }
+
+  static const _borderStyles = const {
+    'none': BorderStyle.none,
+    'solid': BorderStyle.solid,
+  };
+
+  BorderSide? _side(String name, BorderSide? opt) {
+    final str = _attrs[name];
+    if (str == null) return null;
+
+    String? styleStr;
+    String? widthStr;
+    String? colorStr;
+
+    _apply(String v) {
+      if (_borderStyles.containsKey(v)) {
+        // style = _borderStyles[v];
+        styleStr = v;
+      } else if ((v.codeUnitAt(0) ^ 0x30) <= 9) {
+        // width = double.tryParse(v.replaceAll('px', ''));
+        widthStr = v.replaceAll('px', '');
+      } else if (_toColor(v) != null) {
+        // color = _toColor(v);
+        colorStr = v;
+      }
+    }
+    if (str.contains(' ')) {
+      str.split(' ').forEach(_apply);
+    } else {
+      _apply(str);
+    }
+
+    final _widthStr = _attrs['$name-width']?.replaceAll('px', '');
+    BorderStyle? style = (_attrs['$name-style'] ?? styleStr)?.let((it) => _borderStyles[it]);
+    double? width = (_widthStr ?? widthStr)?.let((it) => double.tryParse(it));
+    Color? color = (_attrs['$name-color'] ?? colorStr)?.let((it) => _toColor(it));
+    if (style != null || width != null || color != null) {
+      return BorderSide(
+        color: color ?? opt?.color ?? Colors.black,
+        width: width ?? opt?.width ?? 1.0,
+        style: style ?? opt?.style ?? BorderStyle.solid,
+      );
+    }
+  }
+
+  Border? get border {
+    final all = _side('border', null);
+    final left = _side('border-left', all) ?? all;
+    final top = _side('border-top', all) ?? all;
+    final right = _side('border-right', all) ?? all;
+    final bottom = _side('border-bottom', all) ?? all;
+    if (left != null || top != null || right != null || bottom != null) {
+      return Border(
+        left: left ?? BorderSide.none,
+        top: top ?? BorderSide.none,
+        right: right ?? BorderSide.none,
+        bottom: bottom ?? BorderSide.none,
+      );
     }
   }
 }
