@@ -1,87 +1,135 @@
 
 
-
-<!--answer.wxml-->
-<view class="container" style="height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-between; box-sizing: border-box; background: #F0F4F3; padding: 0; font-size: 14rpx; color: #000;">
-    <view class="question" bindtap="toQuestion" style="position: relative; width: 650rpx; padding: 40rpx 50rpx 30rpx; background: #298DE5; color: #fff; font-size: 38rpx; line-height: 48rpx;">
-        <text class="question-title">选择 Kindle 而不是纸质书的原因是什么？</text>
+<view class="container" style="display: flex; flex-direction: column; min-height: 100vh;">
+  <view class="header" style="flex-shrink: 0; flex-grow: 0; display: flex; align-items: center; flex-direction: column; padding: 14px 0 20px; background-color: #F7F7F7;">
+    <view class="avatar-wrap" style="position: relative; width: 64px; height: 64px;">
+      <image wx:if="{{data.wearing_medal.wearFlag === 1}}" mode="aspectFill" class="medal" action="openUrl" param-url="{{data.wearing_medal.medalUrl}}" src="{{data.wearing_medal.medalIcon}}" style="position: absolute; right: 0; bottom: 0; width: 20px; height: 20px; z-index: 1; border-radius: 50%;">
+      </image>
+      <image class="avatar" mode="aspectFill" src="{{data.avatar_url ? data.avatar_url + '?x-s3-process=image/format,png/resize,m_mfit,h_128,w_128': 'https://img-ys011.didistatic.com/static/dicht_cdn/do1_mwUMAMkisnzKu8zqweYU'}}" action="previewAvatar" style="position: absolute; left: 0; top: 0; width: 64px; height: 64px; border-radius: 50%; overflow: hidden; background-color: #999999;"/>
     </view>
-    <view class="answerer-wrp" style="position: relative; width: 750rpx; height: 150rpx; background: #fff;">
-        <view class="bg-half" style="position: absolute; top: 0; width: 750rpx; height: 75rpx; background: #298DE5;"/>
-        <view class="answerer flex-wrp" style="display: flex; position: relative; margin: 0 auto; width: 630rpx; height: 90rpx; padding: 30rpx; background: #fff; border: solid 1px #ebebeb; border-radius: 4px; box-shadow: 0 1px 2px #bebebe;">
-            <view class="avatar flex-item" style="flex-grow: 1; text-align: center; flex: 1; width: 90rpx; height: 90rpx;">
-                <image src="@image/icon1.jpeg" style="display: inline-block; width: 90rpx; height: 90rpx; border-radius: 90rpx;"/>
-            </view>
-            <view class="answerer-info flex-item" style="flex-grow: 1; text-align: left; flex: 5; padding: 10rpx 20rpx; line-height: 38rpx;">
-                <text class="answerer-name" style="display: block; font-size: 22rpx;">Rebecca</text>
-                <text class="answerer-des" style="display: block; font-size: 22rpx; color: #808080; line-height: 28rpx;">WEB前端*不靠谱天气预报员*想做代码小仙女</text>
-            </view>
-            <view class="follow flex-item" style="flex-grow: 1; text-align: center; flex: 2; padding: 15rpx 0; font-size: 22rpx;">
-                <text bindtap="follow" style="display: inline-block; padding: 15rpx 20rpx; color: #40bcd0; border: solid 2px #40bcd0; border-radius: 6rpx;">十 关注</text>
-            </view>
+    <view class="name-wrap" style="padding-top: 20px; font-weight: 500; font-size: 20px; color: #111111; line-height: 1; white-space: nowrap;">{{data.fullname}} </view>
+    <view class="title-wrap" style="padding-top: 10px; color: #666666; font-size: 14px; line-height: 1;">{{data.job}}</view>
+    <view class="btns-wrap" wx:if="{{data.emp_status !== -1}}" style="padding-top: 24px; margin: 0 40px; display: flex; align-items: center;">
+      <view class="action-btn" action="openUrl" wx:if="{{data.homepage}}" param-url="{{data.homepage}}" style="width: 40px; height: 40px; border-radius: 50%; background-color: rgba(253, 129, 60, 0.1); color: #fc8c4e; font-size: 16px; line-height: 40px; text-align: center; transition: 300ms color ease-out,300ms background-color ease-out;">
+        <icon size="14" type="home"/>
+      </view>
+      <view class="action-btn" wx:if="{{options.view === 'guest'}}" action="follow" param-uid="{{data.id}}" style="width: 40px; height: 40px; border-radius: 50%; background-color: rgba(253, 129, 60, 0.1); color: #fc8c4e; font-size: 16px; line-height: 40px; text-align: center; transition: 300ms color ease-out,300ms background-color ease-out; margin-left: 24px;">
+        <icon size="14" type="{{data.is_follow ? 'star-solid': 'star'}}"/>
+      </view>
+      <view class="action-btn" wx:if="{{options.view === 'guest' && ((data.display_config >> 0) & 1) === 0}}" action="makePhoneCall" param-uid="{{data.id}}" style="width: 40px; height: 40px; border-radius: 50%; background-color: rgba(253, 129, 60, 0.1); color: #fc8c4e; font-size: 16px; line-height: 40px; text-align: center; transition: 300ms color ease-out,300ms background-color ease-out; margin-left: 24px;">
+        <icon size="14" type="phone"/>
+      </view>
+      <view class="action-btn" action="shareNameCard" style="width: 40px; height: 40px; border-radius: 50%; background-color: rgba(253, 129, 60, 0.1); color: #fc8c4e; font-size: 16px; line-height: 40px; text-align: center; transition: 300ms color ease-out,300ms background-color ease-out; margin-left: 24px;">
+        <icon size="14" type="share"/>
+      </view>
+    </view>
+  </view>
+
+  <view class="body" wx:if="{{data.emp_status !== -1}}" style="flex-grow: 1; display: flex; flex-direction: column;">
+    <view class="work-state work-state-guest" wx:if="{{options.view === 'guest' && data.work_status.emoji }}" style="border-radius: 8px; margin: 20px 20px 0; padding: 8px 12px; display: flex; background-color: rgba(0, 0, 0, 0.02);">
+      <emoji type="{{data.work_status.emoji || 'message'}}" class="work-state-icon" style="margin-top: 3px;"/>
+      <view class="work-state-text" style="margin-left: 8px; color: #999999; font-size: 14px; line-height: 22px; flex-grow: 1; word-break: break-word;">{{data.work_status.text}}</view>
+    </view>
+    <view wx:if="{{options.view === 'main'}}" class="work-state work-state-main" action="openWorkStateEditor" style="border-radius: 8px; margin: 20px 20px 0; padding: 8px 12px; display: flex; border: 1px solid #EEEEEE; color: #999999;">
+      <emoji wx:if="{{data.work_status.emoji}}" type="{{data.work_status.emoji || 'message'}}" class="work-state-icon" style="margin-top: 3px;"/>
+      <icon wx:else="" type="emoji-add" size="14" class="work-state-icon" style="margin-top: 3px;"/>
+      <view class="work-state-text" style="margin-left: 8px; color: #999999; font-size: 14px; line-height: 22px; flex-grow: 1; word-break: break-word; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">{{data.work_status.text || (options.lang === 'en-us'? 'Add working status': '添加工作状态')}}</view>
+      <icon type="edit" class="work-state-edit" style="align-self: center; flex-shrink: 0;"/>
+    </view>
+    <view class="rows" style="margin-top: 8px; padding: 0 0 100px;">
+      <view class="row" wx:if="{{options.view === 'guest' && (data.nickname)}}" style="position: relative; margin: 0 0 0 20px; padding: 12px 0; padding-right: 20px;">
+        <view class="row-tit" style="padding-bottom: 4px; color: #999999; font-size: 12px; line-height: 17px;">{{options.lang === 'en-us' ? 'Preferred Name': '昵称'}}</view>
+        <view class="row-bd" action="showActionSheet" param-itemList="[{"name": "{{options.lang === "en-us"? "Copy": "复制昵称"}}", "action":"copyText", "actionParams": {"text":"{{data.nickname}}"} }]" style="display: flex; align-items: center; color: #333333; font-size: 14px; line-height: 22px;">
+          <text style="flex-grow: 1;">{{data.nickname}}</text>
         </view>
-    </view>
-
-    <view class="answer-content" style="padding: 30rpx 40rpx; background: #ffffff;">
-        <text style="font-size: 32rpx; color: #454545; line-height: 44rpx;">难道不明白纸质书更贵啊！！！
-
-            若觉得kindle更贵，我觉得要么阅读量太少，那确实没有买kindle的必要。要么买的都是盗版的纸质书？我不清楚不加以评论。。。
-
-            另外，用kindle看小说的怎么真心不懂了。题主不看小说么？难道题主拿来看教科书还是技术文档？还是题主觉得小说就是小时代内样的？（对小时代没偏见，尊重多样性）
-
-            而且纸质书搬起来真心困难啊！当初毕业带不回来，忍痛卖了不少好桑心！
-
-            碎片时间阅读总不能天天背着一本书吧，那么占地方。
-
-            看到描述最后一段，感觉有骗答案的嫌疑
-
-        </text>
-        <image src="https://ww3.sinaimg.cn/large/6d2a6003jw1dxh9c9685vj.jpg" style="width: 100%; margin: 20rpx 0;"/>
-        <text style="font-size: 32rpx; color: #454545; line-height: 44rpx;">
-            难道不明白纸质书更贵啊！！！
-
-            若觉得kindle更贵，我觉得要么阅读量太少，那确实没有买kindle的必要。要么买的都是盗版的纸质书？我不清楚不加以评论。。。
-
-            另外，用kindle看小说的怎么真心不懂了。题主不看小说么？难道题主拿来看教科书还是技术文档？还是题主觉得小说就是小时代内样的？（对小时代没偏见，尊重多样性）
-
-            而且纸质书搬起来真心困难啊！当初毕业带不回来，忍痛卖了不少好桑心！
-
-            碎片时间阅读总不能天天背着一本书吧，那么占地方。
-
-            看到描述最后一段，感觉有骗答案的嫌疑
-
-        </text>
-        <image src="https://ww3.sinaimg.cn/large/6d2a6003jw1dxh9c9685vj.jpg" style="width: 100%; margin: 20rpx 0;"/>
-    </view>
-
-    <view class="answer-footer flex-wrp" style="display: flex; position: fixed; bottom: 0; height: 70rpx; border-top: solid 1px #ebebeb; background: #ffffff; width: 670rpx; padding: 20rpx 40rpx;">
-        <view class="good flex-item" style="flex-grow: 1; text-align: center; flex: 1; height: 40rpx; border: solid 1px #d1d1d1; border-radius: 3px; padding: 10rpx 8rpx; margin: 10rpx 0;">
-            <view class="good-bad" style="display: inline-block;">
-                <image src="@image/good-bad.png" style="display: inline-block; width: 38rpx; height: 38rpx; vertical-align: middle;"/>
-            </view>
-            <text class="good-num" style="display: inline-block; padding: 10rpx 4rpx;">2.1k</text>
+      </view>
+      <view class="row" wx:if="{{options.view === 'main'}}" style="position: relative; margin: 0 0 0 20px; padding: 12px 0; padding-right: 20px;">
+        <view class="row-tit" style="padding-bottom: 4px; color: #999999; font-size: 12px; line-height: 17px;">{{options.lang === 'en-us' ? 'Preferred Name': '昵称'}}</view>
+        <view class="row-bd" action="openNickNameEditor" style="display: flex; align-items: center; color: #333333; font-size: 14px; line-height: 22px;">
+          <text wx:if="{{data.nickname}}" style="flex-grow: 1;">{{data.nickname}}</text>
+          <text wx:else="" style="flex-grow: 1;">{{options.lang === 'en-us' ? 'Fill in': '未设置'}}</text>
+          <icon class="more-btn" size="9" type="right-arrow" style="flex-grow: 0; flex-shrink: 0; float: right; color: #999999;"/>
         </view>
-        <view class="operation-wrp flex-item" style="flex-grow: 1; text-align: center; flex: 5;">
-            <view class="operation flex-wrp flex-tab" style="display: flex; flex-flow: row nowrap; align-items: stretch; justify-content: space-between; padding: 0 0 0 60rpx;">
-                <view class="operation-btn flex-item" style="flex-grow: 1; text-align: center; flex: 1;">
-                    <image src="@image/flag.png" style="display: block; margin: 0 auto; width: 50rpx; height: 50rpx;"/>
-                    <text style="display: block; font-size: 14rpx; color: #bebebe;">没有帮助</text>
-                </view>
-                <view class="operation-btn flex-item" style="flex-grow: 1; text-align: center; flex: 1;">
-                    <image src="@image/heart2.png" style="display: block; margin: 0 auto; width: 50rpx; height: 50rpx;"/>
-                    <text style="display: block; font-size: 14rpx; color: #bebebe;">感谢</text>
-                </view>
-                <view class="operation-btn flex-item" style="flex-grow: 1; text-align: center; flex: 1;">
-                    <image src="@image/star2.png" style="display: block; margin: 0 auto; width: 50rpx; height: 50rpx;"/>
-                    <text style="display: block; font-size: 14rpx; color: #bebebe;">收藏</text>
-                </view>
-                <view class="operation-btn flex-item" style="flex-grow: 1; text-align: center; flex: 1;">
-                    <image src="@image/comment.png" style="display: block; margin: 0 auto; width: 50rpx; height: 50rpx;"/>
-                    <text style="display: block; font-size: 14rpx; color: #bebebe;">302</text>
-                </view>
-
-            </view>
+      </view>
+      <!-- view class="row" wx:if="{{options.view === 'guest'}}">
+        <view class="row-tit">备注</view>
+        <view class="row-bd">
+          <text wx:if="{{data.xxx}}">{{data.xxx}}</text>
+          <text wx:else>未设置</text>
+          <icon class="more-btn" size="9" type="right-arrow"></icon>
         </view>
+      </view -->
+      <view class="row" wx:if="{{data.emp_num}}" style="position: relative; margin: 0 0 0 20px; padding: 12px 0; padding-right: 20px;">
+        <view class="row-tit" style="padding-bottom: 4px; color: #999999; font-size: 12px; line-height: 17px;">{{options.lang === 'en-us' ? 'EE No.': '工号'}}</view>
+        <view class="row-bd" action="showActionSheet" param-itemList="[{"name": "{{options.lang === "en-us" ? "Copy": "复制工号"}}", "action":"copyText","actionParams":{"text":"{{data.emp_num}}"}}]" style="display: flex; align-items: center; color: #333333; font-size: 14px; line-height: 22px;">
+          <text style="flex-grow: 1;">{{data.emp_num}}</text>
+        </view>
+      </view>
+      <view class="row" style="position: relative; margin: 0 0 0 20px; padding: 12px 0; padding-right: 20px;">
+        <view class="row-tit" style="padding-bottom: 4px; color: #999999; font-size: 12px; line-height: 17px;">{{options.lang === 'en-us' ? 'E-mail': '邮箱'}}</view>
+        <view class="row-bd" action="showActionSheet" param-itemList="[{"name": "{{options.lang === "en-us"? "Copy": "复制邮箱地址"}}", "action":"copyText","actionParams":{"text":"{{data.email}}"}}, {"name": "{{options.lang === "en-us" ? "Send Mail": "发邮件"}}", "action":"mailto","actionParams":{"to":"{{data.email}}"}}]" style="display: flex; align-items: center; color: #333333; font-size: 14px; line-height: 22px;">
+          <text style="flex-grow: 1;">{{data.email}}</text>
+          <icon class="more-btn" size="9" type="right-arrow" style="flex-grow: 0; flex-shrink: 0; float: right; color: #999999;"/>
+        </view>
+      </view>
+      <view class="row" wx:if="{{data.location.city}}" style="position: relative; margin: 0 0 0 20px; padding: 12px 0; padding-right: 20px;">
+        <view class="row-tit" style="padding-bottom: 4px; color: #999999; font-size: 12px; line-height: 17px;">{{options.lang === 'en-us' ? 'Base City': ' 城市'}}</view>
+        <view class="row-bd" action="showActionSheet" param-itemList="[{"name": "{{options.lang === "en-us"? "Copy": "复制城市"}}", "action":"copyText","actionParams":{"text":"{{data.location && data.location.city}}"}}]" style="display: flex; align-items: center; color: #333333; font-size: 14px; line-height: 22px;">
+          <text style="flex-grow: 1;">{{data.location.city}}</text>
+        </view>
+      </view>
+      <view class="row" wx:if="{{data.department_info && data.department_info.length > 0}}" style="position: relative; margin: 0 0 0 20px; padding: 12px 0; padding-right: 20px;">
+        <view class="row-tit" style="padding-bottom: 4px; color: #999999; font-size: 12px; line-height: 17px;">{{options.lang === 'en-us' ? 'Department' : '部门'}}</view>
+        <block wx:if="{{((data.display_config >> 1) & 1) === 0}}">
+          <view class="row-bd" action="openSchema" param-schema="dchat://departmentInfo?id={{data.department_info && data.department_info.length && data.department_info[data.department_info.length - 1].id}}" style="display: flex; align-items: center; color: #333333; font-size: 14px; line-height: 22px;">
+            <text style="flex-grow: 1;">
+              <text class="dpt-item" wx:for="{{data.department_info}}" style="flex-grow: 1;">{{item.name}}</text>
+            </text>
+            <icon class="more-btn" size="9" type="right-arrow" style="flex-grow: 0; flex-shrink: 0; float: right; color: #999999;"/>
+          </view>
+        </block>
+        <block wx:else="">
+          <view class="row-bd" style="display: flex; align-items: center; color: #333333; font-size: 14px; line-height: 22px;">
+            <text style="flex-grow: 1;">
+              <text class="dpt-item" wx:for="{{data.department_info}}" style="flex-grow: 1;">{{item.name}}</text>
+            </text>
+          </view>
+        </block>
+      </view>
+      <view class="row" wx:if="{{data.manager_name}}" style="position: relative; margin: 0 0 0 20px; padding: 12px 0; padding-right: 20px;">
+        <view class="row-tit" style="padding-bottom: 4px; color: #999999; font-size: 12px; line-height: 17px;">{{options.lang === 'en-us' ? 'Supervisor': '上级'}}</view>
+        <view class="row-bd" action="openSchema" param-schema="dchat://nameCard?name={{data.manager_name}}" style="display: flex; align-items: center; color: #333333; font-size: 14px; line-height: 22px;">
+          <text style="flex-grow: 1;">{{data.manager_fullname}}</text>
+          <icon class="more-btn" size="9" type="right-arrow" style="flex-grow: 0; flex-shrink: 0; float: right; color: #999999;"/>
+        </view>
+      </view>
+      <!-- <view class="row">
+        <view class="row-tit">日程</view>
+        <view
+          class="row-bd"
+          action="openSchema"
+          param-schema="dchat://calendar?scedule={{data.calendar}}">
+          <text>2小时内无日程</text>
+          <icon class="more-btn" size="9" type="right-arrow"></icon>
+        </view>
+      </view> -->
+      <view class="row" wx:if="{{data.location && data.location.building}}" style="position: relative; margin: 0 0 0 20px; padding: 12px 0; padding-right: 20px;">
+        <view class="row-tit" style="padding-bottom: 4px; color: #999999; font-size: 12px; line-height: 17px;">{{options.lang === 'en-us' ? 'Office Desk': '工位'}}</view>
+        <view class="row-bd" style="display: flex; align-items: center; color: #333333; font-size: 14px; line-height: 22px;">
+          <text style="flex-grow: 1;">{{data.location.building}}</text>
+        </view>
+      </view>
     </view>
+  </view>
 
+  <view class="body" wx:elif="{{data.emp_status === -1}}" style="flex-grow: 1; display: flex; flex-direction: column;">
+    <view class="emp_status" style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 12px; color: #999999;">
+      <image class="dimission-icon" style="background-image: url(data:image/png;base64,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); background-size: contain; margin-bottom: 20px; width: 70px; height: 70px;"/>
+      {{options.lang === "en-us"? "Dimission": "已离职"}}
+    </view>
+  </view>
+  <view class="contact-btn" action="openSchema" param-schema="dchat://sendMsg?name={{data.name}}" style="transform: translate3d(0,0,0); position: fixed; left: 40px; right: 40px; bottom: 33px; display: block; background-color: #3d3d3d; color: #FFFFFF; text-align: center; font-size: 14px; border-radius: 20px; line-height: 40px;">
+    <text wx:if="{{data.emp_status !== -1}}">{{options.lang === 'en-us' ? 'Send Messages': '发消息'}}</text>
+    <text wx:elif="{{data.emp_status === -1}}">{{options.lang === 'en-us' ? 'Message Records': '查看聊天记录'}}</text>
+  </view>
 </view>
