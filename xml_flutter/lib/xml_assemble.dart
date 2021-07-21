@@ -97,7 +97,28 @@ class AssembleTank {
         ? ListView(children: children,)
         : builder.build(element, children);
 
+    w = _CSSContainer(element: element, child: w, extra: element.extra,);
+    return w;
+  }
+
+  Widget build(BuildContext context, _AssembleElement root) {
+    return _assembleWidget(root, 0);
+  }
+}
+
+class _CSSContainer extends StatelessWidget {
+  final _AssembleElement element;
+  final Widget child;
+  final Map<String, String>? extra;
+  final _debugProperties = <String, String>{};
+
+  _CSSContainer({Key? key, required this.element, required this.child, this.extra})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     final css = element.style;
+    Widget w = child;
     final padding = css.padding;
 
     final flex = _canFlex(css);
@@ -110,6 +131,7 @@ class AssembleTank {
     final border = css.border;
     final shadows = css.boxShadow;
 
+    _debugProperties.clear();
     BoxDecoration? decoration;
     if (color != null || borderRadius != null || border != null || shadows != null) {
       decoration = BoxDecoration(
@@ -137,15 +159,34 @@ class AssembleTank {
         height: _height,
         child: w,
       );
+      if (color != null) {
+        _debugProperties['color'] = color.toString();
+      }
+      if (borderRadius != null) {
+        _debugProperties['radius'] = borderRadius.toString();
+      }
+      if (border != null) {
+        _debugProperties['border'] = border.toString();
+      }
+      if (shadows != null) {
+        _debugProperties['shadow'] = "true";
+      }
+      if (padding != null) {
+        _debugProperties['padding'] = padding.toString();
+      }
+      if (validSize) {
+        _debugProperties['size'] = '($_width, $_height)';
+      }
     }
 
-    final tap = element.extra?['bindtap'];
+    final tap = extra?['bindtap'];
     if (tap != null) {
       w = InkWell(
         onTap: () {
         },
         child: w,
       );
+      _debugProperties['tap'] = tap;
     }
 
     if (borderRadius != null) {
@@ -161,6 +202,7 @@ class AssembleTank {
         w = Center(
           child: w,
         );
+        _debugProperties['margin'] = 'auto';
       } else {
         final margin = css.margin;
         if (margin != null) {
@@ -168,6 +210,7 @@ class AssembleTank {
             padding: margin,
             child: w,
           );
+          _debugProperties['margin'] = margin.toString();
         }
       }
     }
@@ -179,6 +222,7 @@ class AssembleTank {
         fit: FlexFit.tight,
         child: w,
       );
+      _debugProperties['flex'] = '$flex';
     } else if (positionCSS == 'absolute') {
       final left = css._getDouble('left');
       final top = css._getDouble('top');
@@ -191,6 +235,7 @@ class AssembleTank {
         bottom: bottom,
         child: w,
       );
+      _debugProperties['position'] = '($left, $top, $right, $bottom)';
     } else if (positionCSS == 'relative') {
       final left = css._getDouble('left');
       final top = css._getDouble('top');
@@ -206,6 +251,7 @@ class AssembleTank {
           ),
           child: w,
         );
+        _debugProperties['offset'] = '($dx, $dy)';
       }
     }
     return w;
@@ -216,7 +262,10 @@ class AssembleTank {
     return flex;
   }
 
-  Widget build(BuildContext context, _AssembleElement root) {
-    return _assembleWidget(root, 0);
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(StringProperty('<${element.name}>', child.toStringShort()));
+    _debugProperties.entries.map((e) => StringProperty(e.key, e.value)).forEach(properties.add);
   }
 }
