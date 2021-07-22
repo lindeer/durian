@@ -70,6 +70,30 @@ class ImageAssembleBuilder implements AssembleBuilder {
   }
 }
 
+class IconAssembleBuilder implements AssembleBuilder {
+  const IconAssembleBuilder();
+
+  static const _icons = {
+    "home": Icons.house_outlined,
+    "star": Icons.star_outline,
+    "phone": Icons.call_outlined,
+    "share": Icons.share_outlined,
+  };
+
+  @override
+  Widget build(_AssembleElement e, List<Widget> children) {
+    final style = e.style;
+    final extra = e.extra;
+    final size = style._optDouble('size', 24);
+    final name = extra?['type'] ?? 'share';
+    return Icon(
+      _icons[name] ?? Icons.star,
+      size: size,
+      color: e.inheritStyle?.textColor,
+    );
+  }
+}
+
 class ColumnAssembleBuilder implements AssembleBuilder {
   const ColumnAssembleBuilder();
 
@@ -86,6 +110,7 @@ class AssembleTank {
   static final _defaultBuilders = const {
     'text': const TextAssembleBuilder(),
     'image': const ImageAssembleBuilder(),
+    'icon': const IconAssembleBuilder(),
     'view': const ViewAssembleBuilder(),
   };
 
