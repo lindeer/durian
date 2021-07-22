@@ -1,6 +1,7 @@
 library durian;
 
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -27,10 +28,16 @@ class PreProcessor {
   }
 
   String processSize(BuildContext context, String source) {
-    final reg = RegExp(r'(\d+(\.\d+)?)rpx');
+    final reg = RegExp(r'(\d+(\.\d+)?)(rpx|px)');
     return source.replaceAllMapped(reg, (match) {
-      final value = double.tryParse(match[1]!) ?? 0;
-      return (value * _width / 750).toStringAsFixed(2);
+      final v = match[1]!;
+      final unit = match[3];
+
+      if (unit == 'rpx') {
+        final value = double.tryParse(v) ?? 0;
+        return (value * _width / 750).toStringAsFixed(2);
+      }
+      return v;
     });
   }
 }

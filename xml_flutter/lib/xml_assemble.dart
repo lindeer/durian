@@ -51,6 +51,17 @@ class ImageAssembleBuilder implements AssembleBuilder {
         height: height,
       );
     }
+    // fake Image by ColoredBox
+    if (src.contains("{{")) {
+      final color = (Random().nextDouble() * 0xFFFFFF).toInt();
+      return SizedBox(
+        width: width,
+        height: height,
+        child: ColoredBox(
+          color: Color(color).withOpacity(1.0),
+        ),
+      );
+    }
     return Image.file(
       File(src),
       width: width,

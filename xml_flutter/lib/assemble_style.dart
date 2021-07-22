@@ -77,7 +77,7 @@ class CSSStyle {
     final keys = _attrs.keys.where((k) => k.contains(RegExp(r'border*-radius')));
     if (keys.isEmpty) return null;
 
-    final values = _attrs['border-radius']?.replaceAll('px', '').split(' ').map((e) => double.tryParse(e));
+    final values = _attrs['border-radius']?.split(' ').map((e) => double.tryParse(e));
     if (values == null) return null;
 
     final l = _sizeList(values);
@@ -128,7 +128,7 @@ class CSSStyle {
         styleStr = v;
       } else if ((v.codeUnitAt(0) ^ 0x30) <= 9) {
         // width = double.tryParse(v.replaceAll('px', ''));
-        widthStr = v.replaceAll('px', '');
+        widthStr = v;
       } else if (_toColor(v) != null) {
         // color = _toColor(v);
         colorStr = v;
@@ -140,7 +140,7 @@ class CSSStyle {
       _apply(str);
     }
 
-    final _widthStr = _attrs['$name-width']?.replaceAll('px', '');
+    final _widthStr = _attrs['$name-width'];
     BorderStyle? style = (_attrs['$name-style'] ?? styleStr)?.let((it) => _borderStyles[it]);
     double? width = (_widthStr ?? widthStr)?.let((it) => double.tryParse(it));
     Color? color = (_attrs['$name-color'] ?? colorStr)?.let((it) => _toColor(it));
@@ -172,7 +172,7 @@ class CSSStyle {
   static bool _startsDigit(String? v) => v != null && v.isNotEmpty && (v.codeUnitAt(0) ^ 0x30) <= 9;
 
   List<BoxShadow>? get boxShadow {
-    final shadowStr = _attrs['box-shadow']?.replaceAll('px', '');
+    final shadowStr = _attrs['box-shadow'];
     if (shadowStr == null) return null;
 
     final shadows = shadowStr.split(',').map((v) {
