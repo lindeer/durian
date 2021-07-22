@@ -12,6 +12,7 @@ class AssembleReader {
   static _AssembleElement _fromXml(XmlElement e, AncestorStyle? parent) {
     final style = <String, String>{};
     Map<String, String>? extra;
+    String? klass;
     e.attributes.forEach((attr) {
       final key = attr.name.local;
       final value = attr.value;
@@ -23,7 +24,7 @@ class AssembleReader {
           }
         });
       } else if (key == 'class') {
-        // skip
+        klass = value;
       } else {
         final ext = extra ?? <String, String>{};
         ext[key] = value;
@@ -47,6 +48,6 @@ class AssembleReader {
           .map((child) => _fromXml(child as XmlElement, ancestorStyle))
           .toList(growable: false);
     }
-    return _AssembleElement(name, css, extra, children, parent);
+    return _AssembleElement(name, css, klass, extra, children, parent);
   }
 }
