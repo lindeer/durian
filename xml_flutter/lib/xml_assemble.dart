@@ -129,7 +129,9 @@ class AssembleTank {
         .toList(growable: false);
 
     final builder = builders[name] ?? _defaultBuilders[name] ?? const ColumnAssembleBuilder();
-    Widget w = depth == 0 && name == 'view'
+    final style = element.style;
+    final overflowY = style['overflow-y'];
+    Widget w = depth == 0 && name == 'view' && overflowY != null
         ? ListView(children: children,)
         : builder.build(element, children);
 
@@ -301,7 +303,7 @@ class _CSSContainer extends StatelessWidget {
   }
 
   int _canFlex(CSSStyle style) {
-    final flex = style.optInt('flex', 0);
+    final flex = style.optInt('flex', style.optInt('flex-grow', 0));
     return flex;
   }
 
