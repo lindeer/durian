@@ -241,23 +241,19 @@ class _CSSContainer extends StatelessWidget {
       );
     }
 
+    final margin = css.margin;
     final marginCSS = css['margin'];
-    if (marginCSS != null) {
-      if (marginCSS.contains('auto')) {
-        w = Center(
-          child: w,
-        );
-        _debugProperties['margin'] = 'auto';
-      } else {
-        final margin = css.margin;
-        if (margin != null) {
-          w = Padding(
-            padding: margin,
-            child: w,
-          );
-          _debugProperties['margin'] = margin.toString();
-        }
-      }
+    if (marginCSS != null && marginCSS.contains('auto')) {
+      w = Center(
+        child: w,
+      );
+      _debugProperties['margin'] = 'auto';
+    } else if (margin != null) {
+      w = Padding(
+        padding: margin,
+        child: w,
+      );
+      _debugProperties['margin'] = margin.toString();
     }
 
     // flexible should be contained directly inside Column/Row
