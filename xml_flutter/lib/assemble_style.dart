@@ -18,13 +18,6 @@ class CSSStyle {
 
   double? _getDouble(String key) => _attrs[key]?.let((it) => double.tryParse(it));
 
-  double? _percent(String key) => _attrs[key]?.let((it) {
-    int pos = it.indexOf('%');
-    return pos > 0
-        ? double.tryParse(it.substring(0, pos))?.let((it) => it / 100)
-        : double.tryParse(it);
-  });
-
   double? get width => _getDouble('width');
 
   double? get height => _getDouble('height');
@@ -82,15 +75,24 @@ class CSSStyle {
 
     final l = _sizeList(values);
     if (l == null) return null;
-    final topLeft = _percent('border-top-left-radius');
-    final topRight = _percent('border-top-right-radius');
-    final bottomRight = _percent('border-bottom-right-radius');
-    final bottomLeft = _percent('border-bottom-left-radius');
+    final topLeft = _getDouble('border-top-left-radius') ?? l[1];
+    final topRight = _getDouble('border-top-right-radius') ?? l[2];
+    final bottomRight = _getDouble('border-bottom-right-radius') ?? l[3];
+    final bottomLeft = _getDouble('border-bottom-left-radius') ?? l[0];
+    final w = width ?? 0;
+    final h = height ?? 0;
+    Radius? _toRadius(double v) {
+      if (v > 0) {
+        return Radius.circular(v);
+      } else if (w > 0 && h > 0) {
+        return Radius.elliptical(-w * v, -h * v);
+      }
+    }
     return BorderRadius.only(
-      topLeft: (topLeft ?? l[1])?.let((it) => Radius.circular(it)) ?? Radius.zero,
-      topRight: (topRight ?? l[2])?.let((it) => Radius.circular(it)) ?? Radius.zero,
-      bottomRight: (bottomRight ?? l[3])?.let((it) => Radius.circular(it)) ?? Radius.zero,
-      bottomLeft: (bottomLeft ?? l[3])?.let((it) => Radius.circular(it)) ?? Radius.zero,
+      topLeft: topLeft?.let(_toRadius) ?? Radius.zero,
+      topRight: topRight?.let(_toRadius) ?? Radius.zero,
+      bottomRight: bottomRight?.let(_toRadius) ?? Radius.zero,
+      bottomLeft: bottomLeft?.let(_toRadius) ?? Radius.zero,
     );
   }
 

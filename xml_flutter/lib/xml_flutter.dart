@@ -28,7 +28,7 @@ class PreProcessor {
   }
 
   String processSize(BuildContext context, String source) {
-    final reg = RegExp(r'(\d+(\.\d+)?)(rpx|px)');
+    final reg = RegExp(r'(\d+(\.\d+)?)(rpx|px|%)');
     return source.replaceAllMapped(reg, (match) {
       final v = match[1]!;
       final unit = match[3];
@@ -36,6 +36,10 @@ class PreProcessor {
       if (unit == 'rpx') {
         final value = double.tryParse(v) ?? 0;
         return (value * _width / 750).toStringAsFixed(2);
+      }
+      if (unit == '%') {
+        final value = double.tryParse(v) ?? 0;
+        return (-value / 100).toStringAsFixed(2);
       }
       return v;
     });
