@@ -138,6 +138,13 @@ class AssembleTank {
   }
 
   Widget build(BuildContext context, _AssembleElement root) {
+    if (root.name == '_floatStack') {
+      var depth = 0;
+      final children = root.children.map((e) => _assembleWidget(e, depth++)).toList(growable: false);
+      return Stack(
+        children: children,
+      );
+    }
     return _assembleWidget(root, 0);
   }
 }
@@ -259,7 +266,7 @@ class _CSSContainer extends StatelessWidget {
         child: w,
       );
       _debugProperties['flex'] = '$flex';
-    } else if (positionCSS == 'absolute') {
+    } else if (positionCSS == 'absolute' || positionCSS == 'fixed') {
       final left = css._getDouble('left');
       final top = css._getDouble('top');
       final right = css._getDouble('right');

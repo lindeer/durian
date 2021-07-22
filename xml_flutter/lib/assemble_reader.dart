@@ -3,10 +3,22 @@ part of durian;
 class AssembleReader {
   static const _empty = const <_AssembleElement>[];
 
+  static final _fixedPosition = <_AssembleElement>[];
+
   static _AssembleElement fromSource(String source) {
     final doc = XmlDocument.parse(source);
     final root = doc.rootElement;
-    return _fromXml(root, null);
+    var rootElement = _fromXml(root, null);
+    if (_fixedPosition.isNotEmpty) {
+      final children = [
+        rootElement,
+        ..._fixedPosition,
+      ];
+      rootElement = _AssembleElement('_floatStack', const CSSStyle({}), null, null, children, null);
+      _fixedPosition.clear();
+    }
+
+    return rootElement;
   }
 
   static _AssembleElement _fromXml(XmlElement e, AncestorStyle? parent) {
@@ -58,7 +70,14 @@ class AssembleReader {
       if (elementNodes.length > 0) {
         children = elementNodes
             .map((child) => _fromXml(child, ancestorStyle))
-            .toList(growable: false);
+            .toList();
+        children.removeWhere((e) {
+          final isFixed = e.style['position'] == 'fixed';
+          if (isFixed) {
+            _fixedPosition.add(e);
+          }
+          return isFixed;
+        });
       } else if (textNodes.length > 0) {
         name = 'text';
         String _trimLine(XmlText e) => e.text.split('\n').map((line) => line.trim()).join('\n');
