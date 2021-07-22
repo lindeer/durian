@@ -32,7 +32,7 @@ class AssembleReader {
       }
     });
 
-    final name = e.name.local;
+    var name = e.name.local;
     var children = _empty;
 
     final css = CSSStyle(style);
@@ -42,11 +42,31 @@ class AssembleReader {
       ext['data'] = text.split('\n').map((line) => line.trim()).join('\n');
       extra = ext;
     } else {
+      final textNodes = <XmlText>[];
+      final elementNodes = <XmlElement>[];
+      e.children.forEach((e) {
+        if (e.nodeType == XmlNodeType.TEXT) {
+          final node = e as XmlText;
+          if (node.text.trim().isNotEmpty) {
+            textNodes.add(node);
+          }
+        } else if (e.nodeType == XmlNodeType.ELEMENT) {
+          elementNodes.add(e as XmlElement);
+        }
+      });
       final ancestorStyle = AncestorStyle.from(css, parent);
-      children = e.children
-          .where((e) => e.nodeType == XmlNodeType.ELEMENT)
-          .map((child) => _fromXml(child as XmlElement, ancestorStyle))
-          .toList(growable: false);
+      if (elementNodes.length > 0) {
+        children = elementNodes
+            .map((child) => _fromXml(child, ancestorStyle))
+            .toList(growable: false);
+      } else if (textNodes.length > 0) {
+        name = 'text';
+        String _trimLine(XmlText e) => e.text.split('\n').map((line) => line.trim()).join('\n');
+        textNodes.map((e) => e.text.trim().split('\n'));
+        final ext = extra ?? <String, String>{};
+        ext['data'] = textNodes.map(_trimLine).join('');
+        extra = ext;
+      }
     }
     return _AssembleElement(name, css, klass, extra, children, parent);
   }
