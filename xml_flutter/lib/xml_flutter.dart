@@ -24,6 +24,7 @@ class PreProcessor {
 
   String preprocess(BuildContext context, String source) {
     String result = processSize(context, source);
+    result = _processColor(context, result);
     return result;
   }
 
@@ -43,5 +44,34 @@ class PreProcessor {
       }
       return v;
     });
+  }
+
+  static final _rgbColor = RegExp(r'rgba?\((.+)\)');
+  String _processColor(BuildContext c, String source) {
+    return source.replaceAllMapped(_rgbColor, (match) {
+      final v = match[1]!;
+      final color = _rgbaColor(v);
+      return color != null ? '#${color.value.toRadixString(16)}': '';
+    });
+  }
+
+  static Color? _rgbaColor(String text) {
+    final rgb = text.split(',').map((value) => double.tryParse(value))
+        .whereType<double>().toList(growable: false);
+    if (rgb.length == 4) {
+      return Color.fromRGBO(
+        rgb[0].toInt(),
+        rgb[1].toInt(),
+        rgb[2].toInt(),
+        rgb[3],
+      );
+    } else if (rgb.length == 3) {
+      return Color.fromRGBO(
+        rgb[0].toInt(),
+        rgb[1].toInt(),
+        rgb[2].toInt(),
+        1.0,
+      );
+    }
   }
 }
