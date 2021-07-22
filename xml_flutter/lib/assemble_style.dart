@@ -32,16 +32,15 @@ class CSSStyle {
 
     final values = _attrs[property]?.split(' ').map((e) => double.tryParse(e));
     final l = _sizeList(values);
-    if (l == null) return null;
     final left = _getDouble('$property-left');
     final top = _getDouble('$property-top');
     final right = _getDouble('$property-right');
     final bottom = _getDouble('$property-bottom');
     final edge = EdgeInsets.only(
-      left: left ?? l[0] ?? 0,
-      top: top ?? l[1] ?? 0,
-      right: right ?? l[2] ?? 0,
-      bottom: bottom ?? l[3] ?? 0,
+      left: left ?? l?[0] ?? 0,
+      top: top ?? l?[1] ?? 0,
+      right: right ?? l?[2] ?? 0,
+      bottom: bottom ?? l?[3] ?? 0,
     );
     return EdgeInsets.zero == edge ? null : edge;
   }
