@@ -78,6 +78,9 @@ class IconAssembleBuilder implements AssembleBuilder {
     "star": Icons.star_outline,
     "phone": Icons.call_outlined,
     "share": Icons.share_outlined,
+    "emoji-add": Icons.add,
+    "edit": Icons.edit,
+    "right-arrow": Icons.keyboard_arrow_right,
   };
 
   @override
@@ -89,6 +92,19 @@ class IconAssembleBuilder implements AssembleBuilder {
     return Icon(
       _icons[name] ?? Icons.star,
       size: size,
+      color: e.inheritStyle?.textColor,
+    );
+  }
+}
+
+class EmojiAssembleBuilder implements AssembleBuilder {
+  const EmojiAssembleBuilder();
+
+  @override
+  Widget build(_AssembleElement e, List<Widget> children) {
+    return Icon(
+      Icons.error_outline_outlined,
+      size: 24,
       color: e.inheritStyle?.textColor,
     );
   }
@@ -106,12 +122,23 @@ class ColumnAssembleBuilder implements AssembleBuilder {
   }
 }
 
+class BlockAssembleBuilder implements AssembleBuilder {
+  const BlockAssembleBuilder();
+
+  @override
+  Widget build(_AssembleElement e, List<Widget> children) {
+    return children.first;
+  }
+}
+
 class AssembleTank {
   static final _defaultBuilders = const {
     'text': const TextAssembleBuilder(),
     'image': const ImageAssembleBuilder(),
     'icon': const IconAssembleBuilder(),
     'view': const ViewAssembleBuilder(),
+    'emoji': const EmojiAssembleBuilder(),
+    'block': const BlockAssembleBuilder(),
   };
 
   final Map<String, AssembleBuilder> builders;

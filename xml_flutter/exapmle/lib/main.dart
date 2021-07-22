@@ -64,11 +64,6 @@ class _MyHomePageState extends State<MyHomePage> {
     final processor = PreProcessor(media.size.width);
     print("width = ${media.size.width}");
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
       body: FutureBuilder<String>(
         future: _html,
         builder: (ctx, snapshot) {
