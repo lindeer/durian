@@ -21,7 +21,7 @@ class AssembleReader {
     return rootElement;
   }
 
-  static _AssembleElement _fromXml(XmlElement e, AncestorStyle? parent) {
+  static _AssembleElement _fromXml(XmlElement e, ParentStyle? parent) {
     final style = <String, String>{};
     Map<String, String>? extra;
     String? klass;
@@ -47,7 +47,7 @@ class AssembleReader {
     var name = e.name.local;
     var children = _empty;
 
-    final css = CSSStyle(style);
+    final css = CSSStyle(style, parent: parent?.parent,);
     if (name == 'text') {
       final text = e.text;
       final ext = extra ?? <String, String>{};
@@ -66,10 +66,10 @@ class AssembleReader {
           elementNodes.add(e as XmlElement);
         }
       });
-      final ancestorStyle = AncestorStyle.from(css, parent);
+      final parentStyle = ParentStyle.from(css, parent);
       if (elementNodes.length > 0) {
         children = elementNodes
-            .map((child) => _fromXml(child, ancestorStyle))
+            .map((child) => _fromXml(child, parentStyle))
             .toList();
         children.removeWhere((e) {
           final isFixed = e.style['position'] == 'fixed';
@@ -87,6 +87,6 @@ class AssembleReader {
         extra = ext;
       }
     }
-    return _AssembleElement(name, css, klass, extra, children, parent);
+    return _AssembleElement(name, css, klass, extra, children, parent?.inherited);
   }
 }

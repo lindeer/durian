@@ -2,8 +2,9 @@ part of durian;
 
 class CSSStyle {
   final Map<String, String> _attrs;
+  final CSSStyle? parent;
 
-  const CSSStyle(this._attrs);
+  const CSSStyle(this._attrs, {this.parent});
 
   @override
   String toString() => _attrs.toString();
@@ -11,6 +12,8 @@ class CSSStyle {
   bool get isEmpty => _attrs.isEmpty;
 
   String? operator[](String key) => _attrs[key];
+
+  bool contains(String key) => _attrs.containsKey(key);
 
   int optInt(String key, [int defVal = 0]) => _attrs[key]?.let((it) => int.tryParse(it)) ?? defVal;
 
@@ -209,13 +212,30 @@ class CSSStyle {
 }
 
 /// style inherited from ancestor, e.g. text color
-class AncestorStyle {
-  final Color textColor;
+class InheritedStyle {
+  final Color? textColor;
 
-  AncestorStyle._(this.textColor);
+  const InheritedStyle(this.textColor);
+}
 
-  static AncestorStyle? from(CSSStyle style, AncestorStyle? parent) {
-    final color = style.color('color');
-    return color?.let((it) => AncestorStyle._(it)) ?? parent;
+class ParentStyle {
+  /// style of parent
+  final CSSStyle parent;
+  /// style inherited from ancestor,
+  final InheritedStyle? inherited;
+
+  const ParentStyle._(this.parent, this.inherited);
+
+  /// make parent style by css with parent's
+  static ParentStyle from(CSSStyle style, ParentStyle? parent) {
+    InheritedStyle? inherited;
+    if (style.contains('color')) {
+      final ancestor = parent?.inherited;
+
+      final color = style.color('color') ?? ancestor?.textColor;
+
+      inherited = InheritedStyle(color);
+    }
+    return ParentStyle._(style, inherited ?? parent?.inherited);
   }
 }

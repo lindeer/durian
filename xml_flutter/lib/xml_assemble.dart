@@ -327,7 +327,11 @@ class _CSSContainer extends StatelessWidget {
 
   int _canFlex(CSSStyle style) {
     final flex = style.optInt('flex', style.optInt('flex-grow', 0));
-    return flex;
+    if (flex > 0 && style.parent?['display'] == 'flex') {
+      return flex;
+    }
+
+    return 0;
   }
 
   @override
