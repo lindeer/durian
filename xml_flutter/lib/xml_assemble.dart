@@ -4,6 +4,8 @@ typedef Widget FnWidgetBuilder(_AssembleElement e, List<Widget> children);
 
 abstract class AssembleBuilder {
   Widget build(_AssembleElement e, List<Widget> children);
+
+  String generate(_AssembleElement e, List<String> children);
 }
 
 class TextAssembleBuilder implements AssembleBuilder {
@@ -24,6 +26,21 @@ class TextAssembleBuilder implements AssembleBuilder {
       ),
     );
   }
+
+  @override
+  String generate(_AssembleElement e, List<String> children) {
+    final style = e.style;
+    final extra = e.extra;
+    final color = style.color('color') ?? e.inheritStyle?.textColor;
+    final size = style._getDouble('font-size');
+    return """
+<Text
+  flutter:data="${extra?['data'] ?? ''}"
+  ${_FlutterXmlAttr.genColor(color, prefix: 'style.')}
+  ${_FlutterXmlAttr.genAttr<double>('style.fontSize', size)}/>
+""";
+  }
+
 }
 
 class ImageAssembleBuilder implements AssembleBuilder {
@@ -68,6 +85,17 @@ class ImageAssembleBuilder implements AssembleBuilder {
       height: height,
     );
   }
+
+  @override
+  String generate(_AssembleElement e, List<String> children) {
+    final extra = e.extra;
+    final src = extra?['src'] ?? '';
+    return """
+<Image
+  flutter:src="$src"
+  />
+""";
+  }
 }
 
 class IconAssembleBuilder implements AssembleBuilder {
@@ -95,6 +123,21 @@ class IconAssembleBuilder implements AssembleBuilder {
       color: e.inheritStyle?.textColor,
     );
   }
+
+  @override
+  String generate(_AssembleElement e, List<String> children) {
+    final style = e.style;
+    final extra = e.extra;
+    final size = style._optDouble('size', 24);
+    final name = extra?['type'] ?? 'share';
+    final color = e.inheritStyle?.textColor;
+    return """
+<Icon
+  flutter:icon="@icon/$name"
+  flutter:size="$size"
+  ${_FlutterXmlAttr.genColor(color)}/>
+""";
+  }
 }
 
 class EmojiAssembleBuilder implements AssembleBuilder {
@@ -108,6 +151,16 @@ class EmojiAssembleBuilder implements AssembleBuilder {
       color: e.inheritStyle?.textColor,
     );
   }
+
+  @override
+  String generate(_AssembleElement e, List<String> children) {
+    final color = e.inheritStyle?.textColor;
+    return """
+<Icon
+  flutter:icon="@icon/error_outline_outlined"
+  ${_FlutterXmlAttr.genColor(color)}/>
+""";
+  }
 }
 
 class ColumnAssembleBuilder implements AssembleBuilder {
@@ -120,6 +173,16 @@ class ColumnAssembleBuilder implements AssembleBuilder {
       children: children,
     );
   }
+
+  @override
+  String generate(_AssembleElement e, List<String> children) {
+    return """
+<Column
+  flutter:crossAxisAlignment="stretch">
+${children.join('\n')}
+</Column>
+""";
+  }
 }
 
 class BlockAssembleBuilder implements AssembleBuilder {
@@ -127,6 +190,11 @@ class BlockAssembleBuilder implements AssembleBuilder {
 
   @override
   Widget build(_AssembleElement e, List<Widget> children) {
+    return children.first;
+  }
+
+  @override
+  String generate(_AssembleElement e, List<String> children) {
     return children.first;
   }
 }
@@ -175,6 +243,191 @@ class AssembleTank {
       );
     }
     return _assembleWidget(root, 0);
+  }
+
+  String _assembleSource(_AssembleElement element, int depth) {
+    final name = element.name;
+    final children = element.children
+        .map((e) => _assembleSource(e, depth + 1))
+        .toList(growable: false);
+
+    final builder = builders[name] ?? _defaultBuilders[name] ?? const ColumnAssembleBuilder();
+    final style = element.style;
+    final overflowY = style['overflow-y'];
+    final source = depth == 0 && name == 'view' && overflowY != null
+        ? """
+<ListView>
+${children.join('\n')}
+</ListView>
+"""
+        : builder.generate(element, children);
+
+    final css = element.style;
+    final padding = css.padding;
+    final margin = css.margin;
+
+    final flex = _CSSContainer._canFlex(css);
+    final positionCSS = css['position'];
+    final width = css.width;
+    final height = css.height;
+
+    final color = css.color('background-color') ?? css.color('background');
+    final borderRadius = css.borderRadius;
+    final border = css.border;
+    final shadows = css.boxShadow;
+
+    BoxDecoration? decoration;
+    if (color != null || borderRadius != null || border != null || shadows != null) {
+      decoration = BoxDecoration(
+        color: color,
+        borderRadius: borderRadius,
+        border: border,
+        boxShadow: shadows,
+      );
+    }
+
+    final borderBox = (css['box-sizing'] ?? 'content-box') == 'border-box';
+    double? _width = width, _height = height;
+    if (!borderBox) {
+      final horizon = (padding?.horizontal ?? 0); // + (border?.let((it) => it.left.width + it.right.width) ?? 0);
+      final vertical = (padding?.vertical ?? 0); // + (border?.let((it) => it.top.width + it.bottom.width) ?? 0);
+      _width = width?.let((it) => it + horizon);
+      _height = height?.let((it) => it + vertical);
+    }
+    final validSize = _width != null || _height != null;
+    final sb = StringBuffer();
+    final endTags = <String>[];
+
+    /// string writing in reverse order
+    if (flex > 0) {
+      sb.write("""
+<Flexible
+  flutter:flex="$flex"
+  flutter:fit="tight">
+"""
+      );
+      endTags.add('</Flexible>');
+    } else if (positionCSS == 'absolute' || positionCSS == 'fixed') {
+      final left = css._getDouble('left');
+      final top = css._getDouble('top');
+      final right = css._getDouble('right');
+      final bottom = css._getDouble('bottom');
+      sb.writeln('<Positioned');
+      if (left != null) {
+        sb.writeln('flutter:left="$left"');
+      }
+      if (top != null) {
+        sb.writeln('flutter:top="$top"');
+      }
+      if (right != null) {
+        sb.writeln('flutter:right="$right"');
+      }
+      if (bottom != null) {
+        sb.writeln('flutter:bottom="$bottom"');
+      }
+      sb.writeln('>');
+      endTags.add('</Positioned>');
+    } else if (positionCSS == 'relative') {
+      final left = css._getDouble('left');
+      final top = css._getDouble('top');
+      final right = css._getDouble('right');
+      final bottom = css._getDouble('bottom');
+      final dx = left ?? right?.let((it) => -right);
+      final dy = top ?? bottom?.let((it) => -bottom);
+      if (dx != null || dy != null) {
+        sb.writeln('<Translate');
+        if (dx != null) {
+          sb.writeln('flutter:x="$dx"');
+        }
+        if (dy != null) {
+          sb.writeln('flutter:y="$dy"');
+        }
+        sb.writeln('>');
+        endTags.add('</Translate>');
+      }
+    }
+
+    final marginCSS = css['margin'];
+    if (marginCSS != null && marginCSS.contains('auto')) {
+      sb.writeln('<Center>');
+      endTags.add('</Center>');
+    } else if (margin != null) {
+      sb.writeln('<Padding');
+      sb.writeln(_FlutterXmlAttr.genEdge(margin, 'margin'));
+      sb.writeln('>');
+      endTags.add('</Padding>');
+    }
+
+    if (borderRadius != null) {
+      sb.write("""
+<ClipRRect
+  ${_FlutterXmlAttr.genRadius(borderRadius)}>
+"""
+      );
+      endTags.add('</ClipRRect>');
+    }
+
+    final tap = element.extra?['bindtap'];
+    if (tap != null) {
+      sb.write("""
+<InkWell
+  flutter:onTap="$tap">
+""");
+      endTags.add('</InkWell>');
+    }
+
+    if (padding != null || decoration != null || validSize) {
+      sb.writeln('<Ink');
+      if (padding != null) {
+        sb.writeln(_FlutterXmlAttr.genEdge(padding, 'padding'));
+      }
+      if (decoration != null) {
+        if (color != null) {
+          sb.writeln(_FlutterXmlAttr.genColor(color, prefix: 'decoration.'));
+        }
+        if (borderRadius != null) {
+          sb.writeln(_FlutterXmlAttr.genRadius(borderRadius, prefix: 'decoration.'));
+        }
+        if (border != null) {
+          sb.writeln(_FlutterXmlAttr.genBorder(border, prefix: 'decoration.'));
+        }
+      }
+      if (_width != null) {
+        sb.writeln('flutter:width="$_width"');
+      }
+      if (_height != null) {
+        sb.writeln('flutter:height="$_height"');
+      }
+      sb.writeln(">");
+      endTags.add('</Ink>');
+    }
+
+    sb.writeln(source);
+
+    endTags.reversed.forEach(sb.writeln);
+
+    return sb.toString();
+  }
+
+  String gen(_AssembleElement root) {
+    if (root.name == '_floatStack') {
+      var depth = 0;
+      final children = root.children.map((e) => _assembleSource(e, depth++)).toList(growable: false);
+      return """
+<Stack xmlns:flutter="http://flutter.dev/xml/flutter">
+${children.join('\n')}
+</Stack>
+""";
+    }
+    return _assembleSource(root, 0);
+  }
+
+  static String indentLines(Iterable<String> text, int indent) {
+    final lines = [
+      for (final str in text)
+        ...(str.split('\n'))
+    ];
+    return lines.map((e) => e.padLeft(indent)).join('\n');
   }
 }
 
@@ -325,7 +578,7 @@ class _CSSContainer extends StatelessWidget {
     return w;
   }
 
-  int _canFlex(CSSStyle style) {
+  static int _canFlex(CSSStyle style) {
     final flex = style.optInt('flex', style.optInt('flex-grow', 0));
     if (flex > 0 && style.parent?['display'] == 'flex') {
       return flex;
@@ -339,5 +592,87 @@ class _CSSContainer extends StatelessWidget {
     super.debugFillProperties(properties);
     properties.add(StringProperty('<${element.name}>', child.toStringShort()));
     _debugProperties.entries.map((e) => StringProperty(e.key, e.value)).forEach(properties.add);
+  }
+}
+
+// make flutter to xml attributes
+class _FlutterXmlAttr {
+  static String genAttr<T>(String key, T? t, {String Function(T)? map}) {
+    if (t == null) return '';
+    final v = map == null ? '$t' : t.let(map);
+    return 'flutter:$key="$v"';
+  }
+
+  static String genColor(Color? color, {String prefix = ''}) {
+    return genAttr<Color>('${prefix}color', color, map: (it) => '#${it.value.toRadixString(16)}');
+  }
+
+  static String genEdge(EdgeInsets insets, String key) {
+    if (insets.left == insets.right && insets.left == insets.top && insets.left == insets.bottom) {
+      return 'flutter:$key="${insets.left}"';
+    } else {
+      final sb = StringBuffer();
+      if (insets.left > 0) {
+        sb.writeln('flutter:${key}Left="${insets.left}"');
+      }
+      if (insets.top > 0) {
+        sb.writeln('flutter:${key}Top="${insets.top}"');
+      }
+      if (insets.right > 0) {
+        sb.writeln('flutter:${key}Right="${insets.right}"');
+      }
+      if (insets.bottom > 0) {
+        sb.writeln('flutter:${key}Bottom="${insets.bottom}"');
+      }
+      return sb.toString();
+    }
+  }
+
+  static String genRadius(BorderRadius radius, {String prefix = ''}) {
+    final topLeft = radius.topLeft;
+    final topRight = radius.topRight;
+    final bottomLeft = radius.bottomLeft;
+    final bottomRight = radius.bottomRight;
+    if (topLeft == topRight && topLeft == bottomLeft && topLeft == bottomRight) {
+      return 'flutter:${prefix}borderRadius="${topLeft.x}"';
+    } else {
+      final sb = StringBuffer();
+      if (topLeft.x > 0) {
+        sb.writeln('flutter:${prefix}borderRadiusTopLeft="${topLeft.x}"');
+      }
+      if (topRight.x > 0) {
+        sb.writeln('flutter:${prefix}borderRadiusTopRight="${topRight.x}"');
+      }
+      if (bottomLeft.x > 0) {
+        sb.writeln('flutter:${prefix}borderRadiusBottomLeft="${bottomLeft.x}"');
+      }
+      if (bottomRight.x > 0) {
+        sb.writeln('flutter:${prefix}borderRadiusBottomRight="${bottomRight.x}"');
+      }
+      return sb.toString();
+    }
+  }
+
+  static void _genSide(StringBuffer sb, BorderSide side, String direction) {
+    if (side.color != Colors.black) {
+      sb.writeln(genColor(side.color, prefix: 'border$direction.'));
+    }
+    if (side.width > 1.0) {
+      sb.writeln(genAttr('border$direction.width', side.width));
+    }
+  }
+
+  static String genBorder(Border border, {String prefix = ''}) {
+    final sb = StringBuffer();
+    if (border.isUniform) {
+      final side = border.top;
+      _genSide(sb, side, '');
+    } else {
+      _genSide(sb, border.left, 'Left');
+      _genSide(sb, border.top, 'Top');
+      _genSide(sb, border.right, 'Right');
+      _genSide(sb, border.bottom, 'Bottom');
+    }
+    return sb.toString();
   }
 }

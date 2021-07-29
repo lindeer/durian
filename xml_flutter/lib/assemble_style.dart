@@ -25,11 +25,11 @@ class CSSStyle {
 
   double? get height => _getDouble('height');
 
-  EdgeInsetsGeometry? get padding => _edge('padding');
+  EdgeInsets? get padding => _edge('padding');
 
-  EdgeInsetsGeometry? get margin => _edge('margin');
+  EdgeInsets? get margin => _edge('margin');
 
-  EdgeInsetsGeometry? _edge(String property) {
+  EdgeInsets? _edge(String property) {
     final keys = _attrs.keys.where((k) => k.startsWith(property));
     if (keys.isEmpty) return null;
 

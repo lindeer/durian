@@ -17,6 +17,9 @@ extension _TExt<T> on T {
   R let<R>(R Function(T it) op) => op(this);
 }
 
+final _mainAxisAlignment = MainAxisAlignment.values.asMap().map((key, value) => MapEntry(value, value.toString().split('.').last));
+final _crossAxisAlignment = CrossAxisAlignment.values.asMap().map((key, value) => MapEntry(value, value.toString().split('.').last));
+
 class PreProcessor {
   final double _width;
 

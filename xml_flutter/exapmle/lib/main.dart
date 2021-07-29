@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_html/flutter_html.dart';
@@ -50,6 +52,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late Future<String> _html;
+  String _xml = '';
 
   @override
   void initState() {
@@ -79,10 +82,22 @@ class _MyHomePageState extends State<MyHomePage> {
           } else {
             final data = snapshot.requireData;
             final text = processor.preprocess(ctx, data);
+            _xml = text;
             return _buildView(ctx, text);
           }
         },
       ), // This trailing comma makes auto-formatting nicer for build methods.
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          final content = _genXml(context, _xml);
+          final f = File('gen.xml');
+          f.writeAsStringSync(content);
+          ScaffoldMessenger.of(this.context).showSnackBar(SnackBar(
+            content: Text("'${f.absolute}' generate!"),
+          ));
+        },
+      ),
     );
   }
 
@@ -90,6 +105,12 @@ class _MyHomePageState extends State<MyHomePage> {
     final root = AssembleReader.fromSource(html);
     final tank = AssembleTank();
     return tank.build(context, root);
+  }
+
+  String _genXml(BuildContext context, String html) {
+    final root = AssembleReader.fromSource(html);
+    final tank = AssembleTank();
+    return tank.gen(root);
   }
 }
 
