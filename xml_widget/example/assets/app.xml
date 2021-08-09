@@ -167,7 +167,7 @@
     <Column flutter:mainAxisAlignment="end">
       <Container
         flutter:decoration.color="@flutter:color/white"
-        flutter:decoration.radius="10">
+        flutter:decoration.borderRadius="10">
         <Column flutter:crossAxisAlignment="stretch">
           <TextButton
             flutter:height="56"
@@ -182,7 +182,7 @@
 
       <Container
         flutter:decoration.color="@flutter:color/white"
-        flutter:decoration.radius="10">
+        flutter:decoration.borderRadius="10">
 
         <TextButton
           flutter:height="56"

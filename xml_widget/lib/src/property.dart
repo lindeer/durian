@@ -104,15 +104,15 @@ class _PropertyStruct {
   }
 
   static BorderRadius? _borderRadius(AssembleResource res, Map<String, String> attr) {
-    final keys = attr.keys.where((k) => k.startsWith('radius'));
+    final keys = attr.keys.where((k) => k.startsWith('borderRadius'));
     if (keys.isEmpty) {
       return null;
     }
-    final radius = attr['radius'];
-    final topLeft = attr['radiusTopLeft'] ?? radius;
-    final topRight = attr['radiusTopRight'] ?? radius;
-    final bottomLeft = attr['radiusBottomLeft'] ?? radius;
-    final bottomRight = attr['radiusBottomRight'] ?? radius;
+    final radius = attr['borderRadius'];
+    final topLeft = attr['borderRadiusTopLeft'] ?? radius;
+    final topRight = attr['borderRadiusTopRight'] ?? radius;
+    final bottomLeft = attr['borderRadiusBottomLeft'] ?? radius;
+    final bottomRight = attr['borderRadiusBottomRight'] ?? radius;
 
     Radius _radius(String? s) {
       final r = res.size(s);

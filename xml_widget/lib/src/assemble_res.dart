@@ -11,6 +11,7 @@ class _ResImpl implements AssembleResource {
   static final _digits = RegExp(r"\d+");
   final _stateColors = <String, MaterialStateProperty<Color?>>{};
   final _colors = <String, Color>{};
+  final _icons = <String, IconData>{};
 
   @override
   Color? operator [](String? key) => key == null ? null : _saveColor(key);
@@ -48,12 +49,9 @@ class _ResImpl implements AssembleResource {
     if (key == null || pos < 0) {
       return null;
     }
-    final prefix = key.substring(0, pos);
     final name = key.substring(pos + 5);
 
-    if ('@flutter:' == prefix) {
-      return sysIcons[name];
-    }
+    return _icons[name] ?? sysIcons[name];
   }
 
   @override

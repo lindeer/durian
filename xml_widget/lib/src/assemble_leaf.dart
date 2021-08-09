@@ -40,7 +40,7 @@ class _XmlIconBuilder extends CommonWidgetBuilder {
     final attrs = element.attrs;
     final res = buildContext.resource;
     return Icon(
-      res.icon(attrs['icon']),
+      res.icon(attrs['icon']) ?? Icons.error_outline_outlined,
       size: res.size(attrs['size']),
       color: res[attrs['color']],
       semanticLabel: attrs['semanticLabel'],
@@ -127,7 +127,7 @@ class _XmlImageBuilder extends CommonWidgetBuilder {
         cacheHeight: attrs['cacheHeight']?.toInt(),
       );
     } else {
-      return SizedBox.shrink();
+      return Icon(Icons.stop_circle_outlined, color: Colors.redAccent,);
     }
   }
 }

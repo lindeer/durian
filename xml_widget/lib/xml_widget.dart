@@ -110,6 +110,7 @@ class _Assembler implements WidgetAssembler {
     const _XmlFlexibleBuilder(),
     const _XmlExpandedBuilder(),
     const _XmlClipOvalBuilder(),
+    const _XmlClipRRectBuilder(),
   ];
 
   Widget _assembleByElement(BuildContext buildContext, AssembleElement element) {

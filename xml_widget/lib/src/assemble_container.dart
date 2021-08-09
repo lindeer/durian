@@ -497,3 +497,20 @@ class _XmlClipOvalBuilder extends CommonWidgetBuilder {
     );
   }
 }
+
+class _XmlClipRRectBuilder extends CommonWidgetBuilder {
+  const _XmlClipRRectBuilder() : super('ClipRRect');
+
+  @override
+  Widget build(BuildContext buildContext, AssembleElement element, List<AssembleChildElement> descendant) {
+    final attrs = element.attrs;
+    final res = buildContext.resource;
+    final br = _PropertyStruct._borderRadius(res, attrs);
+
+    return ClipRRect(
+      child: descendant.isEmpty ? null : descendant.first.child,
+      borderRadius: br ?? BorderRadius.zero,
+      clipBehavior: _clip[attrs['clipBehavior']] ?? Clip.antiAlias,
+    );
+  }
+}
