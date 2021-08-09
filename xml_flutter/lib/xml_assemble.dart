@@ -353,7 +353,7 @@ ${children.join('\n')}
       endTags.add('</Center>');
     } else if (margin != null) {
       sb.writeln('<Padding');
-      sb.writeln(_FlutterXmlAttr.genEdge(margin, 'margin'));
+      sb.writeln(_FlutterXmlAttr.genEdge(margin, 'padding'));
       sb.writeln('>');
       endTags.add('</Padding>');
     }
@@ -653,12 +653,12 @@ class _FlutterXmlAttr {
     }
   }
 
-  static void _genSide(StringBuffer sb, BorderSide side, String direction) {
+  static void _genSide(StringBuffer sb, BorderSide side, String prefix, String direction) {
     if (side.color != Colors.black) {
-      sb.writeln(genColor(side.color, prefix: 'border$direction.'));
+      sb.writeln(genColor(side.color, prefix: '${prefix}border$direction.'));
     }
     if (side.width > 1.0) {
-      sb.writeln(genAttr('border$direction.width', side.width));
+      sb.writeln(genAttr('${prefix}border$direction.width', side.width));
     }
   }
 
@@ -666,12 +666,12 @@ class _FlutterXmlAttr {
     final sb = StringBuffer();
     if (border.isUniform) {
       final side = border.top;
-      _genSide(sb, side, '');
+      _genSide(sb, side, prefix, '');
     } else {
-      _genSide(sb, border.left, 'Left');
-      _genSide(sb, border.top, 'Top');
-      _genSide(sb, border.right, 'Right');
-      _genSide(sb, border.bottom, 'Bottom');
+      _genSide(sb, border.left, prefix, 'Left');
+      _genSide(sb, border.top, prefix, 'Top');
+      _genSide(sb, border.right, prefix, 'Right');
+      _genSide(sb, border.bottom, prefix, 'Bottom');
     }
     return sb.toString();
   }
