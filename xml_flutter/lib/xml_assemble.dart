@@ -35,7 +35,6 @@ class TextAssembleBuilder implements AssembleBuilder {
     final size = style._getDouble('font-size');
     return """
 <Text
-  ${_FlutterXmlAttr.genControlFlow(extra)}
   flutter:data="${extra?['data'] ?? ''}"
   ${_FlutterXmlAttr.genColor(color, prefix: 'style.')}
   ${_FlutterXmlAttr.genAttr<double>('style.fontSize', size)}/>
@@ -94,7 +93,7 @@ class ImageAssembleBuilder implements AssembleBuilder {
     return """
 <Image
   flutter:src="$src"
-  ${_FlutterXmlAttr.genControlFlow(extra)}/>
+  />
 """;
   }
 }
@@ -134,7 +133,6 @@ class IconAssembleBuilder implements AssembleBuilder {
     final color = e.inheritStyle?.textColor;
     return """
 <Icon
-  ${_FlutterXmlAttr.genControlFlow(extra)}
   flutter:icon="@icon/$name"
   flutter:size="$size"
   ${_FlutterXmlAttr.genColor(color)}/>
@@ -157,10 +155,8 @@ class EmojiAssembleBuilder implements AssembleBuilder {
   @override
   String generate(_AssembleElement e, List<String> children) {
     final color = e.inheritStyle?.textColor;
-    final extra = e.extra;
     return """
 <Icon
-  ${_FlutterXmlAttr.genControlFlow(extra)}
   flutter:icon="@icon/error_outline_outlined"
   ${_FlutterXmlAttr.genColor(color)}/>
 """;
@@ -180,10 +176,8 @@ class ColumnAssembleBuilder implements AssembleBuilder {
 
   @override
   String generate(_AssembleElement e, List<String> children) {
-    final extra = e.extra;
     return """
 <Column
-  ${_FlutterXmlAttr.genControlFlow(extra)}
   flutter:crossAxisAlignment="stretch">
 ${children.join('\n')}
 </Column>
@@ -201,15 +195,6 @@ class BlockAssembleBuilder implements AssembleBuilder {
 
   @override
   String generate(_AssembleElement e, List<String> children) {
-    final extra = e.extra;
-    final cf = _FlutterXmlAttr.genControlFlow(extra);
-    if (cf.isNotEmpty) {
-      if (children.length > 1) {
-        print("control flow applying more than one child!!");
-      }
-      final str = children.first;
-      return _FlutterXmlAttr.insertFlow(str, cf);
-    }
     return children.first;
   }
 }
@@ -421,7 +406,9 @@ ${children.join('\n')}
 
     endTags.reversed.forEach(sb.writeln);
 
-    return sb.toString();
+    final nodeString = sb.toString();
+    final cf = _FlutterXmlAttr.genControlFlow(element.extra);
+    return cf.isEmpty ? nodeString : _FlutterXmlAttr.insertFlow(nodeString, cf);
   }
 
   String gen(_AssembleElement root) {
@@ -715,9 +702,10 @@ class _FlutterXmlAttr {
       sb.write(text.substring(0, match.start));
     }
     final str = match[0]!;
+    final end = str.lastIndexOf('>');
     final s = str.endsWith("/>")
         ? str.replaceFirst("/>", " $to/>")
-        : str.replaceFirst(">", " $to>");
+        : str.replaceRange(end, str.length, " $to>");
     sb.write(s);
     if (match.end < text.length) {
       sb.write(text.substring(match.end));

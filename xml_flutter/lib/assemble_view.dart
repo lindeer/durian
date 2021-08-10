@@ -57,11 +57,9 @@ class ViewAssembleBuilder implements AssembleBuilder {
   @override
   String generate(_AssembleElement e, List<String> children) {
     final style = e.style;
-    final extra = e.extra;
     if (style.isEmpty) {
       return """
 <Column
-  ${_FlutterXmlAttr.genControlFlow(extra)}
   flutter:crossAxisAlignment="stretch">
 ${children.join('\n')}
 </Column>
@@ -76,7 +74,6 @@ ${children.join('\n')}
     if (useRow) {
       return """
 <Row
-  ${_FlutterXmlAttr.genControlFlow(extra)}
   flutter:mainAxisAlignment="center">
 ${children.join('\n')}
 </Row>
@@ -86,8 +83,7 @@ ${children.join('\n')}
     final inlineChildren = e.children.where((e) => e.style['display']?.startsWith('inline') ?? false);
     if (inlineChildren.length > 0) {
       return """
-<Wrap
-  ${_FlutterXmlAttr.genControlFlow(extra)}>
+<Wrap>
 ${children.join('\n')}
 </Wrap>
 """;
@@ -96,8 +92,7 @@ ${children.join('\n')}
     final alignChildren = e.children.where((e) => e.style['position'] == 'absolute');
     if (alignChildren.length > 0) {
       return """
-<Stack
-  ${_FlutterXmlAttr.genControlFlow(extra)}>
+<Stack>
 ${children.join('\n')}
 </Stack>
 """;
@@ -113,7 +108,6 @@ ${children.join('\n')}
         : CrossAxisAlignment.start;
     return """
 <Column
-  ${_FlutterXmlAttr.genControlFlow(extra)}
   flutter:mainAxisAlignment="${_mainAxisAlignment[main]}"
   flutter:crossAxisAlignment="${_crossAxisAlignment[cross]}">
 ${children.join('\n')}
