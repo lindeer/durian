@@ -35,6 +35,7 @@ class TextAssembleBuilder implements AssembleBuilder {
     final size = style._getDouble('font-size');
     return """
 <Text
+  ${_FlutterXmlAttr.genControlFlow(extra)}
   flutter:data="${extra?['data'] ?? ''}"
   ${_FlutterXmlAttr.genColor(color, prefix: 'style.')}
   ${_FlutterXmlAttr.genAttr<double>('style.fontSize', size)}/>
@@ -93,7 +94,7 @@ class ImageAssembleBuilder implements AssembleBuilder {
     return """
 <Image
   flutter:src="$src"
-  />
+  ${_FlutterXmlAttr.genControlFlow(extra)}/>
 """;
   }
 }
@@ -133,6 +134,7 @@ class IconAssembleBuilder implements AssembleBuilder {
     final color = e.inheritStyle?.textColor;
     return """
 <Icon
+  ${_FlutterXmlAttr.genControlFlow(extra)}
   flutter:icon="@icon/$name"
   flutter:size="$size"
   ${_FlutterXmlAttr.genColor(color)}/>
@@ -155,8 +157,10 @@ class EmojiAssembleBuilder implements AssembleBuilder {
   @override
   String generate(_AssembleElement e, List<String> children) {
     final color = e.inheritStyle?.textColor;
+    final extra = e.extra;
     return """
 <Icon
+  ${_FlutterXmlAttr.genControlFlow(extra)}
   flutter:icon="@icon/error_outline_outlined"
   ${_FlutterXmlAttr.genColor(color)}/>
 """;
@@ -176,8 +180,10 @@ class ColumnAssembleBuilder implements AssembleBuilder {
 
   @override
   String generate(_AssembleElement e, List<String> children) {
+    final extra = e.extra;
     return """
 <Column
+  ${_FlutterXmlAttr.genControlFlow(extra)}
   flutter:crossAxisAlignment="stretch">
 ${children.join('\n')}
 </Column>
@@ -195,6 +201,15 @@ class BlockAssembleBuilder implements AssembleBuilder {
 
   @override
   String generate(_AssembleElement e, List<String> children) {
+    final extra = e.extra;
+    final cf = _FlutterXmlAttr.genControlFlow(extra);
+    if (cf.isNotEmpty) {
+      if (children.length > 1) {
+        print("control flow applying more than one child!!");
+      }
+      final str = children.first;
+      return _FlutterXmlAttr.insertFlow(str, cf);
+    }
     return children.first;
   }
 }
@@ -672,6 +687,40 @@ class _FlutterXmlAttr {
       _genSide(sb, border.top, prefix, 'Top');
       _genSide(sb, border.right, prefix, 'Right');
       _genSide(sb, border.bottom, prefix, 'Bottom');
+    }
+    return sb.toString();
+  }
+
+  static String? _genKeyword(Map<String, String> extra, String wxKey, {String? flutterKey}) {
+    flutterKey ??= wxKey;
+    // '&' in xml should have to be '&amp;'
+    return extra['wx:$wxKey']?.let((it) => 'flutter:$flutterKey="${it.replaceAll('&', '&amp;')}"');
+  }
+
+  static String genControlFlow(Map<String, String>? extra) {
+    if (extra == null) return '';
+    return _genKeyword(extra, "if")
+        ?? _genKeyword(extra, "elif", flutterKey: "elseif")
+        ?? _genKeyword(extra, "else")
+        ?? _genKeyword(extra, "for")
+        ?? '';
+  }
+
+  static final _startTag = RegExp(r'<\w+[\s\S]*?>');
+  static String insertFlow(String text, String to) {
+    final match = _startTag.firstMatch(text);
+    if (match == null) return text;
+    final sb = StringBuffer();
+    if (0 < match.start) {
+      sb.write(text.substring(0, match.start));
+    }
+    final str = match[0]!;
+    final s = str.endsWith("/>")
+        ? str.replaceFirst("/>", " $to/>")
+        : str.replaceFirst(">", " $to>");
+    sb.write(s);
+    if (match.end < text.length) {
+      sb.write(text.substring(match.end));
     }
     return sb.toString();
   }

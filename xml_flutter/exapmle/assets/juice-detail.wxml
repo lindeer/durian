@@ -75,17 +75,17 @@
         <view class="row-tit" style="padding-bottom: 4px; color: #999999; font-size: 12px; line-height: 17px;">{{options.lang === 'en-us' ? 'Department' : '部门'}}</view>
         <block wx:if="{{((data.display_config >> 1) & 1) === 0}}">
           <view class="row-bd" action="openSchema" param-schema="dchat://departmentInfo?id={{data.department_info && data.department_info.length && data.department_info[data.department_info.length - 1].id}}" style="display: flex; align-items: center; color: #333333; font-size: 14px; line-height: 22px;">
-            <text style="flex-grow: 1;">
+            <view style="flex-grow: 1; display: flex; flex-direction: row;">
               <text class="dpt-item" wx:for="{{data.department_info}}" style="flex-grow: 1;">{{item.name}}</text>
-            </text>
+            </view>
             <icon class="more-btn" size="9" type="right-arrow" style="flex-grow: 0; flex-shrink: 0; float: right; color: #999999;"/>
           </view>
         </block>
         <block wx:else="">
           <view class="row-bd" style="display: flex; align-items: center; color: #333333; font-size: 14px; line-height: 22px;">
-            <text style="flex-grow: 1;">
+            <view style="flex-grow: 1; display: flex; flex-direction: row;">
               <text class="dpt-item" wx:for="{{data.department_info}}" style="flex-grow: 1;">{{item.name}}</text>
-            </text>
+            </view>
           </view>
         </block>
       </view>

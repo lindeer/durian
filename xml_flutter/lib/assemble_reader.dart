@@ -26,7 +26,7 @@ class AssembleReader {
     Map<String, String>? extra;
     String? klass;
     e.attributes.forEach((attr) {
-      final key = attr.name.local;
+      final key = attr.name.qualified;
       final value = attr.value;
       if (key == 'style') {
         value.split(';').forEach((expr) {
