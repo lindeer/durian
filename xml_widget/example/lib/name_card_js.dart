@@ -9,7 +9,7 @@ class NameCardJSPage extends StatefulWidget {
 }
 
 class _NameCardState extends State<NameCardJSPage> {
-  final _engine = JSEngine();
+  final _engine = JSEngine(prefixData: false);
 
   @override
   Widget build(BuildContext context) {
