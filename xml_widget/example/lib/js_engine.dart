@@ -9,10 +9,10 @@ class JSEngine implements ScriptEngine {
 
   JSEngine._(this._rt, this.domain, this._data);
 
-  factory JSEngine({String prefix = 'page'}) {
+  factory JSEngine({String prefix = 'page', bool prefixData = true}) {
     final runtime = js.getJavascriptRuntime(xhr: false);
     final domain = prefix.isEmpty ? '' : '$prefix.';
-    final data = prefix.isEmpty ? '' : '$prefix.data.';
+    final data = prefix.isEmpty ? '' : prefixData ? '$prefix.data.' : '$prefix.';
     final engine = JSEngine._(runtime, domain, data);
     engine._exprHandler[StatementType.expression] = engine._prefix;
     engine._exprHandler[StatementType.condition] = engine._parseField;
@@ -24,14 +24,41 @@ class JSEngine implements ScriptEngine {
 
   static final _reg = RegExp(r'[_a-zA-Z]\w*(\.\w+)*');
 
-  String _prefix(String expr) => expr.startsWith('item.') ? expr : "$_data$expr";
+  static final _stringReg = RegExp(r"'.+?'");
+
+  String _prefix(String expr) => expr.startsWith('item.') ? expr : _parseField(expr);
+
+  String _parseWithQuote(String expr) {
+    final matches = _stringReg.allMatches(expr);
+    int start = 0;
+    final sb = StringBuffer();
+    for (final m in matches) {
+      if (start < m.start) {
+        final str = _insertDataPrefix(expr.substring(start, m.start));
+        sb.write(str);
+      }
+      sb.write(expr.substring(m.start, m.end));
+      start = m.end;
+    }
+    if (start < expr.length) {
+      final sub = expr.substring(start);
+      final str = _insertDataPrefix(sub);
+      sb.write(str);
+    }
+    return sb.toString();
+  }
 
   String _parseField(String expr) {
-    return expr.replaceAllMapped(_reg, (m) {
-      final name = m[0] ?? '';
-      return name == 'item' ? name : '$_data$name';
-    });
+    if (expr.contains("'")) {
+      return _parseWithQuote(expr);
+    }
+    return _insertDataPrefix(expr);
   }
+
+  String _insertDataPrefix(String expr) => expr.replaceAllMapped(_reg, (m) {
+    final name = m[0] ?? '';
+    return name == 'item' ? name : '$_data$name';
+  });
 
   String _parseCall(String expr) => expr.startsWith('item.') ? '$expr();' : "$domain$expr();";
 
