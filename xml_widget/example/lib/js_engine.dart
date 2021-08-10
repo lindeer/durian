@@ -76,6 +76,16 @@ class JSEngine implements ScriptEngine {
 
   String _prefix2(String expr) => "$domain$expr";
 
+  static const _boolValues = {
+    "true": true,
+    "false": false,
+    "null": false,
+    "": false,
+    "undefined": false,
+    "0": false,
+    "NaN": false,
+  };
+
   @override
   String eval(String statement, {StatementType type = StatementType.expression}) {
     final fn = _exprHandler[type];
@@ -86,7 +96,17 @@ class JSEngine implements ScriptEngine {
       print("eval error($type): '$str' -> '${result.stringResult}'");
       return '';
     }
+    if (type == StatementType.condition) {
+      final v = result.stringResult;
+      final b = _boolValues[v] ?? _jsBoolResult(v);
+      return b.toString();
+    }
     return result.stringResult;
+  }
+
+  bool _jsBoolResult(String returnVal) {
+    final s = _rt.evaluate("Boolean('$returnVal')");
+    return _boolValues[s.stringResult] ?? false;
   }
 
   @override
