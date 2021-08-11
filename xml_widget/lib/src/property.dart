@@ -13,6 +13,7 @@ class _PropertyStruct {
       color: res[style['color']],
       backgroundColor: res[style['backgroundColor']],
       fontSize: res.size(style['fontSize']),
+      height: res.size(style['height']),
     );
   }
 

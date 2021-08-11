@@ -17,12 +17,14 @@ class TextAssembleBuilder implements AssembleBuilder {
     final extra = e.extra;
     final color = style.color('color') ?? e.inheritStyle?.textColor;
     final size = style._getDouble('font-size');
+    final sz = size ?? 14;
+    final height = style._getDouble('line-height')?.let((it) => it > sz ? it / sz : it);
     return Text(
       extra?['data'] ?? '',
       style: TextStyle(
         color: color,
         fontSize: size,
-        height: 1,
+        height: height,
       ),
     );
   }
@@ -33,10 +35,13 @@ class TextAssembleBuilder implements AssembleBuilder {
     final extra = e.extra;
     final color = style.color('color') ?? e.inheritStyle?.textColor;
     final size = style._getDouble('font-size');
+    final sz = size ?? 14;
+    final height = style._getDouble('line-height')?.let((it) => it > sz ? it / sz : it);
     return """
 <Text
   flutter:data="${extra?['data'] ?? ''}"
   ${_FlutterXmlAttr.genColor(color, prefix: 'style.')}
+  ${_FlutterXmlAttr.genAttr('style.height', height?.toStringAsFixed(2))}
   ${_FlutterXmlAttr.genAttr<double>('style.fontSize', size)}/>
 """;
   }
