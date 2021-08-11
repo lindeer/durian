@@ -110,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String _genXml(BuildContext context, String html) {
     final root = AssembleReader.fromSource(html);
     final tank = AssembleTank();
-    return tank.gen(root);
+    return tank.assemble(root).toXmlString(pretty: true, indent: '  ');
   }
 }
 

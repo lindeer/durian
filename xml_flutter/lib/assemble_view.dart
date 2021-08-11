@@ -55,15 +55,13 @@ class ViewAssembleBuilder implements AssembleBuilder {
   }
 
   @override
-  String generate(_AssembleElement e, List<String> children) {
+  XmlElement assemble(_AssembleElement e, Iterable<XmlElement> children) {
     final style = e.style;
     if (style.isEmpty) {
-      return """
-<Column
-  flutter:crossAxisAlignment="stretch">
-${children.join('\n')}
-</Column>
-""";
+      final attrs = {
+        'crossAxisAlignment': 'stretch',
+      };
+      return AssembleBuilder.element('Column', attrs, children);
     }
     final align = style['text-align'];
     final crossAlign = style['align-items'] ?? align;
@@ -72,46 +70,26 @@ ${children.join('\n')}
     final useRow = display == 'flex' && flex != 'column';
 
     if (useRow) {
-      return """
-<Row
-  flutter:mainAxisAlignment="center">
-${children.join('\n')}
-</Row>
-""";
+      final attrs = {
+        'mainAxisAlignment': 'center',
+      };
+      return AssembleBuilder.element('Row', attrs, children);
     }
 
     final inlineChildren = e.children.where((e) => e.style['display']?.startsWith('inline') ?? false);
     if (inlineChildren.length > 0) {
-      return """
-<Wrap>
-${children.join('\n')}
-</Wrap>
-""";
+      return AssembleBuilder.element('Wrap', {}, children);
     }
 
     final alignChildren = e.children.where((e) => e.style['position'] == 'absolute');
     if (alignChildren.length > 0) {
-      return """
-<Stack>
-${children.join('\n')}
-</Stack>
-""";
+      return AssembleBuilder.element('Stack', {}, children);
     }
 
-    final main = align == 'center'
-        ? MainAxisAlignment.center
-        : align == 'end' ? MainAxisAlignment.end
-        : MainAxisAlignment.start;
-    final cross = crossAlign == 'center'
-        ? CrossAxisAlignment.center
-        : crossAlign == 'end' ? CrossAxisAlignment.end
-        : CrossAxisAlignment.start;
-    return """
-<Column
-  flutter:mainAxisAlignment="${_mainAxisAlignment[main]}"
-  flutter:crossAxisAlignment="${_crossAxisAlignment[cross]}">
-${children.join('\n')}
-</Column>
-""";
+    final attrs = {
+      'mainAxisAlignment': align ?? 'start',
+      'crossAxisAlignment': crossAlign ?? 'start',
+    };
+    return AssembleBuilder.element('Column', attrs, children);
   }
 }
