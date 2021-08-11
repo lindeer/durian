@@ -214,8 +214,16 @@ class CSSStyle {
 /// style inherited from ancestor, e.g. text color
 class InheritedStyle {
   final Color? textColor;
+  final double? fontSize;
+  /// multiple of the font size
+  final double? lineHeight;
 
-  const InheritedStyle(this.textColor);
+  const InheritedStyle(this.textColor, this.fontSize, this.lineHeight);
+
+  @override
+  String toString() {
+    return 'Inherited{color:$textColor, font-size:$fontSize, line-height:$lineHeight}';
+  }
 }
 
 class ParentStyle {
@@ -229,13 +237,28 @@ class ParentStyle {
   /// make parent style by css with parent's
   static ParentStyle from(CSSStyle style, ParentStyle? parent) {
     InheritedStyle? inherited;
+    Color? color;
+    double? fontSize;
+    double? lineHeight;
+    bool createNew = false;
     if (style.contains('color')) {
-      final ancestor = parent?.inherited;
-
-      final color = style.color('color') ?? ancestor?.textColor;
-
-      inherited = InheritedStyle(color);
+      color = style.color('color');
+      createNew = true;
     }
+    if (style.contains('font-size')) {
+      fontSize = style._getDouble('font-size');
+      createNew = true;
+    }
+    if (style.contains('line-height')) {
+      lineHeight = style._getDouble('line-height');
+      createNew = true;
+    }
+    final ancestor = parent?.inherited;
+    inherited = createNew ? InheritedStyle(
+      color ?? ancestor?.textColor,
+      fontSize ?? ancestor?.fontSize,
+      lineHeight ?? ancestor?.lineHeight,
+    ) : null;
     return ParentStyle._(style, inherited ?? parent?.inherited);
   }
 }

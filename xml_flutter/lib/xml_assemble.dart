@@ -15,10 +15,12 @@ class TextAssembleBuilder implements AssembleBuilder {
   Widget build(_AssembleElement e, List<Widget> children) {
     final style = e.style;
     final extra = e.extra;
-    final color = style.color('color') ?? e.inheritStyle?.textColor;
-    final size = style._getDouble('font-size');
+    final inherited = e.inheritStyle;
+    final color = style.color('color') ?? inherited?.textColor;
+    final size = style._getDouble('font-size') ?? inherited?.fontSize;
+    final lineHeight = style._getDouble('line-height') ?? inherited?.lineHeight;
     final sz = size ?? 14;
-    final height = style._getDouble('line-height')?.let((it) => it > sz ? it / sz : it);
+    final height = lineHeight?.let((it) => it > sz ? it / sz : it);
     return Text(
       extra?['data'] ?? '',
       style: TextStyle(
@@ -33,10 +35,12 @@ class TextAssembleBuilder implements AssembleBuilder {
   String generate(_AssembleElement e, List<String> children) {
     final style = e.style;
     final extra = e.extra;
-    final color = style.color('color') ?? e.inheritStyle?.textColor;
-    final size = style._getDouble('font-size');
+    final inherited = e.inheritStyle;
+    final color = style.color('color') ?? inherited?.textColor;
+    final size = style._getDouble('font-size') ?? inherited?.fontSize;
+    final lineHeight = style._getDouble('line-height') ?? inherited?.lineHeight;
     final sz = size ?? 14;
-    final height = style._getDouble('line-height')?.let((it) => it > sz ? it / sz : it);
+    final height = lineHeight?.let((it) => it > sz ? it / sz : it);
     return """
 <Text
   flutter:data="${extra?['data'] ?? ''}"
