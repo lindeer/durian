@@ -419,7 +419,47 @@ class AssembleTank {
     }
     final xmlns = XmlAttribute(XmlName.fromString('xmlns:flutter'), 'http://flutter.dev/xml/flutter');
     rootElement.attributes.add(xmlns);
+    rootElement.children.add(_dialog());
     return rootElement;
+  }
+
+  XmlElement _dialog() {
+    const xml = """
+<Dialog flutter:name="name_card_select">
+  <Column flutter:mainAxisAlignment="end">
+    <Container
+      flutter:decoration.color="@flutter:color/white"
+      flutter:decoration.borderRadius="10">
+      <Column flutter:crossAxisAlignment="stretch">
+        <TextButton
+          flutter:height="56"
+          flutter:for="{{options}}"
+          flutter:onPressed="item.onClick">
+          <Text flutter:data="{{item.text}}"/>
+        </TextButton>
+      </Column>
+    </Container>
+
+    <SizedBox flutter:height="10"/>
+
+    <Container
+      flutter:decoration.color="@flutter:color/white"
+      flutter:decoration.borderRadius="10">
+
+      <TextButton
+        flutter:height="56"
+        flutter:onPressed="copyNickname">
+        <Text flutter:data="取消"/>
+      </TextButton>
+    </Container>
+
+    <SizedBox flutter:height="40"/>
+  </Column>
+</Dialog>
+    """;
+    final doc = XmlDocument.parse(xml);
+    doc.rootElement.detachParent(doc);
+    return doc.rootElement;
   }
 
   static String indentLines(Iterable<String> text, int indent) {

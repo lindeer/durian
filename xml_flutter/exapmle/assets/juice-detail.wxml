@@ -39,7 +39,7 @@
     <view class="rows" style="margin-top: 8px; padding: 0 0 100px;">
       <view class="row" wx:if="{{options.view === 'guest' && (data.nickname)}}" style="position: relative; margin: 0 0 0 20px; padding: 12px 0; padding-right: 20px;">
         <view class="row-tit" style="padding-bottom: 4px; color: #999999; font-size: 12px; line-height: 17px;">{{options.lang === 'en-us' ? 'Preferred Name': '昵称'}}</view>
-        <view class="row-bd" action="showActionSheet"  style="display: flex; align-items: center; color: #333333; font-size: 14px; line-height: 22px;">
+        <view class="row-bd" action="showActionSheet" bindtap="onClickNickname" style="display: flex; align-items: center; color: #333333; font-size: 14px; line-height: 22px;">
           <text style="flex-grow: 1;">{{data.nickname}}</text>
         </view>
       </view>
@@ -54,20 +54,20 @@
 
       <view class="row" wx:if="{{data.emp_num}}" style="position: relative; margin: 0 0 0 20px; padding: 12px 0; padding-right: 20px;">
         <view class="row-tit" style="padding-bottom: 4px; color: #999999; font-size: 12px; line-height: 17px;">{{options.lang === 'en-us' ? 'EE No.': '工号'}}</view>
-        <view class="row-bd" action="showActionSheet" style="display: flex; align-items: center; color: #333333; font-size: 14px; line-height: 22px;">
+        <view class="row-bd" action="showActionSheet" bindtap="onClickEmpNum" style="display: flex; align-items: center; color: #333333; font-size: 14px; line-height: 22px;">
           <text style="flex-grow: 1;">{{data.emp_num}}</text>
         </view>
       </view>
       <view class="row" style="position: relative; margin: 0 0 0 20px; padding: 12px 0; padding-right: 20px;">
         <view class="row-tit" style="padding-bottom: 4px; color: #999999; font-size: 12px; line-height: 17px;">{{options.lang === 'en-us' ? 'E-mail': '邮箱'}}</view>
-        <view class="row-bd" action="showActionSheet" style="display: flex; align-items: center; color: #333333; font-size: 14px; line-height: 22px;">
+        <view class="row-bd" action="showActionSheet" bindtap="onClickEmail" style="display: flex; align-items: center; color: #333333; font-size: 14px; line-height: 22px;">
           <text style="flex-grow: 1;">{{data.email}}</text>
           <icon class="more-btn" size="9" type="right-arrow" style="flex-grow: 0; flex-shrink: 0; float: right; color: #999999;"/>
         </view>
       </view>
       <view class="row" wx:if="{{data.location.city}}" style="position: relative; margin: 0 0 0 20px; padding: 12px 0; padding-right: 20px;">
         <view class="row-tit" style="padding-bottom: 4px; color: #999999; font-size: 12px; line-height: 17px;">{{options.lang === 'en-us' ? 'Base City': ' 城市'}}</view>
-        <view class="row-bd" action="showActionSheet" style="display: flex; align-items: center; color: #333333; font-size: 14px; line-height: 22px;">
+        <view class="row-bd" action="showActionSheet" bindtap="onClickCity" style="display: flex; align-items: center; color: #333333; font-size: 14px; line-height: 22px;">
           <text style="flex-grow: 1;">{{data.location.city}}</text>
         </view>
       </view>
@@ -91,7 +91,7 @@
       </view>
       <view class="row" wx:if="{{data.manager_name}}" style="position: relative; margin: 0 0 0 20px; padding: 12px 0; padding-right: 20px;">
         <view class="row-tit" style="padding-bottom: 4px; color: #999999; font-size: 12px; line-height: 17px;">{{options.lang === 'en-us' ? 'Supervisor': '上级'}}</view>
-        <view class="row-bd" action="openSchema" param-schema="dchat://nameCard?name={{data.manager_name}}" style="display: flex; align-items: center; color: #333333; font-size: 14px; line-height: 22px;">
+        <view class="row-bd" action="openSchema" bindtap="onClickSupervisor" style="display: flex; align-items: center; color: #333333; font-size: 14px; line-height: 22px;">
           <text style="flex-grow: 1;">{{data.manager_fullname}}</text>
           <icon class="more-btn" size="9" type="right-arrow" style="flex-grow: 0; flex-shrink: 0; float: right; color: #999999;"/>
         </view>

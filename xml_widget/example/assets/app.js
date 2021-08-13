@@ -36,6 +36,47 @@ function Page(options) {
       dlg.push(obj);
       sendMessage('_showDialog', JSON.stringify(obj));
     }
+
+    onClickNickname() {
+      let items = [{
+        text: this.options.lang === "en-us"? "Copy": "复制昵称",
+        onClick() {
+          console.log("copy nickname click!");
+        },
+      }];
+      page.showDialog('name_card_select', {
+        options: items,
+      });
+    }
+
+    onClickEmpNum() {
+      console.log("onClickEmpNum");
+    }
+
+    onClickEmail() {
+      let items = [{
+        text: this.options.lang === "en-us"? "Copy": "复制邮箱地址",
+        onClick() {
+          console.log("copy email click!");
+        },
+      }, {
+        text: this.options.lang === "en-us" ? "Send Mail": "发邮件",
+        onClick() {
+          console.log("send email click!");
+        },
+      }];
+      page.showDialog('name_card_select', {
+        options: items,
+      });
+    }
+
+    onClickCity() {
+      console.log("onClickCity");
+    }
+
+    onClickSupervisor() {
+      console.log("onClickSupervisor");
+    }
   }
   sendMessage('_onPageCreated', JSON.stringify({id: 0}));
   return new _Page(options);
