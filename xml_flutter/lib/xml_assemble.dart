@@ -31,15 +31,25 @@ class TextAssembleBuilder implements AssembleBuilder {
     final size = style._getDouble('font-size') ?? inherited?.fontSize;
     final lineHeight = style._getDouble('line-height') ?? inherited?.lineHeight;
     final sz = size ?? 14;
-    final height = lineHeight?.let((it) => it > sz ? it / sz : it);
-    return Text(
+    final height = lineHeight?.let((it) => it > sz ? it : it * sz);
+    final align = style['text-align'] ?? inherited?.textAlign;
+
+    Widget w = Text(
       extra?['data'] ?? '',
       style: TextStyle(
         color: color,
         fontSize: size,
-        height: height,
+        height: 1,
       ),
     );
+    if (height != null) {
+      w = Container(
+        height: height,
+        alignment: _alignment[align] ?? (height > sz ? Alignment.centerLeft : null),
+        child: w,
+      );
+    }
+    return w;
   }
 
   @override
@@ -51,15 +61,23 @@ class TextAssembleBuilder implements AssembleBuilder {
     final size = style._getDouble('font-size') ?? inherited?.fontSize;
     final lineHeight = style._getDouble('line-height') ?? inherited?.lineHeight;
     final sz = size ?? 14;
-    final height = lineHeight?.let((it) => it > sz ? it / sz : it);
+    final height = lineHeight?.let((it) => it > sz ? it : it * sz);
+    final align = style['text-align'] ?? inherited?.textAlign;
 
     final attrs = {
       'data': extra?['data'] ?? '',
+      'style.height': "1",
     }
       ..color(color, prefix: 'style.')
-      ..attrDouble('style.height', height)
       ..attrDouble('style.fontSize', size);
-    return AssembleBuilder.element('Text', attrs, children);
+    var node = AssembleBuilder.element('Text', attrs, children);
+    if (height != null) {
+      final _attrs = {
+        'height': '$height',
+      }..attr('alignment', align ?? (height > sz ? 'centerLeft' : null));
+      node = AssembleBuilder.element('Container', _attrs, [node]);
+    }
+    return node;
   }
 
 }

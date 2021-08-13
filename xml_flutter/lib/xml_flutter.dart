@@ -19,6 +19,11 @@ extension _TExt<T> on T {
 
 final _mainAxisAlignment = MainAxisAlignment.values.asMap().map((key, value) => MapEntry(value, value.toString().split('.').last));
 final _crossAxisAlignment = CrossAxisAlignment.values.asMap().map((key, value) => MapEntry(value, value.toString().split('.').last));
+const _alignment = {
+  "center": Alignment.center,
+  "centerLeft": Alignment.centerLeft,
+  "centerRight": Alignment.centerRight,
+};
 
 class PreProcessor {
   final double _width;

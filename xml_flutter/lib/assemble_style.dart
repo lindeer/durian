@@ -217,8 +217,9 @@ class InheritedStyle {
   final double? fontSize;
   /// multiple of the font size
   final double? lineHeight;
+  final String? textAlign;
 
-  const InheritedStyle(this.textColor, this.fontSize, this.lineHeight);
+  const InheritedStyle(this.textColor, this.fontSize, this.lineHeight, this.textAlign);
 
   @override
   String toString() {
@@ -240,6 +241,7 @@ class ParentStyle {
     Color? color;
     double? fontSize;
     double? lineHeight;
+    String? textAlign;
     bool createNew = false;
     if (style.contains('color')) {
       color = style.color('color');
@@ -253,11 +255,16 @@ class ParentStyle {
       lineHeight = style._getDouble('line-height');
       createNew = true;
     }
+    if (style.contains('text-align')) {
+      textAlign = style['text-align'];
+      createNew = true;
+    }
     final ancestor = parent?.inherited;
     inherited = createNew ? InheritedStyle(
       color ?? ancestor?.textColor,
       fontSize ?? ancestor?.fontSize,
       lineHeight ?? ancestor?.lineHeight,
+      textAlign ?? ancestor?.textAlign,
     ) : null;
     return ParentStyle._(style, inherited ?? parent?.inherited);
   }
