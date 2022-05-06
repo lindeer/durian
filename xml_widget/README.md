@@ -1,4 +1,39 @@
-# xml_widget
+# Getting start
+
+## run on pc
+
+```sh
+cd xml_widget/example
+flutter run -d linux
+```
+
+or start it directly in Android Studio (open `xml_widget` as project):
+
+![](example/docs/example-as-linux.png)
+
+show as below:
+
+![](example/docs/example-window.png)
+
+## run on android
+
+open `xml_widget` directly in Android Studio:
+
+![](example/docs/example-as-android.png)
+
+show as below:
+
+![](example/docs/example-android.png)
+
+## run on iOS (TODO)
+
+## run test
+
+```sh
+flutter test test/*.dart
+```
+
+# Introduction
 
 `xml_widget` is a flutter library that could dynamically parse xml file into flutter widgets with javascript as execution engine.
 It is still in development.
