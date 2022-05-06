@@ -263,3 +263,7 @@ A `xml_widget` app's structure is very simple:
 - ListView
 - Flexible
 - Expanded
+
+# Architecture
+
+more details in [architecture](example/docs/architecture.md)
