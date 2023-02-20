@@ -1,1 +1,334 @@
-../../../xml_flutter/example/gen.xml
+<Stack xmlns:flutter="http://flutter.dev/xml/flutter">
+  <ListView>
+    <Ink flutter:paddingTop="14" flutter:paddingBottom="20" flutter:decoration.color="#fff7f7f7">
+      <Column flutter:mainAxisAlignment="start" flutter:crossAxisAlignment="center">
+        <Ink flutter:width="64" flutter:height="64">
+          <Stack>
+            <Positioned flutter:right="0" flutter:bottom="0" flutter:if="{{data.wearing_medal.wearFlag === 1}}">
+              <ClipRRect flutter:borderRadius="10">
+                <Ink flutter:decoration.borderRadius="10" flutter:width="20" flutter:height="20">
+                  <Image flutter:src="{{data.wearing_medal.medalIcon}}"/>
+                </Ink>
+              </ClipRRect>
+            </Positioned>
+            <Positioned flutter:left="0" flutter:top="0">
+              <ClipRRect flutter:borderRadius="32">
+                <Ink flutter:decoration.color="#ff999999" flutter:decoration.borderRadius="32" flutter:width="64" flutter:height="64">
+                  <Image flutter:src="{{data.avatar_url ? data.avatar_url + '?x-s3-process=image/format,png/resize,m_mfit,h_128,w_128': 'https://img-ys011.didistatic.com/static/dicht_cdn/do1_mwUMAMkisnzKu8zqweYU'}}"/>
+                </Ink>
+              </ClipRRect>
+            </Positioned>
+          </Stack>
+        </Ink>
+        <Ink flutter:paddingTop="20">
+          <Container flutter:height="20.0">
+            <Text flutter:data="{{data.fullname}}" flutter:style.height="1" flutter:style.color="#ff111111" flutter:style.fontSize="20"/>
+          </Container>
+        </Ink>
+        <Ink flutter:paddingTop="10">
+          <Container flutter:height="14.0">
+            <Text flutter:data="{{data.job}}" flutter:style.height="1" flutter:style.color="#ff666666" flutter:style.fontSize="14"/>
+          </Container>
+        </Ink>
+        <Padding flutter:paddingLeft="40" flutter:paddingRight="40" flutter:if="{{data.emp_status !== -1}}">
+          <Ink flutter:paddingTop="24">
+            <Row flutter:mainAxisAlignment="center">
+              <ClipRRect flutter:borderRadius="20" flutter:if="{{data.homepage}}">
+                <Ink flutter:decoration.color="#19fd813c" flutter:decoration.borderRadius="20" flutter:width="40" flutter:height="40">
+                  <Column flutter:mainAxisAlignment="center" flutter:crossAxisAlignment="center">
+                    <Icon flutter:icon="@icon/home" flutter:color="#fffc8c4e" flutter:size="24"/>
+                  </Column>
+                </Ink>
+              </ClipRRect>
+              <Padding flutter:paddingLeft="24" flutter:if="{{options.view === 'guest'}}">
+                <ClipRRect flutter:borderRadius="20">
+                  <Ink flutter:decoration.color="#19fd813c" flutter:decoration.borderRadius="20" flutter:width="40" flutter:height="40">
+                    <Column flutter:mainAxisAlignment="center" flutter:crossAxisAlignment="center">
+                      <Icon flutter:icon="@icon/{{data.is_follow ? 'star-solid': 'star'}}" flutter:color="#fffc8c4e" flutter:size="24"/>
+                    </Column>
+                  </Ink>
+                </ClipRRect>
+              </Padding>
+              <Padding flutter:paddingLeft="24" flutter:if="{{options.view === 'guest' &amp;&amp; ((data.display_config >> 0) &amp; 1) === 0}}">
+                <ClipRRect flutter:borderRadius="20">
+                  <Ink flutter:decoration.color="#19fd813c" flutter:decoration.borderRadius="20" flutter:width="40" flutter:height="40">
+                    <Column flutter:mainAxisAlignment="center" flutter:crossAxisAlignment="center">
+                      <Icon flutter:icon="@icon/phone" flutter:color="#fffc8c4e" flutter:size="24"/>
+                    </Column>
+                  </Ink>
+                </ClipRRect>
+              </Padding>
+              <Padding flutter:paddingLeft="24">
+                <ClipRRect flutter:borderRadius="20">
+                  <Ink flutter:decoration.color="#19fd813c" flutter:decoration.borderRadius="20" flutter:width="40" flutter:height="40">
+                    <Column flutter:mainAxisAlignment="center" flutter:crossAxisAlignment="center">
+                      <Icon flutter:icon="@icon/share" flutter:color="#fffc8c4e" flutter:size="24"/>
+                    </Column>
+                  </Ink>
+                </ClipRRect>
+              </Padding>
+            </Row>
+          </Ink>
+        </Padding>
+      </Column>
+    </Ink>
+    <Column flutter:mainAxisAlignment="start" flutter:crossAxisAlignment="start" flutter:if="{{data.emp_status !== -1}}">
+      <Padding flutter:paddingLeft="20" flutter:paddingTop="20" flutter:paddingRight="20" flutter:if="{{options.view === 'guest' &amp;&amp; data.work_status.emoji }}">
+        <ClipRRect flutter:borderRadius="8">
+          <Ink flutter:paddingLeft="12" flutter:paddingTop="8" flutter:paddingRight="12" flutter:paddingBottom="8" flutter:decoration.color="#5000000" flutter:decoration.borderRadius="8">
+            <Row flutter:mainAxisAlignment="center">
+              <Padding flutter:paddingTop="3">
+                <Icon flutter:icon="@icon/error_outline_outlined"/>
+              </Padding>
+              <Flexible flutter:flex="1" flutter:fit="tight">
+                <Padding flutter:paddingLeft="8">
+                  <Container flutter:height="22.0" flutter:alignment="centerLeft">
+                    <Text flutter:data="{{data.work_status.text}}" flutter:style.height="1" flutter:style.color="#ff999999" flutter:style.fontSize="14"/>
+                  </Container>
+                </Padding>
+              </Flexible>
+            </Row>
+          </Ink>
+        </ClipRRect>
+      </Padding>
+      <Padding flutter:paddingLeft="20" flutter:paddingTop="20" flutter:paddingRight="20" flutter:if="{{options.view === 'main'}}">
+        <ClipRRect flutter:borderRadius="8">
+          <Ink flutter:paddingLeft="12" flutter:paddingTop="8" flutter:paddingRight="12" flutter:paddingBottom="8" flutter:decoration.borderRadius="8" flutter:decoration.border.color="#ffeeeeee">
+            <Row flutter:mainAxisAlignment="center">
+              <Padding flutter:paddingTop="3" flutter:if="{{data.work_status.emoji}}">
+                <Icon flutter:icon="@icon/error_outline_outlined" flutter:color="#ff999999"/>
+              </Padding>
+              <Padding flutter:paddingTop="3" flutter:else="">
+                <Icon flutter:icon="@icon/emoji-add" flutter:color="#ff999999" flutter:size="24"/>
+              </Padding>
+              <Flexible flutter:flex="1" flutter:fit="tight">
+                <Padding flutter:paddingLeft="8">
+                  <Container flutter:height="22.0" flutter:alignment="centerLeft">
+                    <Text flutter:data="{{data.work_status.text || (options.lang === 'en-us'? 'Add working status': '添加工作状态')}}" flutter:style.height="1" flutter:style.color="#ff999999" flutter:style.fontSize="14"/>
+                  </Container>
+                </Padding>
+              </Flexible>
+              <Icon flutter:icon="@icon/edit" flutter:color="#ff999999" flutter:size="24"/>
+            </Row>
+          </Ink>
+        </ClipRRect>
+      </Padding>
+      <Padding flutter:paddingTop="8">
+        <Ink flutter:paddingBottom="100">
+          <Column flutter:mainAxisAlignment="start" flutter:crossAxisAlignment="start">
+            <Padding flutter:paddingLeft="20" flutter:if="{{options.view === 'guest' &amp;&amp; (data.nickname)}}">
+              <Ink flutter:paddingTop="12" flutter:paddingRight="20" flutter:paddingBottom="12">
+                <Column flutter:mainAxisAlignment="start" flutter:crossAxisAlignment="start">
+                  <Ink flutter:paddingBottom="4">
+                    <Container flutter:height="17.0" flutter:alignment="centerLeft">
+                      <Text flutter:data="{{options.lang === 'en-us' ? 'Preferred Name': '昵称'}}" flutter:style.height="1" flutter:style.color="#ff999999" flutter:style.fontSize="12"/>
+                    </Container>
+                  </Ink>
+                  <InkWell flutter:onTap="onClickNickname">
+                    <Row flutter:mainAxisAlignment="center">
+                      <Flexible flutter:flex="1" flutter:fit="tight">
+                        <Container flutter:height="22.0" flutter:alignment="centerLeft">
+                          <Text flutter:data="{{data.nickname}}" flutter:style.height="1" flutter:style.color="#ff333333" flutter:style.fontSize="14"/>
+                        </Container>
+                      </Flexible>
+                    </Row>
+                  </InkWell>
+                </Column>
+              </Ink>
+            </Padding>
+            <Padding flutter:paddingLeft="20" flutter:if="{{options.view === 'main'}}">
+              <Ink flutter:paddingTop="12" flutter:paddingRight="20" flutter:paddingBottom="12">
+                <Column flutter:mainAxisAlignment="start" flutter:crossAxisAlignment="start">
+                  <Ink flutter:paddingBottom="4">
+                    <Container flutter:height="17.0" flutter:alignment="centerLeft">
+                      <Text flutter:data="{{options.lang === 'en-us' ? 'Preferred Name': '昵称'}}" flutter:style.height="1" flutter:style.color="#ff999999" flutter:style.fontSize="12"/>
+                    </Container>
+                  </Ink>
+                  <Row flutter:mainAxisAlignment="center">
+                    <Flexible flutter:flex="1" flutter:fit="tight" flutter:if="{{data.nickname}}">
+                      <Container flutter:height="22.0" flutter:alignment="centerLeft">
+                        <Text flutter:data="{{data.nickname}}" flutter:style.height="1" flutter:style.color="#ff333333" flutter:style.fontSize="14"/>
+                      </Container>
+                    </Flexible>
+                    <Flexible flutter:flex="1" flutter:fit="tight" flutter:else="">
+                      <Container flutter:height="22.0" flutter:alignment="centerLeft">
+                        <Text flutter:data="{{options.lang === 'en-us' ? 'Fill in': '未设置'}}" flutter:style.height="1" flutter:style.color="#ff333333" flutter:style.fontSize="14"/>
+                      </Container>
+                    </Flexible>
+                    <Icon flutter:icon="@icon/right-arrow" flutter:color="#ff333333" flutter:size="24"/>
+                  </Row>
+                </Column>
+              </Ink>
+            </Padding>
+            <Padding flutter:paddingLeft="20" flutter:if="{{data.emp_num}}">
+              <Ink flutter:paddingTop="12" flutter:paddingRight="20" flutter:paddingBottom="12">
+                <Column flutter:mainAxisAlignment="start" flutter:crossAxisAlignment="start">
+                  <Ink flutter:paddingBottom="4">
+                    <Container flutter:height="17.0" flutter:alignment="centerLeft">
+                      <Text flutter:data="{{options.lang === 'en-us' ? 'EE No.': '工号'}}" flutter:style.height="1" flutter:style.color="#ff999999" flutter:style.fontSize="12"/>
+                    </Container>
+                  </Ink>
+                  <InkWell flutter:onTap="onClickEmpNum">
+                    <Row flutter:mainAxisAlignment="center">
+                      <Flexible flutter:flex="1" flutter:fit="tight">
+                        <Container flutter:height="22.0" flutter:alignment="centerLeft">
+                          <Text flutter:data="{{data.emp_num}}" flutter:style.height="1" flutter:style.color="#ff333333" flutter:style.fontSize="14"/>
+                        </Container>
+                      </Flexible>
+                    </Row>
+                  </InkWell>
+                </Column>
+              </Ink>
+            </Padding>
+            <Padding flutter:paddingLeft="20">
+              <Ink flutter:paddingTop="12" flutter:paddingRight="20" flutter:paddingBottom="12">
+                <Column flutter:mainAxisAlignment="start" flutter:crossAxisAlignment="start">
+                  <Ink flutter:paddingBottom="4">
+                    <Container flutter:height="17.0" flutter:alignment="centerLeft">
+                      <Text flutter:data="{{options.lang === 'en-us' ? 'E-mail': '邮箱'}}" flutter:style.height="1" flutter:style.color="#ff999999" flutter:style.fontSize="12"/>
+                    </Container>
+                  </Ink>
+                  <InkWell flutter:onTap="onClickEmail">
+                    <Row flutter:mainAxisAlignment="center">
+                      <Flexible flutter:flex="1" flutter:fit="tight">
+                        <Container flutter:height="22.0" flutter:alignment="centerLeft">
+                          <Text flutter:data="{{data.email}}" flutter:style.height="1" flutter:style.color="#ff333333" flutter:style.fontSize="14"/>
+                        </Container>
+                      </Flexible>
+                      <Icon flutter:icon="@icon/right-arrow" flutter:color="#ff333333" flutter:size="24"/>
+                    </Row>
+                  </InkWell>
+                </Column>
+              </Ink>
+            </Padding>
+            <Padding flutter:paddingLeft="20" flutter:if="{{data.location.city}}">
+              <Ink flutter:paddingTop="12" flutter:paddingRight="20" flutter:paddingBottom="12">
+                <Column flutter:mainAxisAlignment="start" flutter:crossAxisAlignment="start">
+                  <Ink flutter:paddingBottom="4">
+                    <Container flutter:height="17.0" flutter:alignment="centerLeft">
+                      <Text flutter:data="{{options.lang === 'en-us' ? 'Base City': ' 城市'}}" flutter:style.height="1" flutter:style.color="#ff999999" flutter:style.fontSize="12"/>
+                    </Container>
+                  </Ink>
+                  <InkWell flutter:onTap="onClickCity">
+                    <Row flutter:mainAxisAlignment="center">
+                      <Flexible flutter:flex="1" flutter:fit="tight">
+                        <Container flutter:height="22.0" flutter:alignment="centerLeft">
+                          <Text flutter:data="{{data.location.city}}" flutter:style.height="1" flutter:style.color="#ff333333" flutter:style.fontSize="14"/>
+                        </Container>
+                      </Flexible>
+                    </Row>
+                  </InkWell>
+                </Column>
+              </Ink>
+            </Padding>
+            <Padding flutter:paddingLeft="20" flutter:if="{{data.department_info &amp;&amp; data.department_info.length > 0}}">
+              <Ink flutter:paddingTop="12" flutter:paddingRight="20" flutter:paddingBottom="12">
+                <Column flutter:mainAxisAlignment="start" flutter:crossAxisAlignment="start">
+                  <Ink flutter:paddingBottom="4">
+                    <Container flutter:height="17.0" flutter:alignment="centerLeft">
+                      <Text flutter:data="{{options.lang === 'en-us' ? 'Department' : '部门'}}" flutter:style.height="1" flutter:style.color="#ff999999" flutter:style.fontSize="12"/>
+                    </Container>
+                  </Ink>
+                  <Row flutter:mainAxisAlignment="center" flutter:if="{{((data.display_config >> 1) &amp; 1) === 0}}">
+                    <Flexible flutter:flex="1" flutter:fit="tight">
+                      <Row flutter:mainAxisAlignment="center">
+                        <Flexible flutter:flex="1" flutter:fit="tight" flutter:for="{{data.department_info}}">
+                          <Container flutter:height="22.0" flutter:alignment="centerLeft">
+                            <Text flutter:data="{{item.name}}" flutter:style.height="1" flutter:style.color="#ff333333" flutter:style.fontSize="14"/>
+                          </Container>
+                        </Flexible>
+                      </Row>
+                    </Flexible>
+                    <Icon flutter:icon="@icon/right-arrow" flutter:color="#ff333333" flutter:size="24"/>
+                  </Row>
+                  <Row flutter:mainAxisAlignment="center" flutter:else="">
+                    <Flexible flutter:flex="1" flutter:fit="tight">
+                      <Row flutter:mainAxisAlignment="center">
+                        <Flexible flutter:flex="1" flutter:fit="tight" flutter:for="{{data.department_info}}">
+                          <Container flutter:height="22.0" flutter:alignment="centerLeft">
+                            <Text flutter:data="{{item.name}}" flutter:style.height="1" flutter:style.color="#ff333333" flutter:style.fontSize="14"/>
+                          </Container>
+                        </Flexible>
+                      </Row>
+                    </Flexible>
+                  </Row>
+                </Column>
+              </Ink>
+            </Padding>
+            <Padding flutter:paddingLeft="20" flutter:if="{{data.manager_name}}">
+              <Ink flutter:paddingTop="12" flutter:paddingRight="20" flutter:paddingBottom="12">
+                <Column flutter:mainAxisAlignment="start" flutter:crossAxisAlignment="start">
+                  <Ink flutter:paddingBottom="4">
+                    <Container flutter:height="17.0" flutter:alignment="centerLeft">
+                      <Text flutter:data="{{options.lang === 'en-us' ? 'Supervisor': '上级'}}" flutter:style.height="1" flutter:style.color="#ff999999" flutter:style.fontSize="12"/>
+                    </Container>
+                  </Ink>
+                  <InkWell flutter:onTap="onClickSupervisor">
+                    <Row flutter:mainAxisAlignment="center">
+                      <Flexible flutter:flex="1" flutter:fit="tight">
+                        <Container flutter:height="22.0" flutter:alignment="centerLeft">
+                          <Text flutter:data="{{data.manager_fullname}}" flutter:style.height="1" flutter:style.color="#ff333333" flutter:style.fontSize="14"/>
+                        </Container>
+                      </Flexible>
+                      <Icon flutter:icon="@icon/right-arrow" flutter:color="#ff333333" flutter:size="24"/>
+                    </Row>
+                  </InkWell>
+                </Column>
+              </Ink>
+            </Padding>
+            <Padding flutter:paddingLeft="20" flutter:if="{{data.location &amp;&amp; data.location.building}}">
+              <Ink flutter:paddingTop="12" flutter:paddingRight="20" flutter:paddingBottom="12">
+                <Column flutter:mainAxisAlignment="start" flutter:crossAxisAlignment="start">
+                  <Ink flutter:paddingBottom="4">
+                    <Container flutter:height="17.0" flutter:alignment="centerLeft">
+                      <Text flutter:data="{{options.lang === 'en-us' ? 'Office Desk': '工位'}}" flutter:style.height="1" flutter:style.color="#ff999999" flutter:style.fontSize="12"/>
+                    </Container>
+                  </Ink>
+                  <Row flutter:mainAxisAlignment="center">
+                    <Flexible flutter:flex="1" flutter:fit="tight">
+                      <Container flutter:height="22.0" flutter:alignment="centerLeft">
+                        <Text flutter:data="{{data.location.building}}" flutter:style.height="1" flutter:style.color="#ff333333" flutter:style.fontSize="14"/>
+                      </Container>
+                    </Flexible>
+                  </Row>
+                </Column>
+              </Ink>
+            </Padding>
+          </Column>
+        </Ink>
+      </Padding>
+    </Column>
+  </ListView>
+  <Positioned flutter:left="40" flutter:right="40" flutter:bottom="33">
+    <ClipRRect flutter:borderRadius="20">
+      <Ink flutter:decoration.color="#ff3d3d3d" flutter:decoration.borderRadius="20">
+        <Column flutter:mainAxisAlignment="center" flutter:crossAxisAlignment="center">
+          <Container flutter:height="40.0" flutter:alignment="center" flutter:if="{{data.emp_status !== -1}}">
+            <Text flutter:data="{{options.lang === 'en-us' ? 'Send Messages': '发消息'}}" flutter:style.height="1" flutter:style.color="#ffffffff" flutter:style.fontSize="14"/>
+          </Container>
+          <Container flutter:height="40.0" flutter:alignment="center" flutter:elseif="{{data.emp_status === -1}}">
+            <Text flutter:data="{{options.lang === 'en-us' ? 'Message Records': '查看聊天记录'}}" flutter:style.height="1" flutter:style.color="#ffffffff" flutter:style.fontSize="14"/>
+          </Container>
+        </Column>
+      </Ink>
+    </ClipRRect>
+  </Positioned>
+  <Dialog flutter:name="name_card_select">
+    <Column flutter:mainAxisAlignment="end">
+      <Container flutter:decoration.color="@flutter:color/white" flutter:decoration.borderRadius="10">
+        <Column flutter:crossAxisAlignment="stretch">
+          <TextButton flutter:height="56" flutter:for="{{options}}" flutter:onPressed="item.onClick">
+            <Text flutter:data="{{item.text}}"/>
+          </TextButton>
+        </Column>
+      </Container>
+      <SizedBox flutter:height="10"/>
+      <Container flutter:decoration.color="@flutter:color/white" flutter:decoration.borderRadius="10">
+        <TextButton flutter:height="56" flutter:onPressed="copyNickname">
+          <Text flutter:data="取消"/>
+        </TextButton>
+      </Container>
+      <SizedBox flutter:height="40"/>
+    </Column>
+  </Dialog>
+</Stack>
