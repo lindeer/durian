@@ -56,10 +56,6 @@ class _ModelState extends State<PageModelWidget> {
     //
   }
 
-  void _onPageBuilt() {
-    //
-  }
-
   Future<ScriptEngine> _prepareEngine() async {
     final t1 = DateTime.now().microsecondsSinceEpoch;
     final js = await _reader.loadJS();

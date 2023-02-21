@@ -13,7 +13,7 @@ class ItemMetaData {
   }
 
   @override
-  int get hashCode => hashList([name, pos]);
+  int get hashCode => Object.hashAll([name, pos]);
 
   @override
   String toString() => "$name[$pos]";
